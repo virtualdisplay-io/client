@@ -2,3 +2,4 @@ node_modules/
 dist/
 coverage/
 stats.html
+.env.local

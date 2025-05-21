@@ -1,0 +1,17 @@
+{
+  "env": { "browser": true, "es2023": true, "node": true },
+  "extends": [
+    "airbnb-base",
+    "airbnb-extended/base",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": "./tsconfig.eslint.json", "tsconfigRootDir": "." },
+  "plugins": ["@typescript-eslint", "prettier"],
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": "error",
+    "@typescript-eslint/no-explicit-any": "error",
+    "import/prefer-default-export": "off"
+  }
+}

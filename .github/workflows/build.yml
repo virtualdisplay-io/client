@@ -1,0 +1,28 @@
+name: Production Build
+on:
+  push:
+    branches: [main]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      - run: pnpm install
+      - run: pnpm build
+      - name: Create version file
+        run: 'echo "{\"version\": \"$npm_package_version\"}" > dist/version.json'
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: |
+            dist/virtual-display-client.es.js
+            dist/virtual-display-client.cjs.js
+            dist/virtual-display-client.umd.js
+            dist/index.d.ts
+            dist/version.json

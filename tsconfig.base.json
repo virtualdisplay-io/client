@@ -6,6 +6,7 @@
       "DOM",
       "ESNext"
     ],
+    "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -19,6 +20,7 @@
     "skipLibCheck": true,
     "emitDeclarationOnly": true,
     "declarationMap": true,
+    "declarationDir": "./dist",
     "allowSyntheticDefaultImports": true
   }
 }

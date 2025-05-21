@@ -9,9 +9,11 @@ export default defineConfig({
       name: 'VirtualDisplayClient',
       fileName: (format) => `virtual-display-client.${format}.js`,
     },
+    outDir: 'dist',
     sourcemap: true,
     rollupOptions: {
       output: {
+        preserveModules: false,
         inlineDynamicImports: true,
         exports: 'named',
       },

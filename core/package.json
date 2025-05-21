@@ -11,8 +11,8 @@
     "dev": "vite",
     "test": "vitest run",
     "release": "semantic-release",
-    "format": "prettier --write \"src/**/*.{ts,json}\"",
-    "lint": "eslint src --ext .ts"
+    "format": "prettier --write \"src/**/*.{ts,json}\" \"tests/**/*.{ts,json}\"",
+    "lint": "eslint . --ext .ts"
   },
   "exports": {
     ".": {

@@ -10,8 +10,13 @@ const __dirname = dirname(__filename);
 
 export default [
   {
-    files: ['src/**/*.ts', 'tests/**/*.ts'],
-    ignores: ['node_modules', 'dist'],
+    files: ['**/*.ts'],
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/vite.config.ts',
+      '**/vitest.config.ts',
+    ],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -43,5 +48,17 @@ export default [
       'prettier/prettier': 'error',
       '@typescript-eslint/adjacent-overload-signatures': 'error',
     },
+  },
+  {
+    files: ['**/vite.config.ts', '**/vitest.config.ts'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      parser: eslintParser,
+    },
+    plugins: {
+      '@typescript-eslint': eslintPlugin,
+    },
+    rules: {},
   },
 ];

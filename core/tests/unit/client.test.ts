@@ -1,9 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { VirtualDisplayClient } from '../../src';
 import { messageBus } from '../../src';
-import {
-  MESSAGE_EVENT_SEND_CLIENT_STATE,
-} from '../../src';
+import { MESSAGE_EVENT_SEND_CLIENT_STATE } from '../../src';
 import { State } from '../../src';
 
 describe('VirtualDisplayClient', () => {

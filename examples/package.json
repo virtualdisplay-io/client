@@ -1,0 +1,21 @@
+{
+  "name": "@virtual-display/examples",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:basic": "pnpm --filter basic dev",
+    "dev:advanced": "pnpm --filter advanced dev",
+    "build:basic": "pnpm --filter basic build",
+    "build:advanced": "pnpm --filter advanced build",
+    "start:basic": "pnpm --filter basic start",
+    "start:advanced": "pnpm --filter advanced start"
+  },
+  "dependencies": {
+    "@virtual-display/client": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5"
+  },
+  "packageManager": "pnpm@10.4.1"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@virtual-display/client-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format",
+    "docs": "pnpm -r docs"
+  },
+  "devDependencies": {
+    "pnpm": "^10.11.0"
+  }
+}

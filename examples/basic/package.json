@@ -1,0 +1,19 @@
+{
+  "name": "@virtual-display/example-basic",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "start": "vite preview"
+  },
+  "dependencies": {
+    "@virtual-display/client": "workspace:*"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5",
+    "typescript": "^5.8.3",
+    "vite-tsconfig-paths": "^5.0.1"
+  }
+}

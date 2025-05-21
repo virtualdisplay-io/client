@@ -7,10 +7,35 @@
     "lint": "pnpm -r lint",
     "format": "pnpm -r format",
     "docs": "pnpm -r docs",
-    "analyze": "pnpm -r analyze"
+    "analyze": "pnpm -r analyze",
+    "prepare": "husky install",
+    "commit": "cz"
   },
   "devDependencies": {
-    "pnpm": "^10.11.0"
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@typescript-eslint/eslint-plugin": "^8.32.1",
+    "@typescript-eslint/parser": "^8.32.1",
+    "commitizen": "^4.3.1",
+    "conventional-changelog-conventionalcommits": "^9.0.0",
+    "husky": "^8.0.0",
+    "pnpm": "^10.11.0",
+    "eslint": "^9.26.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.4.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-bundle-visualizer": "^1.2.1",
+    "vite-plugin-dts": "^4.5.4",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   },
   "packageManager": "pnpm@10.11.0"
 }

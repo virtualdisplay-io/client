@@ -6,7 +6,8 @@
     "test": "pnpm -r test",
     "lint": "pnpm -r lint",
     "format": "pnpm -r format",
-    "docs": "pnpm -r docs"
+    "docs": "pnpm -r docs",
+    "analyze": "pnpm -r analyze"
   },
   "devDependencies": {
     "pnpm": "^10.11.0"

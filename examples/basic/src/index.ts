@@ -13,7 +13,6 @@ window.addEventListener('load', () => {
   try {
     updateStatus('Initializing...');
 
-    // Controleer of het iframe geladen is
     const iframe = document.getElementById('virtual-display') as HTMLIFrameElement;
     if (!iframe || !iframe.contentWindow) {
       throw new Error('Iframe not found or not ready');

@@ -2,7 +2,7 @@ import { VirtualDisplayClient } from '@virtual-display/client';
 
 const client = new VirtualDisplayClient('#virtual-display');
 
-function updateStatus(message: string) {
+function updateStatus(message: string): void {
   const statusElement = document.getElementById('status');
   if (statusElement) {
     statusElement.textContent = message;

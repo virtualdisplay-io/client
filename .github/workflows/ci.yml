@@ -1,9 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -36,12 +33,21 @@ jobs:
           node-version: 20
           cache: pnpm
 
+      - name: Restore pnpm store cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
       - name: Restore node_modules cache
-        id: cache-node-modules
         uses: actions/cache@v4
         with:
           path: core/node_modules
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -56,15 +62,21 @@ jobs:
         run: pnpm build
 
       - name: Save node_modules cache
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
         uses: actions/cache@v4
         with:
           path: core/node_modules
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          save-always: true
 
-      - name: Save dist build as artifact
-        if: steps.cache-dist.outputs.cache-hit != 'true'
+      - name: Save pnpm store cache
         uses: actions/cache@v4
         with:
+          path: ~/.pnpm-store
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          save-always: true
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-dist
           path: core/dist
-          key: dist-${{ runner.os }}-${{ github.sha }}

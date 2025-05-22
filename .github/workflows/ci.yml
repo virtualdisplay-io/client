@@ -27,14 +27,9 @@ jobs:
         with:
           version: 10.11.0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-
       - name: Restore pnpm store cache
-        uses: actions/cache@v4
+        id: pnpm
+        uses: actions/cache/restore@v4
         with:
           path: ~/.pnpm-store
           key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -42,7 +37,8 @@ jobs:
             pnpm-store-${{ runner.os }}-
 
       - name: Restore node_modules cache
-        uses: actions/cache@v4
+        id: node_modules
+        uses: actions/cache/restore@v4
         with:
           path: core/node_modules
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
@@ -62,18 +58,18 @@ jobs:
         run: pnpm build
 
       - name: Save node_modules cache
-        uses: actions/cache@v4
+        if: always() && steps.node_modules.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
         with:
           path: core/node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          save-always: true
+          key: ${{ steps.node_modules.outputs.cache-primary-key }}
 
       - name: Save pnpm store cache
-        uses: actions/cache@v4
+        if: always() && steps.pnpm.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
         with:
           path: ~/.pnpm-store
-          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          save-always: true
+          key: ${{ steps.pnpm.outputs.cache-primary-key }}
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4

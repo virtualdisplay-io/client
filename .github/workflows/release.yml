@@ -25,12 +25,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
         with:
-          name: core-dist
-          path: core/dist
+          fetch-depth: 0
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -43,12 +39,24 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-        working-directory: ./core
+      - name: Try downloading dist artifact (fallback safe)
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: core-dist
+          path: core/dist
+
+      - name: Check if dist exists, or build
+        run: |
+          if [ ! -f "dist/virtual-display-client.umd.js" ]; then
+            echo "dist folder missing or incomplete, rebuilding..."
+            pnpm install --frozen-lockfile
+            pnpm build
+          else
+            echo "Using dist from artifact"
+          fi
 
       - name: Run semantic release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run release
-        working-directory: ./core

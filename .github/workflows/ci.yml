@@ -33,11 +33,12 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      - name: Restore dependencies cache
+      - name: Restore node_modules cache
+        id: cache-node-modules
         uses: actions/cache@v4
         with:
-          path: ~/.pnpm-store
-          key: deps-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: core/node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -51,8 +52,16 @@ jobs:
       - name: Build
         run: pnpm build
 
-      - name: Upload dist artifact
-        uses: actions/upload-artifact@v4
+      - name: Save node_modules cache
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
         with:
-          name: core-dist
+          path: core/node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Save dist build as artifact
+        if: steps.cache-dist.outputs.cache-hit != 'true'
+        uses: actions/cache@v4
+        with:
           path: core/dist
+          key: dist-${{ runner.os }}-${{ github.sha }}

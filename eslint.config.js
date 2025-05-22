@@ -4,19 +4,22 @@ import eslintPlugin from '@typescript-eslint/eslint-plugin';
 import eslintParser from '@typescript-eslint/parser';
 import eslintPluginPrettier from 'eslint-plugin-prettier';
 import airbnbBase from 'eslint-config-airbnb-base';
+import { defineConfig } from 'eslint/config';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export default [
+export default defineConfig([
   {
-    files: ['**/*.ts'],
     ignores: [
       '**/node_modules/**',
       '**/dist/**',
       '**/vite.config.ts',
       '**/vitest.config.ts',
     ],
+  },
+  {
+    files: ['**/*.ts'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -61,4 +64,4 @@ export default [
     },
     rules: {},
   },
-];
+]);

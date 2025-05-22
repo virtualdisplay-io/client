@@ -1,8 +1,8 @@
-name: Release @virtual-display/client
+name: Release
 
 on:
   workflow_run:
-    workflows: ["CI"]
+    workflows: [ "CI" ]
     types:
       - completed
   push:
@@ -14,32 +14,39 @@ permissions:
 
 jobs:
   release:
-    name: Release
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Release @virtual-display/client
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
       pull-requests: write
       id-token: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: core-dist
+          path: core/dist
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.11.0
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         working-directory: ./core
-      - name: Build package
-        run: pnpm run build
-        working-directory: ./core
+
       - name: Run semantic release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

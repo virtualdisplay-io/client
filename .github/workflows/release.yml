@@ -47,6 +47,7 @@ jobs:
           path: core/dist
 
       - name: Check if dist exists, or build
+        working-directory: ./core
         run: |
           if [ ! -f "dist/virtual-display-client.umd.js" ]; then
             echo "dist folder missing or incomplete, rebuilding..."
@@ -57,6 +58,7 @@ jobs:
           fi
 
       - name: Run semantic release
+        working-directory: ./core
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run release

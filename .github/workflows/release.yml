@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
-          cache-dependency-path: core/pnpm-lock.yaml
+          cache-dependency-path: pnpm-lock.yaml
           registry-url: 'https://npm.pkg.github.com'
 
       - name: Install dependencies

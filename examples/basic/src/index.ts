@@ -1,6 +1,25 @@
-import { VirtualDisplayClient } from '@virtual-display/client';
+import { VirtualDisplayClient, State } from '@virtual-display/client';
 
 const client = new VirtualDisplayClient('#virtual-display');
+const state: State = {
+  attributes: [
+    {
+      name: 'Color',
+      values: [
+        { value: 'Red', identifiers: ['color-red'], isSelected: true },
+        { value: 'Blue', identifiers: ['color-blue'], isSelected: false },
+      ],
+    },
+    {
+      name: 'Size',
+      values: [
+        { value: 'Small', identifiers: ['small'], isSelected: false },
+        { value: 'Large', identifiers: ['large'], isSelected: true },
+      ],
+    },
+  ],
+};
+client.sendClientState(state);
 
 function updateStatus(message: string): void {
   const statusElement = document.getElementById('status');

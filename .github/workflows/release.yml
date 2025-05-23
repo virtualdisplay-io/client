@@ -57,6 +57,12 @@ jobs:
             echo "Using dist from artifact"
           fi
 
+      - name: Upload updated changelog (optional)
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog
+          path: core/CHANGELOG.md
+
       - name: Run semantic release
         working-directory: ./core
         env:

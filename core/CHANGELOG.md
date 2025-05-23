@@ -1,3 +1,9 @@
+## [1.0.4](https://github.com/virtualdisplay-io/client/compare/v1.0.3...v1.0.4) (2025-05-23)
+
+### Bug Fixes
+
+* renamed from [@virtual-display](https://github.com/virtual-display) to [@virtualdisplay-io](https://github.com/virtualdisplay-io) ([a199b18](https://github.com/virtualdisplay-io/client/commit/a199b18f7f1906aa38fc83980e9aee6d4392fb10))
+
 ## [1.0.3](https://github.com/virtualdisplay-io/client/compare/v1.0.2...v1.0.3) (2025-05-23)
 
 ### Bug Fixes

@@ -1,9 +1,6 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     branches:
       - main
@@ -30,18 +27,23 @@ jobs:
         with:
           version: 10.11.0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Restore pnpm store cache
+        id: pnpm
+        uses: actions/cache/restore@v4
         with:
-          node-version: 20
-          cache: pnpm
+          path: ~/.pnpm-store
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
 
       - name: Restore node_modules cache
-        id: cache-node-modules
-        uses: actions/cache@v4
+        id: node_modules
+        uses: actions/cache/restore@v4
         with:
           path: core/node_modules
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            node-modules-${{ runner.os }}-
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -56,15 +58,21 @@ jobs:
         run: pnpm build
 
       - name: Save node_modules cache
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
+        if: always() && steps.node_modules.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
         with:
           path: core/node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          key: ${{ steps.node_modules.outputs.cache-primary-key }}
 
-      - name: Save dist build as artifact
-        if: steps.cache-dist.outputs.cache-hit != 'true'
-        uses: actions/cache@v4
+      - name: Save pnpm store cache
+        if: always() && steps.pnpm.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
         with:
+          path: ~/.pnpm-store
+          key: ${{ steps.pnpm.outputs.cache-primary-key }}
+
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-dist
           path: core/dist
-          key: dist-${{ runner.os }}-${{ github.sha }}

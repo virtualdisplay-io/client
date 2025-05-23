@@ -15,11 +15,13 @@ permissions:
 jobs:
   release:
     name: Release @virtual-display/client
+    if: github.event_name == 'workflow_run' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]'))
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
       pull-requests: write
+      packages: write
       id-token: write
 
     steps:
@@ -38,33 +40,16 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
+          cache-dependency-path: core/pnpm-lock.yaml
+          registry-url: 'https://npm.pkg.github.com'
 
-      - name: Try downloading dist artifact (fallback safe)
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          name: core-dist
-          path: core/dist
-
-      - name: Check if dist exists, or build
+      - name: Install dependencies
         working-directory: ./core
-        run: |
-          if [ ! -f "dist/virtual-display-client.umd.js" ]; then
-            echo "dist folder missing or incomplete, rebuilding..."
-            pnpm install --frozen-lockfile
-            pnpm build
-          else
-            echo "Using dist from artifact"
-          fi
-
-      - name: Upload updated changelog (optional)
-        uses: actions/upload-artifact@v4
-        with:
-          name: changelog
-          path: core/CHANGELOG.md
+        run: pnpm install --frozen-lockfile
 
       - name: Run semantic release
         working-directory: ./core
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm run release

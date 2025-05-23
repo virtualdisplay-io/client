@@ -8,6 +8,7 @@
   "scripts": {
     "analyze": "vite-bundle-visualizer --template treemap --output stats.html --open false",
     "build": "tsc && vite build",
+    "prepare": "pnpm build",
     "dev": "vite",
     "test": "vitest run",
     "release": "semantic-release",
@@ -28,7 +29,8 @@
     "../LICENSE"
   ],
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com/",
+    "access": "restricted"
   },
   "repository": {
     "type": "git",
@@ -38,7 +40,9 @@
   "devDependencies": {
     "@semantic-release/changelog": "^6.0.0",
     "@semantic-release/commit-analyzer": "^11.0.0",
+    "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.0",
+    "@semantic-release/npm": "^12.0.0",
     "@semantic-release/release-notes-generator": "^11.0.0",
     "semantic-release": "^24.2.4",
     "vitest": "^2.1.9"

@@ -30,27 +30,12 @@ jobs:
         with:
           version: 10.11.0
 
-      - name: Get pnpm store path
-        id: pnpm-cache
-        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
-
-      - name: Restore pnpm store cache
-        id: pnpm
-        uses: actions/cache/restore@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            pnpm-store-${{ runner.os }}-
-
-      - name: Restore node_modules cache
-        id: node_modules
-        uses: actions/cache/restore@v4
-        with:
-          path: core/node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            node-modules-${{ runner.os }}-
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: core/pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -63,20 +48,6 @@ jobs:
 
       - name: Build
         run: pnpm build
-
-      - name: Save node_modules cache
-        if: always() && steps.node_modules.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: core/node_modules
-          key: ${{ steps.node_modules.outputs.cache-primary-key }}
-
-      - name: Save pnpm store cache
-        if: always() && steps.pnpm.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
-          key: ${{ steps.pnpm.outputs.cache-primary-key }}
 
       - name: Upload dist artifact
         uses: actions/upload-artifact@v4

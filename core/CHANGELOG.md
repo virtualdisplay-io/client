@@ -1,3 +1,9 @@
+## [1.0.5](https://github.com/virtualdisplay-io/client/compare/v1.0.4...v1.0.5) (2025-05-23)
+
+### Bug Fixes
+
+* add missing jsdom file ([6cddc20](https://github.com/virtualdisplay-io/client/commit/6cddc20fe0360e1abd20c632ec8418d36e85cf64))
+
 ## [1.0.4](https://github.com/virtualdisplay-io/client/compare/v1.0.3...v1.0.4) (2025-05-23)
 
 ### Bug Fixes

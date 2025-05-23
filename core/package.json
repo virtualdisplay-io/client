@@ -1,6 +1,6 @@
 {
   "name": "@virtual-display/client",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "main": "dist/virtual-display-client.cjs.js",
   "module": "dist/virtual-display-client.es.js",
   "types": "dist/index.d.ts",

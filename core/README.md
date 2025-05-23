@@ -1,4 +1,4 @@
-# @virtual-display/client
+# @virtualdisplay-io/client
 
 The core Virtual Display client package. It adds an API to show/hide parts of a 3D model based on e-commerce options like mesh, material or variant.
 
@@ -11,18 +11,18 @@ The core Virtual Display client package. It adds an API to show/hide parts of a 
 ## Installation
 
 ```bash
-npm install @virtual-display/client
+npm install @virtualdisplay-io/client
 ```
 
 or
 ```bash
-pnpm add @virtual-display/client
+pnpm add @virtualdisplay-io/client
 ```
 
 ## Usage
 
 ```javascript
-import { VirtualDisplayClient, State } from '@virtual-display/client';
+import { VirtualDisplayClient, State } from '@virtualdisplay-io/client';
 
 // define state that the model should transfor to
 const state: State = {

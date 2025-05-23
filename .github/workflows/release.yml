@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   release:
-    name: Release @virtual-display/client
+    name: Release @virtualdisplay-io/client
     if: github.event_name == 'workflow_run' || (github.event_name == 'push' && !contains(github.event.head_commit.message, '[skip ci]'))
     runs-on: ubuntu-latest
     permissions:

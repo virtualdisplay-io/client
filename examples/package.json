@@ -1,5 +1,5 @@
 {
-  "name": "@virtual-display/examples",
+  "name": "@virtualdisplay-io/examples",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,7 @@
     "start:advanced": "pnpm --filter advanced start"
   },
   "dependencies": {
-    "@virtual-display/client": "workspace:*"
+    "@virtualdisplay-io/client": "workspace:*"
   },
   "devDependencies": {
   }

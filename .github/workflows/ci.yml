@@ -27,11 +27,15 @@ jobs:
         with:
           version: 10.11.0
 
+      - name: Get pnpm store path
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
+
       - name: Restore pnpm store cache
         id: pnpm
         uses: actions/cache/restore@v4
         with:
-          path: ~/.pnpm-store
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: pnpm-store-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-store-${{ runner.os }}-
@@ -68,7 +72,7 @@ jobs:
         if: always() && steps.pnpm.outputs.cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
-          path: ~/.pnpm-store
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
           key: ${{ steps.pnpm.outputs.cache-primary-key }}
 
       - name: Upload dist artifact
@@ -76,3 +80,4 @@ jobs:
         with:
           name: core-dist
           path: core/dist
+          if-no-files-found: warn

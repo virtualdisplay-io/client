@@ -1,3 +1,9 @@
+## [1.0.3](https://github.com/virtualdisplay-io/client/compare/v1.0.2...v1.0.3) (2025-05-23)
+
+### Bug Fixes
+
+* correct the url for the repository. ([f2a1d10](https://github.com/virtualdisplay-io/client/commit/f2a1d100d5e112e750abe14eb18bb8a0d1ab1703))
+
 ## [1.0.2](https://github.com/virtualdisplay-io/client/compare/v1.0.1...v1.0.2) (2025-05-23)
 
 ### Bug Fixes

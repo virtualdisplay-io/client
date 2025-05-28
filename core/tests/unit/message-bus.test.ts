@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from 'vitest';
 import { messageBus } from '../../src';
 import {
   MESSAGE_EVENT_SEND_CLIENT_STATE,
-  MESSAGE_EVENT_SEND_MODEL_TREE,
+  MESSAGE_EVENT_MODEL_TREE_RESPONSE,
   MESSAGE_EVENT_SET_MODEL_STATE,
 } from '../../src';
 
@@ -17,8 +17,8 @@ describe('MessageBus', () => {
 
   it('should support one-time message handling with "once"', async () => {
     const handler = vi.fn();
-    messageBus.once(MESSAGE_EVENT_SEND_MODEL_TREE).then(handler);
-    messageBus.publish(MESSAGE_EVENT_SEND_MODEL_TREE, { once: true });
+    messageBus.once(MESSAGE_EVENT_MODEL_TREE_RESPONSE).then(handler);
+    messageBus.publish(MESSAGE_EVENT_MODEL_TREE_RESPONSE, { once: true });
 
     await new Promise((resolve) => setTimeout(resolve, 10));
     expect(handler).toHaveBeenCalledWith({ once: true });

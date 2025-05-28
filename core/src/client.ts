@@ -1,7 +1,7 @@
 import { messageBus } from './message-bus';
 import {
-  MESSAGE_EVENT_GET_MODEL_TREE,
-  MESSAGE_EVENT_SEND_MODEL_TREE,
+  MESSAGE_EVENT_MODEL_TREE_REQUEST,
+  MESSAGE_EVENT_MODEL_TREE_RESPONSE,
   MESSAGE_EVENT_SEND_CLIENT_STATE,
 } from './types/message-events';
 import { State } from './types/state';
@@ -35,13 +35,13 @@ export class VirtualDisplayClient {
 
   public async requestModelTree(): Promise<VirtualDisplayMessageEventData> {
     const message: VirtualDisplayMessageEventData<null> = {
-      type: MESSAGE_EVENT_GET_MODEL_TREE,
+      type: MESSAGE_EVENT_MODEL_TREE_REQUEST,
       context: null,
     };
 
     this.postMessage(message);
 
-    return messageBus.once(MESSAGE_EVENT_SEND_MODEL_TREE);
+    return messageBus.once(MESSAGE_EVENT_MODEL_TREE_RESPONSE);
   }
 
   private postMessage(message: VirtualDisplayMessageEventData): void {

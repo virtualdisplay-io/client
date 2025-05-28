@@ -5,9 +5,9 @@ import { MESSAGE_EVENT_SEND_CLIENT_STATE } from '../../src';
 describe('Message Handling', () => {
   it('should trigger callback when message is published', () => {
     const callback = vi.fn();
-    messageBus.subscribe('virtualDisplay.getModelTree', callback);
+    messageBus.subscribe('virtualDisplay.modelTreeRequest', callback);
 
-    messageBus.publish('virtualDisplay.getModelTree', { success: true });
+    messageBus.publish('virtualDisplay.modelTreeRequest', { success: true });
     expect(callback).toHaveBeenCalledWith({ success: true });
   });
 

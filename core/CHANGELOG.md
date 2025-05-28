@@ -1,3 +1,10 @@
+## [1.1.0](https://github.com/virtualdisplay-io/client/compare/v1.0.5...v1.1.0) (2025-05-28)
+
+### Features
+
+* deprecate MESSAGE_EVENT_SET_MODEL_STATE will be fixed differently ([ee0b4e5](https://github.com/virtualdisplay-io/client/commit/ee0b4e5bebe8dd69170e07fd87dd692d842f0079))
+* renamed MESSAGE_EVENT_GET_MODEL_TREE and MESSAGE_EVENT_SEND_MODEL_TREE into MESSAGE_EVENT_MODEL_TREE_REQUEST and MESSAGE_EVENT_MODEL_TREE_RESPONSE to make the flow of information more clear. ([d887fb9](https://github.com/virtualdisplay-io/client/commit/d887fb9d626e57f8200a8ddf84b0ff333b1f744e))
+
 ## [1.0.5](https://github.com/virtualdisplay-io/client/compare/v1.0.4...v1.0.5) (2025-05-23)
 
 ### Bug Fixes

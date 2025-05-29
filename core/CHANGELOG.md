@@ -1,3 +1,9 @@
+## [1.2.0](https://github.com/virtualdisplay-io/client/compare/v1.1.0...v1.2.0) (2025-05-29)
+
+### Features
+
+* introduced the iframe-factory to do validation and make sure the iframe element has all the required attributes and values. ([85afd70](https://github.com/virtualdisplay-io/client/commit/85afd704140c121b09492bc2a89a93884df4fabf))
+
 ## [1.1.0](https://github.com/virtualdisplay-io/client/compare/v1.0.5...v1.1.0) (2025-05-28)
 
 ### Features

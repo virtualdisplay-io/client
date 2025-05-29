@@ -22,14 +22,16 @@ class MessageBus {
   }
 
   public publish<T>(type: VirtualDisplayMessageEvent, data: T): void {
-    const subscribers = this.handlers.get(type) || [];
+    const subscribers: VirtualDisplayMessageHandler<unknown>[] =
+      this.handlers.get(type) || [];
+
     for (const handler of subscribers) {
       handler(data);
     }
   }
 
   public once<T>(type: VirtualDisplayMessageEvent): Promise<T> {
-    return new Promise((resolve) => {
+    return new Promise((resolve): void => {
       const handler: VirtualDisplayMessageHandler<T> = (data: T): void => {
         resolve(data);
         this.unsubscribe(type, handler);
@@ -42,10 +44,14 @@ class MessageBus {
     type: VirtualDisplayMessageEvent,
     handler: VirtualDisplayMessageHandler<T>
   ): void {
-    const handlers = this.handlers.get(type) || [];
+    const handlers: VirtualDisplayMessageHandler<unknown>[] =
+      this.handlers.get(type) || [];
+
     this.handlers.set(
       type,
-      handlers.filter((h) => h !== handler)
+      handlers.filter(
+        (h: VirtualDisplayMessageHandler<unknown>) => h !== handler
+      )
     );
   }
 }

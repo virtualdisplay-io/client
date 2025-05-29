@@ -6,18 +6,24 @@ import {
 } from './types/message-events';
 import { State } from './types/state';
 import { VirtualDisplayMessageEventData } from './types/virtual-display-message-event';
+import {
+  getValidatedIframe,
+  prepareVirtualDisplayIframe,
+} from './iframe-factory';
 
 export class VirtualDisplayClient {
-  constructor(private iframeSelector: string) {
-    if (!this.iframeSelector || this.iframeSelector.trim() === '') {
-      throw new Error('Iframe selector cannot be an empty string.');
-    }
+  private iframe: HTMLIFrameElement;
+
+  constructor(iframeSelector: string) {
+    this.iframe = prepareVirtualDisplayIframe(
+      getValidatedIframe(iframeSelector)
+    );
 
     this.setupListener();
   }
 
   private setupListener(): void {
-    window.addEventListener('message', (event: MessageEvent) => {
+    window.addEventListener('message', (event: MessageEvent): void => {
       const message: VirtualDisplayMessageEventData = event.data;
       if (message && message.type) {
         messageBus.publish(message.type, message.context);
@@ -45,30 +51,8 @@ export class VirtualDisplayClient {
   }
 
   private postMessage(message: VirtualDisplayMessageEventData): void {
-    const element = document.querySelector(this.iframeSelector) as HTMLElement;
-
-    if (!element) {
-      throw new Error(
-        `Iframe with selector '${this.iframeSelector}' not found.`
-      );
-    }
-
-    if (!(element instanceof HTMLIFrameElement)) {
-      throw new Error(
-        `Element with selector '${this.iframeSelector}' is not an iframe.`
-      );
-    }
-
-    const iframe = element as HTMLIFrameElement;
-
-    if (!iframe.contentWindow) {
-      throw new Error(
-        `Iframe with selector '${this.iframeSelector}' does not have a contentWindow.`
-      );
-    }
-
     try {
-      iframe.contentWindow.postMessage(message, '*');
+      this.iframe.contentWindow!.postMessage(message, '*');
     } catch (error) {
       if (error instanceof DOMException && error.name === 'SecurityError') {
         throw new Error(

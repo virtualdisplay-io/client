@@ -1,28 +1,28 @@
-import { messageBus } from './message-bus';
-import {
-  MESSAGE_EVENT_MODEL_TREE_REQUEST,
-  MESSAGE_EVENT_MODEL_TREE_RESPONSE,
-  MESSAGE_EVENT_SEND_CLIENT_STATE,
-} from './types/events';
+import { responseDispatcher } from './message/dispatcher';
 import { State } from './types/state';
-import { VirtualDisplayMessageEventData } from './types/message';
 import {
-  getValidatedIframe,
-  prepareVirtualDisplayIframe,
-} from './iframe-factory';
-import { MessageQueue } from './message-queue';
-import { ModelTreeRequestContext } from './types/tree-request';
+  VirtualDisplayRequest,
+  VirtualDisplayRequestType,
+  VirtualDisplayResponse,
+  VirtualDisplayResponseType,
+} from './message/message';
+import { iframeAttributeFactory } from './iframe/factory';
+import { verifiedIframeResolver } from './iframe/resolver';
+import { RequestQueue } from './message/queue';
+import { VirtualDisplayClientOptions } from './iframe/options';
+import { createVirtualDisplayClientWithIframe } from './iframe/builder';
 
 export class VirtualDisplayClient {
   private readonly iframeElement: HTMLIFrameElement;
-  private readonly queue: MessageQueue;
+  private readonly queue: RequestQueue;
 
-  constructor(iframeSelector: string) {
-    this.iframeElement = prepareVirtualDisplayIframe(
-      getValidatedIframe(iframeSelector)
-    );
+  constructor(iframe: string | HTMLIFrameElement) {
+    const localIframe: HTMLIFrameElement =
+      typeof iframe === 'string' ? verifiedIframeResolver(iframe) : iframe;
 
-    this.queue = new MessageQueue(this.iframeElement.contentWindow!);
+    this.iframeElement = iframeAttributeFactory(localIframe);
+
+    this.queue = new RequestQueue(this.iframeElement.contentWindow!);
     this.iframeElement.addEventListener('load', (): void => this.queue.flush());
 
     this.setupListener();
@@ -30,36 +30,48 @@ export class VirtualDisplayClient {
 
   private setupListener(): void {
     window.addEventListener('message', (event: MessageEvent): void => {
-      const message: VirtualDisplayMessageEventData = event.data;
+      const message: VirtualDisplayResponse = event.data;
       if (message && message.type) {
-        messageBus.publish(message.type, message.context);
+        responseDispatcher.publish(message);
       }
     });
   }
 
   public sendClientState(state: State): void {
-    const message: VirtualDisplayMessageEventData<State> = {
-      type: MESSAGE_EVENT_SEND_CLIENT_STATE,
+    const message: VirtualDisplayRequest = {
+      type: VirtualDisplayRequestType.CLIENT_STATE,
       context: state,
     };
 
     this.queue.send(message);
   }
 
-  public async requestModelTree(
+  public async requestObjectTree(
     origin: string | null = null
-  ): Promise<VirtualDisplayMessageEventData> {
-    const message: VirtualDisplayMessageEventData<ModelTreeRequestContext> = {
-      type: MESSAGE_EVENT_MODEL_TREE_REQUEST,
+  ): Promise<VirtualDisplayResponse> {
+    const type = VirtualDisplayRequestType.OBJECT_TREE;
+    const message: VirtualDisplayRequest = {
+      type,
       context: { origin },
     };
 
     this.queue.send(message);
 
-    return messageBus.once(MESSAGE_EVENT_MODEL_TREE_RESPONSE);
+    return responseDispatcher.once(VirtualDisplayResponseType.OBJECT_TREE);
+  }
+
+  public onResponseSubscriber(
+    type: VirtualDisplayResponseType,
+    handler: (data: VirtualDisplayResponse) => void
+  ): void {
+    responseDispatcher.subscribe(type, handler);
   }
 
   public get iframe(): HTMLIFrameElement {
     return this.iframeElement;
+  }
+
+  static builder(options: VirtualDisplayClientOptions): VirtualDisplayClient {
+    return createVirtualDisplayClientWithIframe(options);
   }
 }

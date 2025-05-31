@@ -1,21 +1,21 @@
-import { VirtualDisplayMessageEventData } from './types/message';
+import { VirtualDisplayRequest } from './message';
 
-export class MessageQueue {
+export class RequestQueue {
   private isReady: boolean = false;
-  private queue: VirtualDisplayMessageEventData[] = [];
+  private queue: VirtualDisplayRequest[] = [];
 
   constructor(
     private readonly targetWindow: Window,
     private readonly targetOrigin: string = '*'
   ) {}
 
-  public send(message: VirtualDisplayMessageEventData): void {
+  public send(request: VirtualDisplayRequest): void {
     if (!this.isReady) {
-      this.queue.push(message);
+      this.queue.push(request);
       return;
     }
 
-    this.targetWindow.postMessage(message, this.targetOrigin);
+    this.targetWindow.postMessage(request, this.targetOrigin);
   }
 
   public flush(): void {

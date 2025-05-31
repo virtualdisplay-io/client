@@ -138,8 +138,8 @@ describe('prepareVirtualDisplayIframe', (): void => {
     expect(iframe.hasAttribute('allowfullscreen')).toBe(true);
 
     expect(iframe.style.display).toBe('block');
-    expect(iframe.style.width).toBe('100vw');
-    expect(iframe.style.height).toBe('100vh');
+    expect(iframe.style.width).toBe('100%');
+    expect(iframe.style.height).toBe('100%');
     expect(['', 'none']).toContain(iframe.style.border);
     expect(iframe.style.minHeight).toBe('0');
     expect(iframe.style.minWidth).toBe('0');
@@ -151,8 +151,8 @@ describe('prepareVirtualDisplayIframe', (): void => {
 
     expect(iframe.style.background).toBe('red');
     expect(iframe.style.display).toBe('block');
-    expect(iframe.style.width).toBe('100vw');
-    expect(iframe.style.height).toBe('100vh');
+    expect(iframe.style.width).toBe('100%');
+    expect(iframe.style.height).toBe('100%');
     expect(['', 'none']).toContain(iframe.style.border);
     expect(iframe.style.minHeight).toBe('0');
     expect(iframe.style.minWidth).toBe('0');

@@ -100,7 +100,10 @@ const source = (
   model: string,
   debug: boolean = false
 ): string => {
-  // @ts-ignore
-  const hostName: string = import.meta.env.VITE_VIRTUAL_DISPLAY_SERVER_HOST;
+  const hostName: string =
+    // @ts-ignore
+    import.meta.env.VITE_VIRTUAL_DISPLAY_SERVER_HOST ??
+    'https://server.virtual-display.io';
+
   return `${hostName}?=${license}&model=${model}${debug ? '&debug=true' : ''}`;
 };

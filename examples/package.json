@@ -1,14 +1,18 @@
 {
   "name": "@virtualdisplay-io/examples",
+  "description": "These sub-projects demonstrate how to use the VirtualDisplay.io client library.",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev:basic": "pnpm --filter basic dev",
-    "dev:advanced": "pnpm --filter advanced dev",
-    "build:basic": "pnpm --filter basic build",
-    "build:advanced": "pnpm --filter advanced build",
-    "start:basic": "pnpm --filter basic start",
-    "start:advanced": "pnpm --filter advanced start"
+    "dev:advanced": "pnpm --filter \"*advanced\" dev",
+    "build:advanced": "pnpm --filter \"*advanced\" build",
+    "start:advanced": "pnpm --filter \"*advanced\" start",
+    "dev:basic": "pnpm --filter \"*basic\" dev",
+    "build:basic": "pnpm --filter \"*basic\" build",
+    "start:basic": "pnpm --filter \"*basic\" start",
+    "dev:tree-response": "pnpm --filter \"*tree-response\" dev",
+    "build:tree-response": "pnpm --filter \"*tree-response\" build",
+    "start:tree-response": "pnpm --filter \"*tree-response\" start"
   },
   "dependencies": {
     "@virtualdisplay-io/client": "workspace:*"

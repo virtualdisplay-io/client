@@ -1,32 +1,39 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
+  MESSAGE_EVENT_MODEL_TREE_REQUEST,
   VirtualDisplayClient,
   VirtualDisplayMessageEventData,
 } from '../../src';
 import { messageBus } from '../../src';
 import { MESSAGE_EVENT_SEND_CLIENT_STATE } from '../../src';
 import { State } from '../../src';
+import { ModelTreeRequestContext } from '../../src/types/tree-request';
 
 describe('VirtualDisplayClient', () => {
   it('should ignore unknown message types', (): void => {
     const unknownMessage = { type: 'UNKNOWN_EVENT', context: null };
     window.postMessage(unknownMessage, '*');
+
     expect(mockQueueSend).not.toHaveBeenCalled();
   });
 
   it('should not throw an error if state attributes are empty', (): void => {
     const state: State = { attributes: [] };
+
     expect(() => client.sendClientState(state)).not.toThrow();
   });
 
   it('should handle null model tree gracefully', async (): Promise<void> => {
     messageBus.once = vi.fn().mockResolvedValue(null);
-    const result = await client.requestModelTree();
+    const result: VirtualDisplayMessageEventData<ModelTreeRequestContext> =
+      await client.requestModelTree();
+
     expect(result).toBeNull();
   });
 
   it('should handle message bus error gracefully', async (): Promise<void> => {
     messageBus.once = vi.fn().mockRejectedValue(new Error('Bus Error'));
+
     await expect(client.requestModelTree()).rejects.toThrow('Bus Error');
   });
 
@@ -73,8 +80,8 @@ describe('VirtualDisplayClient', () => {
         },
       ],
     };
-
     client.sendClientState(state);
+
     expect(mockQueueSend).toHaveBeenCalledWith({
       type: MESSAGE_EVENT_SEND_CLIENT_STATE,
       context: state,
@@ -90,8 +97,9 @@ describe('VirtualDisplayClient', () => {
           Promise.resolve(modelTree)
       );
 
-    const result: VirtualDisplayMessageEventData<unknown> =
+    const result: VirtualDisplayMessageEventData<ModelTreeRequestContext> =
       await client.requestModelTree();
+
     expect(result).toEqual(modelTree);
   });
 
@@ -109,6 +117,32 @@ describe('VirtualDisplayClient', () => {
     expect(mockQueueSend).toHaveBeenCalledWith({
       type: MESSAGE_EVENT_SEND_CLIENT_STATE,
       context: state,
+    });
+  });
+
+  it('should send a model tree request with null origin if not provided', async (): Promise<void> => {
+    mockQueueSend.mockClear();
+    messageBus.once = vi.fn().mockResolvedValue({ ok: true });
+
+    await client.requestModelTree();
+
+    expect(mockQueueSend).toHaveBeenCalledWith({
+      type: MESSAGE_EVENT_MODEL_TREE_REQUEST,
+      context: { origin: null },
+    });
+  });
+
+  it('should send a model tree request with correct context', async (): Promise<void> => {
+    const testOrigin = 'https://example.com';
+
+    mockQueueSend.mockClear();
+    messageBus.once = vi.fn().mockResolvedValue({ ok: true });
+
+    await client.requestModelTree(testOrigin);
+
+    expect(mockQueueSend).toHaveBeenCalledWith({
+      type: MESSAGE_EVENT_MODEL_TREE_REQUEST,
+      context: { origin: testOrigin },
     });
   });
 });

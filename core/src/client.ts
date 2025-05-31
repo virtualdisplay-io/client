@@ -11,6 +11,7 @@ import {
   prepareVirtualDisplayIframe,
 } from './iframe-factory';
 import { MessageQueue } from './message-queue';
+import { ModelTreeRequestContext } from './types/tree-request';
 
 export class VirtualDisplayClient {
   private readonly iframeElement: HTMLIFrameElement;
@@ -45,10 +46,12 @@ export class VirtualDisplayClient {
     this.queue.send(message);
   }
 
-  public async requestModelTree(): Promise<VirtualDisplayMessageEventData> {
-    const message: VirtualDisplayMessageEventData<null> = {
+  public async requestModelTree(
+    origin: string | null = null
+  ): Promise<VirtualDisplayMessageEventData> {
+    const message: VirtualDisplayMessageEventData<ModelTreeRequestContext> = {
       type: MESSAGE_EVENT_MODEL_TREE_REQUEST,
-      context: null,
+      context: { origin },
     };
 
     this.queue.send(message);

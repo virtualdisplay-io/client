@@ -3,6 +3,7 @@ import {
   MESSAGE_EVENT_SEND_CLIENT_STATE,
   MESSAGE_EVENT_MODEL_TREE_RESPONSE,
 } from './message-events';
+} from './events';
 
 export type VirtualDisplayMessageEvent =
   | typeof MESSAGE_EVENT_SEND_CLIENT_STATE

@@ -3,9 +3,9 @@ import {
   MESSAGE_EVENT_MODEL_TREE_REQUEST,
   MESSAGE_EVENT_MODEL_TREE_RESPONSE,
   MESSAGE_EVENT_SEND_CLIENT_STATE,
-} from './types/message-events';
+} from './types/events';
 import { State } from './types/state';
-import { VirtualDisplayMessageEventData } from './types/virtual-display-message-event';
+import { VirtualDisplayMessageEventData } from './types/message';
 import {
   getValidatedIframe,
   prepareVirtualDisplayIframe,

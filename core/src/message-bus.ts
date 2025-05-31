@@ -1,4 +1,4 @@
-import { VirtualDisplayMessageEvent } from './types/virtual-display-message-event';
+import { VirtualDisplayMessageEvent } from './types/message';
 
 type VirtualDisplayMessageHandler<T = unknown> = (data: T) => void;
 

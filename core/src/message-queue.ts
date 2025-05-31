@@ -1,4 +1,4 @@
-import { VirtualDisplayMessageEventData } from './types/virtual-display-message-event';
+import { VirtualDisplayMessageEventData } from './types/message';
 
 export class MessageQueue {
   private isReady: boolean = false;

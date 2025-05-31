@@ -1,3 +1,21 @@
+## [1.3.0](https://github.com/virtualdisplay-io/client/compare/v1.2.0...v1.3.0) (2025-05-31)
+
+### Features
+
+* added a more advanced example, this example showcases how to set the default state of the model and how to change it active meshes and variants. ([ae2b491](https://github.com/virtualdisplay-io/client/commit/ae2b491e0d348a7c79af87f7fbc2e9ca24f0c3d9))
+* added a proper basic demo, this will help developers understand how to use the client. ([c5abd6f](https://github.com/virtualdisplay-io/client/commit/c5abd6faa211c90e176e667cb39847afa781d2b6))
+* added another demo, this demo showcases how to use the request model feature. the feature exposes an object that can be used to build interfaces to find mesh and variant identifiers, for further use. ([c8ac2b3](https://github.com/virtualdisplay-io/client/commit/c8ac2b34fe9d9077746e1b76b2653ac7dd3958a3))
+* **ifame builder:** introduces a new iframe builder for easier integration. ([0783c73](https://github.com/virtualdisplay-io/client/commit/0783c730c2df5a17bd75019c5caf74f4e6a8669b))
+* introduce a queue that will keep any messages until the iframe element has loaded / generated. this makes sure that no messages are dropped due to the iframe not beeing ready yet. ([e4e607f](https://github.com/virtualdisplay-io/client/commit/e4e607f35567b9950a94892603a4e699ed3ef7f9))
+* introduce new type to use to define the origin of the message, added state into the mix too. this will make VirtualDisplayMessageEventData typings more clear. ([32762fc](https://github.com/virtualdisplay-io/client/commit/32762fc6c4953caf7169129fe9c9cec474c3e3f4))
+* introduced env variable ([c834148](https://github.com/virtualdisplay-io/client/commit/c8341481478804ceb6fb3c2fce43b4ab36c13881))
+* so, this is the newly introduced type ([b08358e](https://github.com/virtualdisplay-io/client/commit/b08358e53cb766e864a90158fbad415a6d7e8a85))
+
+### Bug Fixes
+
+* make sure we always have a hostname ([40b68ae](https://github.com/virtualdisplay-io/client/commit/40b68ae9cbe9cb7d8a75e28fd1a715c643a9463c))
+* the vw and vh cannot be used by the iframe. the iframe should optimize within the space it was given, not the whole view. ([3b8604e](https://github.com/virtualdisplay-io/client/commit/3b8604ea8fb7b7bb6353988060dd3ad84f6ffe54))
+
 ## [1.2.0](https://github.com/virtualdisplay-io/client/compare/v1.1.0...v1.2.0) (2025-05-29)
 
 ### Features

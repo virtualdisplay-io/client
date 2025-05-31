@@ -1,29 +1,15 @@
-import { VirtualDisplayClient } from '../../../core/src';
+import {
+  VirtualDisplayClient,
+  VirtualDisplayClientOptions,
+} from '../../../core/src';
 
-new VirtualDisplayClient('#virtual-display');
+const options: VirtualDisplayClientOptions = {
+  parent: '#virtual-display-placeholder',
+  license: 'demo',
+  model: 'shopx',
+  style: { background: '#f9fafb' },
+  title: 'Eames Chair 3D View',
+  classNames: 'w-full h-full min-h-[350px] rounded-lg border-0',
+};
 
-function updateStatus(message: string): void {
-  const statusElement = document.getElementById('status');
-  if (statusElement) {
-    statusElement.textContent = message;
-  }
-}
-
-window.addEventListener('load', () => {
-  try {
-    updateStatus('Initializing...');
-
-    const iframe = document.getElementById(
-      'virtual-display'
-    ) as HTMLIFrameElement;
-
-    if (!iframe || !iframe.contentWindow) {
-      throw new Error('Iframe not found or not ready');
-    }
-
-    updateStatus('Iframe found! Displaying model.');
-  } catch (error) {
-    console.error('Initialization error:', error);
-    updateStatus('Initialization failed');
-  }
-});
+VirtualDisplayClient.builder(options);

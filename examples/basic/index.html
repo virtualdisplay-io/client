@@ -23,13 +23,7 @@
   <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
     <!-- Left: 3D Model -->
     <section class="w-full">
-      <div class="aspect-square rounded-lg shadow-lg bg-white flex items-center justify-center overflow-hidden">
-        <iframeKune
-          src="http://localhost:3001/?model=shopx&license=demo"
-          class="w-full h-full min-h-[350px] rounded-lg border-0"
-          style="background: #f9fafb"
-          title="Eames Chair 3D View"
-        ></iframeKune>
+      <div id="virtual-display-placeholder" class="aspect-square rounded-lg shadow-lg bg-white flex items-center justify-center overflow-hidden">
       </div>
       <p class="mt-4 text-center text-sm text-gray-500">3D view powered by Virtual Display</p>
     </section>
@@ -66,5 +60,6 @@
     </section>
   </div>
 </main>
+<script type="module" src="./src/index.ts"></script>
 </body>
 </html>

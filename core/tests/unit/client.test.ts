@@ -11,7 +11,7 @@ describe('VirtualDisplayClient', () => {
   it('should ignore unknown message types', (): void => {
     const unknownMessage = { type: 'UNKNOWN_EVENT', context: null };
     window.postMessage(unknownMessage, '*');
-    expect(mockPostMessage).not.toHaveBeenCalled();
+    expect(mockQueueSend).not.toHaveBeenCalled();
   });
 
   it('should not throw an error if state attributes are empty', (): void => {
@@ -31,16 +31,22 @@ describe('VirtualDisplayClient', () => {
   });
 
   // @ts-ignore
-  let mockPostMessage: vi.Mock;
+  let mockQueueSend: vi.Mock;
   let client: VirtualDisplayClient;
 
   beforeEach((): void => {
-    mockPostMessage = vi.fn();
+    mockQueueSend = vi.fn();
+
+    const mockQueue = {
+      send: mockQueueSend,
+      flush: vi.fn(),
+      isReady: true,
+    };
 
     const iframe: HTMLIFrameElement = document.createElement('iframe');
     Object.defineProperty(iframe, 'contentWindow', {
       value: {
-        postMessage: mockPostMessage,
+        postMessage: mockQueueSend,
       },
       writable: true,
     });
@@ -49,6 +55,8 @@ describe('VirtualDisplayClient', () => {
     document.body.appendChild(iframe);
 
     client = new VirtualDisplayClient('#virtual-display');
+    // @ts-ignore
+    client.queue = mockQueue;
   });
 
   afterEach((): void => {
@@ -67,13 +75,10 @@ describe('VirtualDisplayClient', () => {
     };
 
     client.sendClientState(state);
-    expect(mockPostMessage).toHaveBeenCalledWith(
-      {
-        type: MESSAGE_EVENT_SEND_CLIENT_STATE,
-        context: state,
-      },
-      '*'
-    );
+    expect(mockQueueSend).toHaveBeenCalledWith({
+      type: MESSAGE_EVENT_SEND_CLIENT_STATE,
+      context: state,
+    });
   });
 
   it('should request and receive model tree', async (): Promise<void> => {
@@ -101,12 +106,9 @@ describe('VirtualDisplayClient', () => {
     } as unknown as State;
 
     expect((): void => client.sendClientState(state)).not.toThrow();
-    expect(mockPostMessage).toHaveBeenCalledWith(
-      {
-        type: MESSAGE_EVENT_SEND_CLIENT_STATE,
-        context: state,
-      },
-      '*'
-    );
+    expect(mockQueueSend).toHaveBeenCalledWith({
+      type: MESSAGE_EVENT_SEND_CLIENT_STATE,
+      context: state,
+    });
   });
 });

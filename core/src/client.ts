@@ -10,14 +10,19 @@ import {
   getValidatedIframe,
   prepareVirtualDisplayIframe,
 } from './iframe-factory';
+import { MessageQueue } from './message-queue';
 
 export class VirtualDisplayClient {
-  private iframe: HTMLIFrameElement;
+  private readonly iframeElement: HTMLIFrameElement;
+  private readonly queue: MessageQueue;
 
   constructor(iframeSelector: string) {
-    this.iframe = prepareVirtualDisplayIframe(
+    this.iframeElement = prepareVirtualDisplayIframe(
       getValidatedIframe(iframeSelector)
     );
+
+    this.queue = new MessageQueue(this.iframeElement.contentWindow!);
+    this.iframeElement.addEventListener('load', (): void => this.queue.flush());
 
     this.setupListener();
   }
@@ -36,7 +41,8 @@ export class VirtualDisplayClient {
       type: MESSAGE_EVENT_SEND_CLIENT_STATE,
       context: state,
     };
-    this.postMessage(message);
+
+    this.queue.send(message);
   }
 
   public async requestModelTree(): Promise<VirtualDisplayMessageEventData> {
@@ -45,23 +51,12 @@ export class VirtualDisplayClient {
       context: null,
     };
 
-    this.postMessage(message);
+    this.queue.send(message);
 
     return messageBus.once(MESSAGE_EVENT_MODEL_TREE_RESPONSE);
   }
 
-  private postMessage(message: VirtualDisplayMessageEventData): void {
-    try {
-      this.iframe.contentWindow!.postMessage(message, '*');
-    } catch (error) {
-      if (error instanceof DOMException && error.name === 'SecurityError') {
-        throw new Error(
-          `Failed to send message to iframe due to cross-origin restrictions.`
-        );
-      }
-      throw new Error(
-        `Failed to send message to iframe: ${(error as Error).message}`
-      );
-    }
+  public get iframe(): HTMLIFrameElement {
+    return this.iframeElement;
   }
 }

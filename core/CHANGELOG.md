@@ -1,3 +1,9 @@
+## [1.3.1](https://github.com/virtualdisplay-io/client/compare/v1.3.0...v1.3.1) (2025-06-01)
+
+### Bug Fixes
+
+* response content referred to node ([c96fd47](https://github.com/virtualdisplay-io/client/commit/c96fd478e358db82e10aca1d412f548d6a80286c))
+
 ## [1.3.0](https://github.com/virtualdisplay-io/client/compare/v1.2.0...v1.3.0) (2025-05-31)
 
 ### Features

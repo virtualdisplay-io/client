@@ -29,5 +29,5 @@ export type ObjectTreeRequestContext = {
  * Response context for the object tree, which contains the root node of the object tree.
  */
 export type ObjectTreeResponseContext = {
-  objectTree: ObjectTreeNode;
+  objectTree: ObjectTree;
 };

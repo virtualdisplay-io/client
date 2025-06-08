@@ -34,6 +34,6 @@ client.sendClientState({
 ```
 
 ## Demo projects
-- [Basic Demo](/examples/basic) – Minimal integration, for simple products and models.
-- [Advanced Demo](/examples/advanced) – Complex product configurator, for dynamic options and real-time updates.
+- [Simple Model Integration](/examples/simple-model-integration) – Minimal integration for displaying 3D models without configuration options.
+- [Variable Products](/examples/variable-products) – Complex product configurator with attribute-driven variations and real-time updates.
 - [Tree Request Demo](/examples/tree-request) – Shows how to obtain the model tree using an async request.

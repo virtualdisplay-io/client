@@ -28,4 +28,4 @@ Open `http://localhost:4001/` in your browser.
 
 See the code in `/src/index.ts` for more details.
 
-> For more information about advanced use cases, see the [Advanced Demo](../advanced/README.md) or the [root README](../../README.md).
+> For more information about configurable products, see the [Variable Products Demo](../variable-products/README.md) or the [root README](../../README.md).

@@ -8,7 +8,7 @@ const options: VirtualDisplayClientOptions = {
   license: 'demo',
   model: 'shopx',
   style: { background: '#f9fafb' },
-  title: 'Eames Chair 3D View',
+  title: 'Simple 3D Model Integration',
   classNames: 'w-full h-full min-h-[350px] rounded-lg border-0',
 };
 

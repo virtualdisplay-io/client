@@ -1,3 +1,14 @@
+## [1.5.0](https://github.com/virtualdisplay-io/client/compare/v1.4.0...v1.5.0) (2025-06-08)
+
+### Features
+
+* **examples:** rename basic demo to simple-model-integration ([a895cec](https://github.com/virtualdisplay-io/client/commit/a895cecf491fb96b11d029984446d5e9c1915451))
+
+### Bug Fixes
+
+* update all cross-references from old demo names to new names ([6ffa40b](https://github.com/virtualdisplay-io/client/commit/6ffa40b57c49892882b3a77d354a3cb588408bdc))
+* update pnpm-lock.yaml after renaming basic demo ([73f0f40](https://github.com/virtualdisplay-io/client/commit/73f0f405827cab06309b22990561c96efaf775dd))
+
 ## [1.4.0](https://github.com/virtualdisplay-io/client/compare/v1.3.1...v1.4.0) (2025-06-08)
 
 ### Features

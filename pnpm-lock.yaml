@@ -96,7 +96,7 @@ importers:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@22.15.29)(jsdom@26.1.0)
 
-  examples/basic:
+  examples/simple-model-integration:
     dependencies:
       '@virtualdisplay-io/client':
         specifier: workspace:*

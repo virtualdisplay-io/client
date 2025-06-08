@@ -30,4 +30,4 @@ Open `http://localhost:4003/` in your browser.
 
 See the code in `/src/index.ts` for details.
 
-For other use cases, see the [Basic Demo](../basic) or [Advanced Demo](../advanced).
+For other use cases, see the [Simple Model Integration](../simple-model-integration) or [Variable Products](../variable-products).

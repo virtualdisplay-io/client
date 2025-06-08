@@ -1,5 +1,5 @@
 {
-  "name": "@virtualdisplay-io/example-basic",
+  "name": "@virtualdisplay-io/example-simple-model-integration",
   "version": "1.0.0",
   "private": true,
   "type": "module",

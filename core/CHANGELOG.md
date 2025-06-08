@@ -1,3 +1,9 @@
+## [1.6.1](https://github.com/virtualdisplay-io/client/compare/v1.6.0...v1.6.1) (2025-06-08)
+
+### Bug Fixes
+
+* restore tree-response demo main.ts and add index.ts ([66ba70b](https://github.com/virtualdisplay-io/client/commit/66ba70b8f9a27d03918da6185e48324a1c9ca573))
+
 ## [1.6.0](https://github.com/virtualdisplay-io/client/compare/v1.5.0...v1.6.0) (2025-06-08)
 
 ### Features

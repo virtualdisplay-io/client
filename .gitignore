@@ -3,3 +3,4 @@ dist/
 coverage/
 stats.html
 .env.local
+.idea/

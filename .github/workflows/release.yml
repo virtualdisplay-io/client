@@ -40,13 +40,22 @@ jobs:
         uses: actions/setup-node@v4.0.4
         with:
           node-version: '20'
-          cache: 'pnpm'
-          cache-dependency-path: './pnpm-lock.yaml'
           registry-url: 'https://npm.pkg.github.com'
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Configure pnpm store
+        run: pnpm config set store-dir ~/.pnpm-store
 
       - name: Install dependencies
         working-directory: .
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Run semantic release
         working-directory: ./core

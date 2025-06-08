@@ -27,21 +27,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
       // Disable button and show loading state
       requestBtn.disabled = true;
+      requestBtn.setAttribute('aria-busy', 'true');
       requestBtn.textContent = 'Loading...';
+      
+      // Update output with live region announcement
+      output.setAttribute('aria-live', 'polite');
+      output.setAttribute('aria-busy', 'true');
       output.textContent = 'Requesting model tree...';
 
       // Request the model tree
       const response = await client.requestModelTree();
       
       // Display the response
+      output.setAttribute('aria-busy', 'false');
       output.textContent = JSON.stringify(response, null, 2);
     } catch (error) {
-      // Handle errors
+      // Handle errors with accessible announcement
+      output.setAttribute('aria-busy', 'false');
+      output.setAttribute('role', 'alert');
       output.textContent = `Error: ${error instanceof Error ? error.message : 'Unknown error occurred'}`;
       console.error('Failed to request model tree:', error);
     } finally {
       // Re-enable button
       requestBtn.disabled = false;
+      requestBtn.setAttribute('aria-busy', 'false');
       requestBtn.textContent = 'Request Model Tree';
     }
   });

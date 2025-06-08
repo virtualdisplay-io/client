@@ -1,13 +1,18 @@
 import { VirtualDisplayClientOptions } from './options';
 import { VirtualDisplayClient } from '../client';
 import { VirtualDisplayResponseType } from '../message/message';
+import { logger } from '../utils/logger';
 
 export function createVirtualDisplayClientWithIframe(
   options: VirtualDisplayClientOptions
 ): VirtualDisplayClient {
+  logger.debug('Creating Virtual Display iframe client', { options });
+
   const iframe: HTMLIFrameElement = document.createElement('iframe');
   iframe.src = source(options.license, options.model, options.debug ?? false);
   iframe.id = options.iframeId ?? 'virtual-display-iframe';
+
+  logger.debug('Created iframe element', { src: iframe.src, id: iframe.id });
 
   // added css styles
   if (options.style) {
@@ -51,34 +56,47 @@ const parent = (parent: string | HTMLElement): HTMLElement => {
     return validateParent(document.querySelector(parent), parent);
   }
 
-  if (!(parent instanceof HTMLElement))
-    throw new Error(
-      `Parent must be a selector string or an HTMLElement, received: ${typeof parent}`
-    );
+  if (!(parent instanceof HTMLElement)) {
+    const error = `Parent must be a selector string or an HTMLElement, received: ${typeof parent}`;
+    logger.error('Invalid parent element type', {
+      parent,
+      type: typeof parent,
+    });
+    throw new Error(error);
+  }
 
-  if (typeof parent.appendChild !== 'function')
-    throw new Error(
-      `Provided parent is an HTMLElement but cannot append children.`
-    );
+  if (typeof parent.appendChild !== 'function') {
+    const error = `Provided parent is an HTMLElement but cannot append children.`;
+    logger.error('Parent element cannot append children', { parent });
+    throw new Error(error);
+  }
 
   return parent;
 };
 
 const validateParent = (el: Element | null, selector: string): HTMLElement => {
   if (!el) {
-    throw new Error(
-      `Parent element with selector "${selector}" not found in the DOM.`
-    );
+    const error = `Parent element with selector "${selector}" not found in the DOM.`;
+    logger.error('Parent element not found', { selector });
+    throw new Error(error);
   }
 
   if (!(el instanceof HTMLElement)) {
-    throw new Error(
-      `Parent element with selector "${selector}" is not an HTMLElement.`
-    );
+    const error = `Parent element with selector "${selector}" is not an HTMLElement.`;
+    logger.error('Parent element is not HTMLElement', {
+      selector,
+      element: el,
+    });
+    throw new Error(error);
   }
 
   if (typeof el.appendChild !== 'function') {
-    throw new Error(`Parent element "${selector}" cannot append children.`);
+    const error = `Parent element "${selector}" cannot append children.`;
+    logger.error('Parent element cannot append children', {
+      selector,
+      element: el,
+    });
+    throw new Error(error);
   }
 
   return el;
@@ -86,11 +104,12 @@ const validateParent = (el: Element | null, selector: string): HTMLElement => {
 
 const validateCssObject = (style: Partial<CSSStyleDeclaration>): void => {
   if (typeof style !== 'object' || Array.isArray(style)) {
-    throw new Error(
+    const error =
       'The "style" option must be a plain object, for example:\n' +
-        '    style: { background: "#f9fafb", border: "1px solid red" }\n' +
-        'You probably passed a string or array instead. Only plain objects are allowed.'
-    );
+      '    style: { background: "#f9fafb", border: "1px solid red" }\n' +
+      'You probably passed a string or array instead. Only plain objects are allowed.';
+    logger.error('Invalid CSS style object', { style, type: typeof style });
+    throw new Error(error);
   }
 };
 

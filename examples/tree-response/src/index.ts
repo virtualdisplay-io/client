@@ -1,4 +1,7 @@
-import { VirtualDisplayClient, VirtualDisplayClientOptions } from '../../../core/src';
+import {
+  VirtualDisplayClient,
+  VirtualDisplayClientOptions,
+} from '../../../core/src';
 
 // Configuration for Virtual Display
 const options: VirtualDisplayClientOptions = {
@@ -14,8 +17,10 @@ const options: VirtualDisplayClientOptions = {
 document.addEventListener('DOMContentLoaded', async () => {
   // Build the Virtual Display iframe
   const client = await VirtualDisplayClient.builder(options);
-  
-  const requestBtn = document.getElementById('requestTreeBtn') as HTMLButtonElement;
+
+  const requestBtn = document.getElementById(
+    'requestTreeBtn'
+  ) as HTMLButtonElement;
   const output = document.getElementById('output') as HTMLPreElement;
 
   if (!requestBtn || !output) {
@@ -32,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       // Request the model tree
       const response = await client.requestModelTree();
-      
+
       // Display the response
       output.textContent = JSON.stringify(response, null, 2);
     } catch (error) {

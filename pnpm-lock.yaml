@@ -96,12 +96,6 @@ importers:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@22.15.29)(jsdom@26.1.0)
 
-  examples/advanced:
-    dependencies:
-      '@virtualdisplay-io/client':
-        specifier: workspace:*
-        version: link:../../core
-
   examples/basic:
     dependencies:
       '@virtualdisplay-io/client':
@@ -109,6 +103,12 @@ importers:
         version: link:../../core
 
   examples/tree-response:
+    dependencies:
+      '@virtualdisplay-io/client':
+        specifier: workspace:*
+        version: link:../../core
+
+  examples/variable-products:
     dependencies:
       '@virtualdisplay-io/client':
         specifier: workspace:*

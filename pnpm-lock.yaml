@@ -72,8 +72,8 @@ importers:
         specifier: ^6.0.0
         version: 6.0.3(semantic-release@24.2.5(typescript@5.8.3))
       '@semantic-release/commit-analyzer':
-        specifier: ^11.0.0
-        version: 11.1.0(semantic-release@24.2.5(typescript@5.8.3))
+        specifier: ^13.0.1
+        version: 13.0.1(semantic-release@24.2.5(typescript@5.8.3))
       '@semantic-release/git':
         specifier: ^10.0.1
         version: 10.0.1(semantic-release@24.2.5(typescript@5.8.3))
@@ -824,12 +824,6 @@ packages:
     engines: {node: '>=14.17'}
     peerDependencies:
       semantic-release: '>=18.0.0'
-
-  '@semantic-release/commit-analyzer@11.1.0':
-    resolution: {integrity: sha512-cXNTbv3nXR2hlzHjAMgbuiQVtvWHTlwwISt60B+4NZv01y/QRY7p2HcJm8Eh2StzcTJoNnflvKjHH/cjFS7d5g==}
-    engines: {node: ^18.17 || >=20.6.1}
-    peerDependencies:
-      semantic-release: '>=20.1.0'
 
   '@semantic-release/commit-analyzer@13.0.1':
     resolution: {integrity: sha512-wdnBPHKkr9HhNhXOhZD5a2LNl91+hs8CC2vsAVYxtZH3y0dV3wKn+uZSN61rdJQZ8EGxzWB3inWocBHV9+u/CQ==}
@@ -4537,19 +4531,6 @@ snapshots:
       fs-extra: 11.3.0
       lodash: 4.17.21
       semantic-release: 24.2.5(typescript@5.8.3)
-
-  '@semantic-release/commit-analyzer@11.1.0(semantic-release@24.2.5(typescript@5.8.3))':
-    dependencies:
-      conventional-changelog-angular: 7.0.0
-      conventional-commits-filter: 4.0.0
-      conventional-commits-parser: 5.0.0
-      debug: 4.4.1
-      import-from-esm: 1.3.4
-      lodash-es: 4.17.21
-      micromatch: 4.0.8
-      semantic-release: 24.2.5(typescript@5.8.3)
-    transitivePeerDependencies:
-      - supports-color
 
   '@semantic-release/commit-analyzer@13.0.1(semantic-release@24.2.5(typescript@5.8.3))':
     dependencies:

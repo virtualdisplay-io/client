@@ -50,7 +50,7 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "jsdom": "^26.1.0",
     "semantic-release": "^24.2.4",
-    "vitest": "^2.1.9"
+    "vitest": "^3.2.2"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

@@ -16,3 +16,13 @@ export {
   VirtualDisplayResponseType,
 } from './message/message';
 export type { VirtualDisplayClientOptions } from './iframe/options';
+
+// Accessibility utilities
+export {
+  announceToScreenReader,
+  createScreenReaderAnnouncer,
+  manageFocus,
+  trapFocus,
+  addKeyboardNavigation,
+  createDebouncedAnnouncer,
+} from './utils/accessibility';

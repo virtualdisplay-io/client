@@ -23,9 +23,8 @@ export function createVirtualDisplayClientWithIframe(
     iframe.className = options.classNames;
   }
 
-  if (options.title) {
-    iframe.title = options.title;
-  }
+  // Always set a title for accessibility (WCAG 2.4.1)
+  iframe.title = options.title || 'Virtual Display 3D Model Viewer';
 
   const parentEl: HTMLElement = parent(options.parent);
   parentEl.appendChild(iframe);

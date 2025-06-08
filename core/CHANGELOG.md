@@ -1,3 +1,13 @@
+## [1.4.0](https://github.com/virtualdisplay-io/client/compare/v1.3.1...v1.4.0) (2025-06-08)
+
+### Features
+
+* **ci:** optimize pipeline performance by 20x ([da80080](https://github.com/virtualdisplay-io/client/commit/da800800a127786f615ebfcf2fc8f4d62025dd3d))
+
+### Bug Fixes
+
+* **ci:** replace failing Node.js cache with robust pnpm store caching ([7da410b](https://github.com/virtualdisplay-io/client/commit/7da410baffe08c06e1c9e562a702fe7df23ce4cf))
+
 ## [1.3.1](https://github.com/virtualdisplay-io/client/compare/v1.3.0...v1.3.1) (2025-06-01)
 
 ### Bug Fixes

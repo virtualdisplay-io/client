@@ -1,3 +1,15 @@
+## [1.6.0](https://github.com/virtualdisplay-io/client/compare/v1.5.0...v1.6.0) (2025-06-08)
+
+### Features
+
+* **examples:** rename advanced demo to variable-products ([2fd5ce8](https://github.com/virtualdisplay-io/client/commit/2fd5ce8dbfbe8efce3937491979a5def072ca0c1))
+
+### Bug Fixes
+
+* resolve merge conflict in pnpm-lock.yaml ([7f657eb](https://github.com/virtualdisplay-io/client/commit/7f657eb21d109b98503c773e8bba25ecf71a9e11))
+* update all cross-references from old demo names to new names ([d93faca](https://github.com/virtualdisplay-io/client/commit/d93faca3ccb1714c50ad0ae77524aaacfc43355d))
+* update pnpm-lock.yaml after merging main ([0090115](https://github.com/virtualdisplay-io/client/commit/009011572fd910536b509da394867149e527e0cd))
+
 ## [1.5.0](https://github.com/virtualdisplay-io/client/compare/v1.4.0...v1.5.0) (2025-06-08)
 
 ### Features

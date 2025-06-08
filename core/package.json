@@ -18,8 +18,8 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/virtual-display-client.es.js",
-      "require": "./dist/virtual-display-client.cjs.js"
+      "import": "./dist/virtualdisplay.client.es.js",
+      "require": "./dist/virtualdisplay.client.cjs.js"
     }
   },
   "files": [

@@ -24,5 +24,5 @@ export {
   manageFocus,
   trapFocus,
   addKeyboardNavigation,
-  createDebouncedAnnouncer
+  createDebouncedAnnouncer,
 } from './utils/accessibility';

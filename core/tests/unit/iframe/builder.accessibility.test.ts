@@ -9,15 +9,18 @@ describe('Iframe Builder - Accessibility', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
-    dom = new JSDOM('<!DOCTYPE html><html><body><div id="container"></div></body></html>', {
-      url: 'http://localhost',
-    });
+    dom = new JSDOM(
+      '<!DOCTYPE html><html><body><div id="container"></div></body></html>',
+      {
+        url: 'http://localhost',
+      }
+    );
     document = dom.window.document;
     global.document = document;
     global.window = dom.window as unknown as Window;
     global.HTMLElement = dom.window.HTMLElement;
     global.HTMLIFrameElement = dom.window.HTMLIFrameElement;
-    
+
     container = document.getElementById('container')! as HTMLElement;
   });
 
@@ -31,7 +34,7 @@ describe('Iframe Builder - Accessibility', () => {
         parent: container,
         license: 'test',
         model: 'test',
-        title: 'Custom 3D Viewer Title'
+        title: 'Custom 3D Viewer Title',
       });
 
       const iframe = container.querySelector('iframe');
@@ -42,11 +45,13 @@ describe('Iframe Builder - Accessibility', () => {
       createVirtualDisplayClientWithIframe({
         parent: container,
         license: 'test',
-        model: 'test'
+        model: 'test',
       });
 
       const iframe = container.querySelector('iframe');
-      expect(iframe?.getAttribute('title')).toBe('Virtual Display 3D Model Viewer');
+      expect(iframe?.getAttribute('title')).toBe(
+        'Virtual Display 3D Model Viewer'
+      );
     });
 
     it('should provide default title even with empty string', () => {
@@ -54,11 +59,13 @@ describe('Iframe Builder - Accessibility', () => {
         parent: container,
         license: 'test',
         model: 'test',
-        title: ''
+        title: '',
       });
 
       const iframe = container.querySelector('iframe');
-      expect(iframe?.getAttribute('title')).toBe('Virtual Display 3D Model Viewer');
+      expect(iframe?.getAttribute('title')).toBe(
+        'Virtual Display 3D Model Viewer'
+      );
     });
   });
 
@@ -68,7 +75,7 @@ describe('Iframe Builder - Accessibility', () => {
         parent: container,
         license: 'test',
         model: 'test',
-        title: 'Product Configurator'
+        title: 'Product Configurator',
       });
 
       expectNoA11yViolations(container);
@@ -78,7 +85,7 @@ describe('Iframe Builder - Accessibility', () => {
       createVirtualDisplayClientWithIframe({
         parent: container,
         license: 'test',
-        model: 'test'
+        model: 'test',
       });
 
       const iframe = container.querySelector('iframe')!;
@@ -92,14 +99,14 @@ describe('Iframe Builder - Accessibility', () => {
       createVirtualDisplayClientWithIframe({
         parent: container,
         license: 'test',
-        model: 'test'
+        model: 'test',
       });
 
       const iframe = container.querySelector('iframe');
       // Note: Some browsers use 'allowfullscreen', others use 'allowFullscreen'
       expect(
-        iframe?.hasAttribute('allowfullscreen') || 
-        iframe?.hasAttribute('allowFullscreen')
+        iframe?.hasAttribute('allowfullscreen') ||
+          iframe?.hasAttribute('allowFullscreen')
       ).toBe(true);
     });
 
@@ -108,7 +115,7 @@ describe('Iframe Builder - Accessibility', () => {
         parent: container,
         license: 'test',
         model: 'test',
-        classNames: 'custom-class w-full h-full'
+        classNames: 'custom-class w-full h-full',
       });
 
       const iframe = container.querySelector('iframe');
@@ -123,8 +130,8 @@ describe('Iframe Builder - Accessibility', () => {
         style: {
           width: '100%',
           height: '400px',
-          backgroundColor: 'red'
-        }
+          backgroundColor: 'red',
+        },
       });
 
       const iframe = container.querySelector('iframe') as HTMLIFrameElement;
@@ -139,11 +146,11 @@ describe('Iframe Builder - Accessibility', () => {
       createVirtualDisplayClientWithIframe({
         parent: container,
         license: 'test',
-        model: 'test'
+        model: 'test',
       });
 
       const iframe = container.querySelector('iframe') as HTMLIFrameElement;
-      
+
       // Iframes are focusable by default
       iframe.focus();
       expect(document.activeElement).toBe(iframe);
@@ -156,9 +163,11 @@ describe('Iframe Builder - Accessibility', () => {
         createVirtualDisplayClientWithIframe({
           parent: '#non-existent',
           license: 'test',
-          model: 'test'
+          model: 'test',
         });
-      }).toThrow('Parent element with selector "#non-existent" not found in the DOM.');
+      }).toThrow(
+        'Parent element with selector "#non-existent" not found in the DOM.'
+      );
     });
   });
 });

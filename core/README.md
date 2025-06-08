@@ -55,7 +55,7 @@ client.sendClientState(state);
 - Identifiers must match the mesh, variant, or material codes used in your 3D model.
 
 ## Demos & examples
-•	See [/examples/basic/](../examples/basic) for the simplest setup.
-•	See [/examples/advanced/](../examples/basic) for a full product configurator demo.
+•	See [/examples/simple-model-integration/](../examples/simple-model-integration) for the simplest setup.
+•	See [/examples/variable-products/](../examples/variable-products) for a full product configurator demo.
 
 For more integration patterns, see the root [README.md](../README.md) or [virtualdisplay.io](https://www.virtualdisplay.io).

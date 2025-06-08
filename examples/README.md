@@ -4,6 +4,6 @@ This directory holds examples on how to use the Virtual Display library. Each ex
 
 ## What demo's are available?
 
-- [Basic Demo](basic/README.md): A simple example that shows how to embed a model into a website without any variations. This demo shows how to display a chair that doesn't have any variations.
-- [Advanced Demo](advanced/README.md): An example that demonstrates how to use variations to display different models or configurations.
+- [Simple Model Integration](simple-model-integration/README.md): A simple example that shows how to embed a model into a website without any variations. This demo shows how to display a 3D model as-is without configurability.
+- [Variable Products](variable-products/README.md): An example that demonstrates how to use product attributes to control model variations and configurations in real-time.
 - [Tree Response Demo](tree-response/README.md): This example shows how to request the model state and receive the response from the server.

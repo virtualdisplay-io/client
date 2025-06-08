@@ -24,3 +24,5 @@ Open `http://localhost:4002/` in your browser.
 - State management for complex product configurations
 
 See `/src/index.ts` for the integration code.
+
+> For simpler use cases without configurability, see the [Simple Model Integration](../simple-model-integration/README.md) or the [root README](../../README.md).

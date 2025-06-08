@@ -26,3 +26,7 @@ export {
   addKeyboardNavigation,
   createDebouncedAnnouncer,
 } from './utils/accessibility';
+
+// Logger utilities
+export { logger, ClientLogger } from './utils/logger';
+export type { Logger } from './utils/logger';

@@ -1,5 +1,5 @@
 # Virtual Display Client
-[![npm version](https://img.shields.io/badge/npm-v1.6.2-blue)](https://github.com/virtualdisplay-io/client)
+[![version](https://img.shields.io/github/package-json/v/virtualdisplay-io/client)](https://github.com/virtualdisplay-io/client)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 Virtual Display is a powerful toolkit for embedding interactive 3D product configurators in any webshop, CMS, or web application. Using our secure, managed 3D server, you can visualize products with unlimited options—without worrying about rendering, performance, or model management.

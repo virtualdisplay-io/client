@@ -1,15 +1,15 @@
-# Virtual Display – Basic Demo
+# Virtual Display – Simple Model Integration
 
-This basic demo shows the simplest way to embed a simple 3D model on your website using Virtual Display.
+This demo shows how to integrate a 3D model without meshes or variants into your website using Virtual Display.
 
-- **No configuration or variants:** Just display a single 3D product, as-is
-- **Perfect for simple products, marketing pages, or proof-of-concept**
+- **No meshes or variants:** Display a complete 3D model as-is without configurability
+- **Perfect for product showcases, marketing pages, or static 3D content**
 - **Full source code included:** See exactly how to use the iframe and the client library
 
 ## What does it show?
 
-- How to embed a 3D model using an `<iframe>`
-- How the [Virtual Display Client](https://www.npmjs.com/package/@virtualdisplay-io/client) connects to the 3D server.
+- How to embed a static 3D model using an `<iframe>`
+- How the [Virtual Display Client](https://www.npmjs.com/package/@virtualdisplay-io/client) connects to the 3D server for model display
 
 ## Try it yourself
 

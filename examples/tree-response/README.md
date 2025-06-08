@@ -10,6 +10,8 @@ This demo shows how to use the Virtual Display client message bus to request and
 - How to send a tree request over the message bus.
 - How to listen for the tree response event.
 - How to display the model tree in the UI.
+- Proper error handling and loading states.
+- The complete structure of meshes, variants, and materials in a 3D model.
 
 ## Try it yourself
 
@@ -23,10 +25,11 @@ Open `http://localhost:4003/` in your browser.
 
 ## How it works
 
-1.	An `<iframe>` is added to the page with the Virtual Display server.
-2.	The client connects and exposes a message bus.
-3.	When you click “Request Model Tree”, the client sends a request event via the message bus.
-4.	The server responds with the full model tree, which is shown in the UI.
+1. An `<iframe>` is added to the page pointing to `http://localhost:4000/?model=demo&license=demo`.
+2. The client connects and exposes a message bus for bidirectional communication.
+3. When you click "Request Model Tree", the client sends a request event via the message bus.
+4. The server responds with the full model tree structure (meshes, variants, materials).
+5. The response is displayed as formatted JSON in the UI.
 
 See the code in `/src/index.ts` for details.
 

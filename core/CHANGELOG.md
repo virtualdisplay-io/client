@@ -1,3 +1,19 @@
+## [2.0.0](https://github.com/virtualdisplay-io/client/compare/v1.6.2...v2.0.0) (2025-06-08)
+
+### ⚠ BREAKING CHANGES
+
+* createDropdown now requires labelText parameter and returns container div instead of select element
+
+### Features
+
+* add comprehensive WCAG 2.1 AA compliance tools and testing ([1aa0a5c](https://github.com/virtualdisplay-io/client/commit/1aa0a5cdc5516fb256805e82ddcb9321ea073924))
+* improve WCAG 2.1 AA compliance ([9b3f88e](https://github.com/virtualdisplay-io/client/commit/9b3f88e8e5293d010451befaf2f4436c632948bb))
+
+### Bug Fixes
+
+* resolve ESLint and formatting issues ([6db84b1](https://github.com/virtualdisplay-io/client/commit/6db84b15ec299b0128967bb5f32cb9c5adbd33c2))
+* update pnpm lockfile for new eslint-plugin-jsx-a11y dependency ([51cf191](https://github.com/virtualdisplay-io/client/commit/51cf19106496e343c2acfa1336f94f9daa1bc875))
+
 ## [1.6.2](https://github.com/virtualdisplay-io/client/compare/v1.6.1...v1.6.2) (2025-06-08)
 
 ### Bug Fixes

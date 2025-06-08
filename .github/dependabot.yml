@@ -1,0 +1,72 @@
+version: 2
+updates:
+  # Core library dependencies
+  - package-ecosystem: "npm"
+    directory: "/core"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    groups:
+      # Group build-related dependencies
+      build-dependencies:
+        patterns:
+          - "vite*"
+          - "typescript"
+          - "@types/*"
+          - "tsconfig*"
+      # Group testing dependencies  
+      test-dependencies:
+        patterns:
+          - "vitest*"
+          - "jsdom"
+          - "@open-wc/*"
+          - "eslint*"
+          - "prettier"
+      # Group semantic release dependencies
+      release-dependencies:
+        patterns:
+          - "@semantic-release/*"
+          - "semantic-release"
+
+  # Example projects dependencies
+  - package-ecosystem: "npm"
+    directory: "/examples/simple-model-integration"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+
+  - package-ecosystem: "npm"
+    directory: "/examples/variable-products"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+
+  - package-ecosystem: "npm"
+    directory: "/examples/tree-response"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+
+  # Root workspace dependencies
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "chore"
+      include: "scope"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    commit-message:
+      prefix: "ci"
+      include: "scope"

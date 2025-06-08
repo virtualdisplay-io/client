@@ -16,18 +16,12 @@
     </header>
 
     <div class="grid md:grid-cols-2 gap-8">
-      <!-- Left: Iframe -->
+      <!-- Left: Virtual Display -->
       <section>
-        <div class="aspect-video w-full rounded-lg overflow-hidden border border-gray-200 shadow">
-          <iframe
-            id="virtual-display-iframe"
-            src="http://localhost:4000/"
-            title="Virtual Display"
-            class="w-full h-full min-h-[280px] bg-gray-50"
-            aria-label="Virtual Display Server"
-          ></iframe>
+        <div id="virtual-display-placeholder" class="aspect-video w-full rounded-lg overflow-hidden border border-gray-200 shadow">
+          <!-- Virtual Display iframe will be inserted here by the builder -->
         </div>
-        <p class="mt-2 text-xs text-gray-400 text-center">This is the actual Virtual Display iframe connection.</p>
+        <p class="mt-2 text-xs text-gray-400 text-center">3D model viewer with interactive tree response capability.</p>
       </section>
 
       <!-- Right: Interaction & Output -->

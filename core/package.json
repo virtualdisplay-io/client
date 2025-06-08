@@ -11,9 +11,12 @@
     "prepare": "pnpm build",
     "dev": "vite",
     "test": "vitest run",
+    "test:a11y": "vitest run tests/unit/accessibility.test.ts tests/unit/iframe/builder.accessibility.test.ts",
+    "test:watch": "vitest",
     "release": "semantic-release",
     "format": "prettier --write \"src/**/*.{ts,json}\" \"tests/**/*.{ts,json}\"",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "lint:a11y": "eslint . --ext .ts --config .eslintrc.a11y.json"
   },
   "exports": {
     ".": {
@@ -44,6 +47,7 @@
     "@semantic-release/github": "^11.0.0",
     "@semantic-release/npm": "^12.0.0",
     "@semantic-release/release-notes-generator": "^11.0.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
     "jsdom": "^26.1.0",
     "semantic-release": "^24.2.4",
     "vitest": "^2.1.9"

@@ -58,8 +58,9 @@ export function announceToScreenReader(message: string, priority: 'polite' | 'as
 
 /**
  * Manages focus for better keyboard navigation
+ * Returns a function to restore previous focus
  */
-export function manageFocus(element: HTMLElement | null): void {
+export function manageFocus(element: HTMLElement | null): (() => void) | void {
   if (!element) return;
   
   // Store previous focus
@@ -177,7 +178,7 @@ export function addKeyboardNavigation(
  * Debounces screen reader announcements to prevent spam
  */
 export function createDebouncedAnnouncer(delay: number = 500): (message: string) => void {
-  let timeoutId: NodeJS.Timeout | null = null;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
   
   return (message: string) => {
     if (timeoutId) {

@@ -1,6 +1,6 @@
 {
   "name": "@virtualdisplay-io/client",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "main": "dist/virtualdisplay.client.cjs.js",
   "module": "dist/virtualdisplay.client.es.js",
   "types": "dist/index.d.ts",

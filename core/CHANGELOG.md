@@ -1,3 +1,9 @@
+## [1.6.2](https://github.com/virtualdisplay-io/client/compare/v1.6.1...v1.6.2) (2025-06-08)
+
+### Bug Fixes
+
+* improve tree-response demo functionality and documentation ([6db2afb](https://github.com/virtualdisplay-io/client/commit/6db2afb60a0ecd41f4d44e70749363f91230a110))
+
 ## [1.6.1](https://github.com/virtualdisplay-io/client/compare/v1.6.0...v1.6.1) (2025-06-08)
 
 ### Bug Fixes

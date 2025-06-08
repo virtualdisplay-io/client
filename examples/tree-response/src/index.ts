@@ -1,8 +1,20 @@
-import { VirtualDisplayClient } from '../../../core/src';
+import { VirtualDisplayClient, VirtualDisplayClientOptions } from '../../../core/src';
+
+// Configuration for Virtual Display
+const options: VirtualDisplayClientOptions = {
+  parent: '#virtual-display-placeholder',
+  license: 'demo',
+  model: 'demo',
+  style: { background: '#f9fafb' },
+  title: 'Tree Response Demo Model',
+  classNames: 'w-full h-full min-h-[280px]',
+};
 
 // Wait for DOM to be ready
-document.addEventListener('DOMContentLoaded', () => {
-  const client = new VirtualDisplayClient('#virtual-display-iframe');
+document.addEventListener('DOMContentLoaded', async () => {
+  // Build the Virtual Display iframe
+  const client = await VirtualDisplayClient.builder(options);
+  
   const requestBtn = document.getElementById('requestTreeBtn') as HTMLButtonElement;
   const output = document.getElementById('output') as HTMLPreElement;
 

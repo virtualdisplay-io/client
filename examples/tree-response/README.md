@@ -21,11 +21,11 @@ Run it using pnpm:
 pnpm dev
 ```
 
-Open `http://localhost:4003/` in your browser.
+Open your browser and navigate to the development server URL.
 
 ## How it works
 
-1. An `<iframe>` is added to the page pointing to `http://localhost:4000/?model=demo&license=demo`.
+1. The Virtual Display builder creates an iframe with the specified model and license.
 2. The client connects and exposes a message bus for bidirectional communication.
 3. When you click "Request Model Tree", the client sends a request event via the message bus.
 4. The server responds with the full model tree structure (meshes, variants, materials).

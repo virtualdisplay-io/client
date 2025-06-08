@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
         entry: 'src/index.ts',
         formats: ['es', 'cjs', 'umd'],
         name: 'VirtualDisplayClient',
-        fileName: (format) => `virtual-display-client.${format}.js`,
+        fileName: (format) => `virtualdisplay.client.${format}.js`,
       },
       outDir: 'dist',
       sourcemap: true,

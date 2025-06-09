@@ -1,33 +1,12 @@
 /**
- * Logger utility for Virtual Display Client with consistent formatting
+ * Logger utility for Virtual Display Client using @virtualdisplay-io/logger package
  */
 
-export interface Logger {
-  debug(message: string, ...args: unknown[]): void;
-  info(message: string, ...args: unknown[]): void;
-  warn(message: string, ...args: unknown[]): void;
-  error(message: string, ...args: unknown[]): void;
-}
+import { Logger } from '@virtualdisplay-io/logger';
 
-export class ClientLogger implements Logger {
-  private readonly prefix = '[Client]';
+// Create logger instance with [Client] prefix
+export const logger = new Logger({ prefix: '[Client]' });
 
-  debug(message: string, ...args: unknown[]): void {
-    console.debug(`${this.prefix} ${message}`, ...args);
-  }
-
-  info(message: string, ...args: unknown[]): void {
-    console.info(`${this.prefix} ${message}`, ...args);
-  }
-
-  warn(message: string, ...args: unknown[]): void {
-    console.warn(`${this.prefix} ${message}`, ...args);
-  }
-
-  error(message: string, ...args: unknown[]): void {
-    console.error(`${this.prefix} ${message}`, ...args);
-  }
-}
-
-// Export singleton instance
-export const logger = new ClientLogger();
+// Re-export types for compatibility
+export type { ILogger as Logger } from '@virtualdisplay-io/logger';
+export { Logger as ClientLogger } from '@virtualdisplay-io/logger';

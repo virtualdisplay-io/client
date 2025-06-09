@@ -26,5 +26,5 @@ export enum VirtualDisplayResponseType {
 
 export type VirtualDisplayResponse = {
   type: VirtualDisplayResponseType;
-  context: ObjectTreeResponseContext;
+  context: ObjectTreeResponseContext | null;
 };

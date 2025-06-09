@@ -30,4 +30,5 @@ export type ObjectTreeRequestContext = {
  */
 export type ObjectTreeResponseContext = {
   objectTree: ObjectTree;
+  origin?: string;
 };

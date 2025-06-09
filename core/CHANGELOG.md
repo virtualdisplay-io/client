@@ -1,3 +1,13 @@
+## [2.1.0](https://github.com/virtualdisplay-io/client/compare/v2.0.0...v2.1.0) (2025-06-08)
+
+### Features
+
+* **logger:** integrate custom logger with [Client] prefix ([#28](https://github.com/virtualdisplay-io/client/issues/28)) ([e7aee44](https://github.com/virtualdisplay-io/client/commit/e7aee44f911a378855b53154d1818532d7f5cf09))
+
+### Bug Fixes
+
+* configure CI/CD for GitHub Packages authentication ([97c9f42](https://github.com/virtualdisplay-io/client/commit/97c9f420698c738d4c893675e14556516a2ad797))
+
 ## [2.0.0](https://github.com/virtualdisplay-io/client/compare/v1.6.2...v2.0.0) (2025-06-08)
 
 ### ⚠ BREAKING CHANGES

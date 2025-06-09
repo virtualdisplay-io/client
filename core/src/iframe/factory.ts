@@ -1,19 +1,23 @@
+import { logger } from '../utils/logger';
+
 /**
  * Prepares the given HTMLIFrameElement for use as a Virtual Display iframe.
  */
 export function iframeAttributeFactory(
   iframe: HTMLIFrameElement
 ): HTMLIFrameElement {
+  logger.debug('Preparing iframe for Virtual Display', { iframe });
+
   if (!(iframe instanceof HTMLIFrameElement)) {
-    throw new Error(
-      `Provided element is not an iframe. Make sure to pass a valid HTMLIFrameElement to prepareVirtualDisplayIframe.`
-    );
+    const error = `Provided element is not an iframe. Make sure to pass a valid HTMLIFrameElement to prepareVirtualDisplayIframe.`;
+    logger.error('Invalid iframe element', { iframe, type: typeof iframe });
+    throw new Error(error);
   }
 
   if (!('style' in iframe) || !iframe.style) {
-    throw new Error(
-      `Cannot prepare iframe: style property is missing on the provided iframe element. This may indicate a non-standard or corrupted DOM node.`
-    );
+    const error = `Cannot prepare iframe: style property is missing on the provided iframe element. This may indicate a non-standard or corrupted DOM node.`;
+    logger.error('Iframe missing style property', { iframe });
+    throw new Error(error);
   }
 
   iframe.setAttribute('allowfullscreen', '');
@@ -49,6 +53,11 @@ export function iframeAttributeFactory(
 
   const updatedFeatures = new Set([...currentFeatures, ...requiredFeatures]);
   iframe.setAttribute('allow', Array.from(updatedFeatures).join(';'));
+
+  logger.debug('Successfully prepared iframe', {
+    allowFeatures: Array.from(updatedFeatures),
+    appliedStyles: Object.keys(defaultStyles),
+  });
 
   return iframe;
 }

@@ -52,8 +52,8 @@ jobs:
       - name: Configure npm for GitHub Packages
         working-directory: .
         run: |
-          echo "@virtualdisplay-io:registry=https://npm.pkg.github.com/" >> ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> ~/.npmrc
+          echo "@virtualdisplay-io:registry=https://npm.pkg.github.com/" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN }}" >> .npmrc
 
       - name: Install dependencies
         working-directory: .

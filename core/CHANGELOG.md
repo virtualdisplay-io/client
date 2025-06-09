@@ -1,3 +1,9 @@
+## [2.2.1](https://github.com/virtualdisplay-io/client/compare/v2.2.0...v2.2.1) (2025-06-09)
+
+### Bug Fixes
+
+* correct server URL typo in iframe builder ([#37](https://github.com/virtualdisplay-io/client/issues/37)) ([ecacff4](https://github.com/virtualdisplay-io/client/commit/ecacff45a4fccf0fde21d4c4b79582f33a51b1a4))
+
 ## [2.2.0](https://github.com/virtualdisplay-io/client/compare/v2.1.0...v2.2.0) (2025-06-09)
 
 ### Features

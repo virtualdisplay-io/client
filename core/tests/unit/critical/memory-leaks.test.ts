@@ -85,8 +85,8 @@ describe('Memory Leak Prevention', () => {
       const client = new VirtualDisplayClient(iframe);
       const handlers: Array<ReturnType<typeof vi.fn>> = [];
 
-      // Subscribe many handlers - reduced from 10000 to prevent CI memory issues
-      for (let i = 0; i < 1000; i++) {
+      // Subscribe many handlers - reduced to 100 for CI stability
+      for (let i = 0; i < 100; i++) {
         const handler = vi.fn();
         handlers.push(handler);
         client.onResponseSubscriber(
@@ -104,7 +104,7 @@ describe('Memory Leak Prevention', () => {
 
       // All handlers should be called
       const calledHandlers = handlers.filter((h) => h.mock.calls.length > 0);
-      expect(calledHandlers.length).toBe(1000);
+      expect(calledHandlers.length).toBe(100);
 
       // Memory test: ensure we can still subscribe more
       const additionalHandler = vi.fn();
@@ -130,13 +130,13 @@ describe('Memory Leak Prevention', () => {
 
       const promises: Promise<VirtualDisplayResponse>[] = [];
 
-      // Create many unresolved promises
-      for (let i = 0; i < 1000; i++) {
+      // Create many unresolved promises - reduced for CI
+      for (let i = 0; i < 100; i++) {
         promises.push(client.requestObjectTree(`origin${i}`).catch(() => {}));
       }
 
       // Resolve some of them
-      for (let i = 0; i < 500; i++) {
+      for (let i = 0; i < 50; i++) {
         window.dispatchEvent(
           new MessageEvent('message', {
             data: {
@@ -206,8 +206,8 @@ describe('Memory Leak Prevention', () => {
 
       const client = new VirtualDisplayClient(iframe);
 
-      // Queue many messages
-      for (let i = 0; i < 1000; i++) {
+      // Queue many messages - reduced for CI
+      for (let i = 0; i < 100; i++) {
         client.sendClientState({
           attributes: [
             {

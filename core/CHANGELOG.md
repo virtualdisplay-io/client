@@ -1,3 +1,14 @@
+## [3.0.0](https://github.com/virtualdisplay-io/client/compare/v2.2.1...v3.0.0) (2025-06-09)
+
+### ⚠ BREAKING CHANGES
+
+* ObjectTree.variants now returns an array of Variant objects
+with { name: string, visible: boolean } instead of string[]
+
+### Features
+
+* add CLIENT_STATE response type for complete state visibility ([#39](https://github.com/virtualdisplay-io/client/issues/39)) ([81ba762](https://github.com/virtualdisplay-io/client/commit/81ba7628dd248bd93db1cac31f1df7b012847c86))
+
 ## [2.2.1](https://github.com/virtualdisplay-io/client/compare/v2.2.0...v2.2.1) (2025-06-09)
 
 ### Bug Fixes

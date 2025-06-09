@@ -1,4 +1,5 @@
 import { VirtualDisplayRequest } from './message';
+import { logger } from '../utils/logger';
 
 export class RequestQueue {
   private isReady: boolean = false;
@@ -15,14 +16,22 @@ export class RequestQueue {
       return;
     }
 
-    this.targetWindow.postMessage(request, this.targetOrigin);
+    try {
+      this.targetWindow.postMessage(request, this.targetOrigin);
+    } catch (error) {
+      logger.error('Failed to send message', { error, request });
+    }
   }
 
   public flush(): void {
     this.isReady = true;
 
     for (const msg of this.queue) {
-      this.targetWindow.postMessage(msg, this.targetOrigin);
+      try {
+        this.targetWindow.postMessage(msg, this.targetOrigin);
+      } catch (error) {
+        logger.error('Failed to send queued message', { error, message: msg });
+      }
     }
 
     this.queue = [];

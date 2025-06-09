@@ -121,7 +121,7 @@ const source = (
   const hostName: string =
     // @ts-ignore
     import.meta.env.VITE_VIRTUAL_DISPLAY_SERVER_HOST ??
-    'https://server.virtual-display.io';
+    'https://server.virtualdisplay.io';
 
   return `${hostName}?license=${license}&model=${model}${debug ? '&debug=true' : ''}`;
 };

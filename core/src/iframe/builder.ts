@@ -104,5 +104,5 @@ const source = (
     import.meta.env.VITE_VIRTUAL_DISPLAY_SERVER_HOST ??
     'https://server.virtual-display.io';
 
-  return `${hostName}?=${license}&model=${model}${debug ? '&debug=true' : ''}`;
+  return `${hostName}?license=${license}&model=${model}${debug ? '&debug=true' : ''}`;
 };

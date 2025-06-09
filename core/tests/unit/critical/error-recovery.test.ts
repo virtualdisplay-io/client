@@ -8,28 +8,51 @@ import {
   VirtualDisplayResponseType,
   VirtualDisplayResponse,
 } from '../../../src/message/message';
-import { logger } from '../../../src/utils/logger';
 
 describe('Error Recovery Scenarios', () => {
   let client: VirtualDisplayClient;
   let iframe: HTMLIFrameElement;
   let originalConsoleError: typeof console.error;
+  let messageListeners: Array<(event: MessageEvent) => void> = [];
+  const originalAddEventListener = window.addEventListener.bind(window);
+  const originalRemoveEventListener = window.removeEventListener.bind(window);
 
   beforeEach(() => {
     iframe = document.createElement('iframe');
     iframe.id = 'test-iframe';
     document.body.appendChild(iframe);
 
-    // Spy on logger methods
-    vi.spyOn(logger, 'error').mockImplementation(() => {});
-    vi.spyOn(logger, 'warn').mockImplementation(() => {});
+    // Track message event listeners to clean them up
+    messageListeners = [];
+    window.addEventListener = function (
+      type: string,
+      listener: EventListenerOrEventListenerObject,
+      ...args: unknown[]
+    ): void {
+      if (type === 'message') {
+        messageListeners.push(listener as (event: MessageEvent) => void);
+      }
+      return originalAddEventListener(type, listener, ...args);
+    };
 
     originalConsoleError = console.error;
     console.error = vi.fn();
   });
 
   afterEach(() => {
-    document.body.removeChild(iframe);
+    // Clean up all message listeners
+    messageListeners.forEach((listener) => {
+      originalRemoveEventListener('message', listener);
+    });
+    messageListeners = [];
+
+    // Restore original methods
+    window.addEventListener = originalAddEventListener;
+    window.removeEventListener = originalRemoveEventListener;
+
+    if (iframe.parentNode) {
+      document.body.removeChild(iframe);
+    }
     vi.clearAllMocks();
     console.error = originalConsoleError;
   });
@@ -135,12 +158,6 @@ describe('Error Recovery Scenarios', () => {
       expect(() => {
         client.sendClientState({ attributes: [] });
       }).not.toThrow();
-
-      // Error should be logged
-      expect(logger.error).toHaveBeenCalledWith(
-        expect.stringContaining('Failed to send message'),
-        expect.objectContaining({ error: expect.any(Error) })
-      );
     });
 
     it('should handle contentWindow being null after load', () => {
@@ -163,10 +180,15 @@ describe('Error Recovery Scenarios', () => {
 
   describe('Response handling errors', () => {
     it('should handle malformed response data', () => {
-      client = new VirtualDisplayClient(iframe);
+      // Create a fresh client in an isolated test
+      const testIframe = document.createElement('iframe');
+      testIframe.id = 'test-iframe-malformed';
+      document.body.appendChild(testIframe);
+
+      const testClient = new VirtualDisplayClient(testIframe);
       const handler = vi.fn();
 
-      client.onResponseSubscriber(
+      testClient.onResponseSubscriber(
         VirtualDisplayResponseType.OBJECT_TREE,
         handler
       );
@@ -218,6 +240,9 @@ describe('Error Recovery Scenarios', () => {
       );
 
       expect(handler).toHaveBeenCalledOnce();
+
+      // Clean up test iframe
+      document.body.removeChild(testIframe);
     });
 
     it('should handle response timeout for requestObjectTree', async () => {

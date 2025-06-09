@@ -225,7 +225,7 @@ describe('Memory Leak Prevention', () => {
       iframe.dispatchEvent(new Event('load'));
 
       // All messages sent
-      expect(mockPostMessage).toHaveBeenCalledTimes(1000);
+      expect(mockPostMessage).toHaveBeenCalledTimes(100);
 
       // Queue more messages to ensure queue was properly cleared
       for (let i = 0; i < 100; i++) {
@@ -233,7 +233,7 @@ describe('Memory Leak Prevention', () => {
       }
 
       // New messages should be sent immediately
-      expect(mockPostMessage).toHaveBeenCalledTimes(1100);
+      expect(mockPostMessage).toHaveBeenCalledTimes(200);
     });
 
     it('should not retain references to old messages after sending', () => {

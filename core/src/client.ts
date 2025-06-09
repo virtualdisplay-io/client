@@ -22,8 +22,13 @@ export class VirtualDisplayClient {
 
     this.iframeElement = iframeAttributeFactory(localIframe);
 
-    this.queue = new RequestQueue(this.iframeElement.contentWindow!);
-    this.iframeElement.addEventListener('load', (): void => this.queue.flush());
+    this.queue = new RequestQueue(this.iframeElement.contentWindow);
+
+    this.iframeElement.addEventListener('load', (): void => {
+      // Update the queue's target window on load
+      this.queue.updateTargetWindow(this.iframeElement.contentWindow);
+      this.queue.flush();
+    });
 
     this.setupListener();
   }

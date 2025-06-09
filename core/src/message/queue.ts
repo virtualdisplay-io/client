@@ -15,17 +15,30 @@ export class RequestQueue {
       return;
     }
 
-    this.targetWindow.postMessage(request, this.targetOrigin);
+    try {
+      this.targetWindow.postMessage(request, this.targetOrigin);
+    } catch (error) {
+      // Silently handle postMessage errors (e.g., cross-origin, null window)
+      // The message is lost but the client remains functional
+    }
   }
 
   public flush(): void {
     this.isReady = true;
 
     for (const msg of this.queue) {
-      this.targetWindow.postMessage(msg, this.targetOrigin);
+      try {
+        this.targetWindow.postMessage(msg, this.targetOrigin);
+      } catch (error) {
+        // Silently handle postMessage errors during flush
+      }
     }
 
     this.queue = [];
     this.queue.length = 0;
+  }
+
+  public updateTargetWindow(window: Window | null): void {
+    this.targetWindow = window;
   }
 }

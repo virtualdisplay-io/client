@@ -62,7 +62,10 @@ export class VirtualDisplayClient {
 
     this.queue.send(message);
 
-    return responseDispatcher.once(VirtualDisplayResponseType.OBJECT_TREE);
+    return responseDispatcher.once(
+      VirtualDisplayResponseType.OBJECT_TREE,
+      origin ? (response) => response.context?.origin === origin : undefined
+    );
   }
 
   public onResponseSubscriber(

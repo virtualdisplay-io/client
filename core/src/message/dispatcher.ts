@@ -37,12 +37,15 @@ class ResponseDispatcher {
   }
 
   public once(
-    type: VirtualDisplayResponseType
+    type: VirtualDisplayResponseType,
+    filter?: (response: VirtualDisplayResponse) => boolean
   ): Promise<VirtualDisplayResponse> {
     return new Promise((resolve): void => {
       const handler: Handler = (data: VirtualDisplayResponse): void => {
-        this.unsubscribe(type, handler);
-        resolve(data);
+        if (!filter || filter(data)) {
+          this.unsubscribe(type, handler);
+          resolve(data);
+        }
       };
 
       this.subscribe(type, handler);

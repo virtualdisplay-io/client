@@ -105,7 +105,7 @@ describe('iframeAttributeFactory', (): void => {
     for (const feature of features) {
       expect(allow).toContain(feature);
       expect(
-        allow!.split(';').filter((x: string) => x.trim() === feature).length
+        allow!.split(' ').filter((x: string) => x.trim() === feature).length
       ).toBe(1);
     }
   });
@@ -129,7 +129,7 @@ describe('iframeAttributeFactory', (): void => {
     }
     expect(allow).toContain('microphone');
     expect(
-      allow!.split(';').filter((x: string) => x.trim() === 'microphone').length
+      allow!.split(' ').filter((x: string) => x.trim() === 'microphone').length
     ).toBe(1);
   });
 

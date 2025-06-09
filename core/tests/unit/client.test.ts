@@ -29,7 +29,7 @@ describe('VirtualDisplayClient', () => {
 
     document.body.appendChild(iframe);
 
-    client = new VirtualDisplayClient('#virtual-display');
+    client = new VirtualDisplayClient(iframe);
     // @ts-ignore
     client.queue = mockQueue;
   });

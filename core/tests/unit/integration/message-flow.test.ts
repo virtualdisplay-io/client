@@ -156,8 +156,18 @@ describe('Message Flow Integration', () => {
     });
 
     it('should ignore malformed messages from untrusted origins', () => {
+      // Create a fresh client to avoid interference from other tests
+      const testIframe = document.createElement('iframe');
+      testIframe.id = 'test-malformed';
+      document.body.appendChild(testIframe);
+      Object.defineProperty(testIframe, 'contentWindow', {
+        value: { postMessage: mockPostMessage },
+        writable: true,
+      });
+      
+      const testClient = new VirtualDisplayClient(testIframe);
       const handler = vi.fn();
-      client.onResponseSubscriber(
+      testClient.onResponseSubscriber(
         VirtualDisplayResponseType.OBJECT_TREE,
         handler
       );
@@ -185,14 +195,27 @@ describe('Message Flow Integration', () => {
 
       // Now handler should be called
       expect(handler).toHaveBeenCalledOnce();
+      
+      // Clean up test iframe
+      document.body.removeChild(testIframe);
     });
 
     it('should handle subscription cleanup to prevent memory leaks', () => {
+      // Create a fresh client to avoid interference
+      const testIframe = document.createElement('iframe');
+      testIframe.id = 'test-cleanup';
+      document.body.appendChild(testIframe);
+      Object.defineProperty(testIframe, 'contentWindow', {
+        value: { postMessage: mockPostMessage },
+        writable: true,
+      });
+      
+      const testClient = new VirtualDisplayClient(testIframe);
       const handlers = Array.from({ length: 1000 }, () => vi.fn());
 
       // Subscribe many handlers
       handlers.forEach((handler) => {
-        client.onResponseSubscriber(
+        testClient.onResponseSubscriber(
           VirtualDisplayResponseType.OBJECT_TREE,
           handler
         );
@@ -212,6 +235,9 @@ describe('Message Flow Integration', () => {
 
       // Note: In real implementation, we'd need unsubscribe functionality
       // This test highlights the need for cleanup mechanisms
+      
+      // Clean up test iframe
+      document.body.removeChild(testIframe);
     });
   });
 });

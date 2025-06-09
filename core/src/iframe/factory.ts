@@ -4,15 +4,16 @@
 export function iframeAttributeFactory(
   iframe: HTMLIFrameElement
 ): HTMLIFrameElement {
-  if (!(iframe instanceof HTMLIFrameElement)) {
+  // First check if style is missing before instanceof check
+  if (iframe && !('style' in iframe) || (iframe && !iframe.style)) {
     throw new Error(
-      `Provided element is not an iframe. Make sure to pass a valid HTMLIFrameElement to prepareVirtualDisplayIframe.`
+      `Cannot prepare iframe: style property is missing on the provided iframe element. This may indicate a non-standard or corrupted DOM node.`
     );
   }
 
-  if (!('style' in iframe) || !iframe.style) {
+  if (!(iframe instanceof HTMLIFrameElement)) {
     throw new Error(
-      `Cannot prepare iframe: style property is missing on the provided iframe element. This may indicate a non-standard or corrupted DOM node.`
+      `Provided element is not an iframe. Make sure to pass a valid HTMLIFrameElement to prepareVirtualDisplayIframe.`
     );
   }
 
@@ -43,12 +44,12 @@ export function iframeAttributeFactory(
   ];
 
   const currentFeatures = (iframe.getAttribute('allow') || '')
-    .split(';')
+    .split(/[;\s]+/)
     .map((feature: string) => feature.trim())
     .filter(Boolean);
 
   const updatedFeatures = new Set([...currentFeatures, ...requiredFeatures]);
-  iframe.setAttribute('allow', Array.from(updatedFeatures).join(';'));
+  iframe.setAttribute('allow', Array.from(updatedFeatures).join(' '));
 
   return iframe;
 }

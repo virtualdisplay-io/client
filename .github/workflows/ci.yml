@@ -46,9 +46,11 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Configure pnpm store
+        working-directory: .
         run: pnpm config set store-dir ~/.pnpm-store
 
       - name: Configure npm for GitHub Packages
+        working-directory: .
         run: |
           echo "@virtualdisplay-io:registry=https://npm.pkg.github.com/" >> ~/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.PACKAGES_TOKEN || secrets.GITHUB_TOKEN }}" >> ~/.npmrc

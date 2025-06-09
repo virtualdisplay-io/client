@@ -3,11 +3,14 @@ import { VirtualDisplayRequest } from './message';
 export class RequestQueue {
   private isReady: boolean = false;
   private queue: VirtualDisplayRequest[] = [];
+  private targetWindow: Window | null;
 
   constructor(
-    private readonly targetWindow: Window,
+    targetWindow: Window | null,
     private readonly targetOrigin: string = '*'
-  ) {}
+  ) {
+    this.targetWindow = targetWindow;
+  }
 
   public send(request: VirtualDisplayRequest): void {
     if (!this.isReady) {
@@ -16,7 +19,9 @@ export class RequestQueue {
     }
 
     try {
-      this.targetWindow.postMessage(request, this.targetOrigin);
+      if (this.targetWindow) {
+        this.targetWindow.postMessage(request, this.targetOrigin);
+      }
     } catch (error) {
       // Silently handle postMessage errors (e.g., cross-origin, null window)
       // The message is lost but the client remains functional
@@ -28,7 +33,9 @@ export class RequestQueue {
 
     for (const msg of this.queue) {
       try {
-        this.targetWindow.postMessage(msg, this.targetOrigin);
+        if (this.targetWindow) {
+          this.targetWindow.postMessage(msg, this.targetOrigin);
+        }
       } catch (error) {
         // Silently handle postMessage errors during flush
       }

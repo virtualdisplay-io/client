@@ -46,7 +46,9 @@ export class VirtualDisplayClient {
   }
 
   public sendClientState(state: State): void {
-    logger.debug('Sending client state', { attributeCount: state.attributes.length });
+    logger.debug('Sending client state', {
+      attributeCount: state.attributes.length,
+    });
     const message: VirtualDisplayRequest = {
       type: VirtualDisplayRequestType.CLIENT_STATE,
       context: state,
@@ -67,7 +69,9 @@ export class VirtualDisplayClient {
 
     this.queue.send(message);
 
-    const response = await responseDispatcher.once(VirtualDisplayResponseType.OBJECT_TREE);
+    const response = await responseDispatcher.once(
+      VirtualDisplayResponseType.OBJECT_TREE
+    );
     logger.debug('Object tree response received');
     return response;
   }

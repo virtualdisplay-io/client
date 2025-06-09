@@ -12,7 +12,10 @@ class ResponseDispatcher {
     }
 
     this.handlers.get(type)!.push(handler);
-    logger.debug('Handler subscribed', { type, handlerCount: this.handlers.get(type)!.length });
+    logger.debug('Handler subscribed', {
+      type,
+      handlerCount: this.handlers.get(type)!.length,
+    });
   }
 
   public unsubscribe(type: VirtualDisplayResponseType, handler: Handler): void {
@@ -24,7 +27,10 @@ class ResponseDispatcher {
 
     const newList = list.filter((h: Handler) => h !== handler);
     this.handlers.set(type, newList);
-    logger.debug('Handler unsubscribed', { type, handlerCount: newList.length });
+    logger.debug('Handler unsubscribed', {
+      type,
+      handlerCount: newList.length,
+    });
   }
 
   public publish(response: VirtualDisplayResponse): void {
@@ -34,7 +40,10 @@ class ResponseDispatcher {
       return;
     }
 
-    logger.debug('Publishing response to handlers', { type: response.type, handlerCount: list.length });
+    logger.debug('Publishing response to handlers', {
+      type: response.type,
+      handlerCount: list.length,
+    });
     for (const handler of list) {
       handler(response);
     }

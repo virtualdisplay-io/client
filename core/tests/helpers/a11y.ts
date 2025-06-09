@@ -1,6 +1,7 @@
 /**
  * Accessibility testing helpers for Vitest
  */
+import { logger } from '../../src/utils/logger';
 
 interface A11yViolation {
   rule: string;
@@ -208,5 +209,5 @@ export function simulateScreenReaderAnnouncement(
   message: string,
   priority: 'polite' | 'assertive' = 'polite'
 ): void {
-  console.log(`[Screen Reader ${priority.toUpperCase()}]: ${message}`);
+  logger.info(`Screen Reader ${priority.toUpperCase()}: ${message}`);
 }

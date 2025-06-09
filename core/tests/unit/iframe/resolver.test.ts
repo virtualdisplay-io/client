@@ -44,10 +44,11 @@ describe('verifiedIframeResolver', (): void => {
   // In a real browser, these scenarios would be caught by the checks
 
   it('returns the iframe if all checks pass', (): void => {
-    const iframe: HTMLIFrameElement = createIframeWithWindow('my-iframe');
-
+    const iframe = document.createElement('iframe');
+    iframe.id = 'my-iframe';
     document.body.appendChild(iframe);
 
-    expect(verifiedIframeResolver('#my-iframe')).toBe(iframe);
+    const result = verifiedIframeResolver('#my-iframe');
+    expect(result).toBe(iframe);
   });
 });

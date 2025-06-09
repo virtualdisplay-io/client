@@ -64,7 +64,9 @@ export class VirtualDisplayClient {
 
     return responseDispatcher.once(
       VirtualDisplayResponseType.OBJECT_TREE,
-      origin ? (response) => response.context?.origin === origin : undefined
+      origin
+        ? (response): boolean => response.context?.origin === origin
+        : undefined
     );
   }
 

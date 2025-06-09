@@ -10,5 +10,6 @@ export default defineConfig({
         singleFork: true,
       },
     },
+    setupFiles: ['./tests/setup.ts'],
   },
 });

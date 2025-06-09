@@ -29,4 +29,3 @@ export {
 
 // Logger utilities
 export { logger } from './utils/logger';
-export type { Logger } from './utils/logger';

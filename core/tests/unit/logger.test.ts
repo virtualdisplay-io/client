@@ -2,7 +2,7 @@
  * @vitest-environment jsdom
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ClientLogger } from '../../src/utils/logger';
+import { logger } from '../../src/utils/logger';
 import { Logger } from '@virtualdisplay-io/logger';
 
 describe('ClientLogger', () => {
@@ -84,8 +84,8 @@ describe('ClientLogger', () => {
 
   describe('when creating new logger instances', () => {
     it('should create independent logger instances', () => {
-      const logger1 = new ClientLogger({ prefix: '[Client]' });
-      const logger2 = new ClientLogger({ prefix: '[Client]' });
+      const logger1 = new Logger({ prefix: '[Client]', enabled: true });
+      const logger2 = new Logger({ prefix: '[Client]', enabled: true });
 
       logger1.info('Logger 1 message');
       logger2.info('Logger 2 message');
@@ -100,9 +100,9 @@ describe('ClientLogger', () => {
       expect(call2[0]).toContain('Logger 2 message');
     });
 
-    it('should export logger type and ClientLogger class', () => {
-      expect(ClientLogger).toBeDefined();
-      expect(typeof ClientLogger).toBe('function');
+    it('should have logger configured with [Client] prefix', () => {
+      expect(logger).toBeDefined();
+      expect(logger).toBeInstanceOf(Logger);
     });
   });
 

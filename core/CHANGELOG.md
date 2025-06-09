@@ -1,3 +1,15 @@
+## [2.2.0](https://github.com/virtualdisplay-io/client/compare/v2.1.0...v2.2.0) (2025-06-09)
+
+### Features
+
+* integrate @virtualdisplay-io/logger package ([#32](https://github.com/virtualdisplay-io/client/issues/32)) ([d9fd2ea](https://github.com/virtualdisplay-io/client/commit/d9fd2eabfbfd4f599d85925c57c80323f3ab01b7))
+
+### Bug Fixes
+
+* **client:** correct license query parameter in iframe URL ([#34](https://github.com/virtualdisplay-io/client/issues/34)) ([f47db1c](https://github.com/virtualdisplay-io/client/commit/f47db1cf87f3f7e0874e232c15d6bb2cf5b0da00))
+* disable Husky in CI environments to allow semantic-release commits ([4650d98](https://github.com/virtualdisplay-io/client/commit/4650d98061d14cc8a1ae4a2c54bdb241174daa56))
+* resolve Husky ESM compatibility issues ([#36](https://github.com/virtualdisplay-io/client/issues/36)) ([a2f8ffd](https://github.com/virtualdisplay-io/client/commit/a2f8ffd79915be90897f5934b239ee22c5b8808e))
+
 ## [2.1.0](https://github.com/virtualdisplay-io/client/compare/v2.0.0...v2.1.0) (2025-06-08)
 
 ### Features

@@ -28,3 +28,5 @@ export const logger = new Logger({
   colors: true,
   timestamp: false,
 });
+
+// Logger configured and ready for use

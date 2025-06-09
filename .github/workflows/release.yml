@@ -56,10 +56,13 @@ jobs:
       - name: Install dependencies
         working-directory: .
         run: pnpm install --frozen-lockfile --prefer-offline
+        env:
+          HUSKY: 0
 
       - name: Run semantic release
         working-directory: ./core
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HUSKY: 0
         run: pnpm run release

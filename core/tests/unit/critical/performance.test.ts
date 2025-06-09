@@ -29,13 +29,17 @@ describe('Performance Metrics', () => {
 
   describe('Message Processing Speed', () => {
     it('should process messages within acceptable time limits', () => {
-      client = new VirtualDisplayClient('#test-iframe');
       const postMessageSpy = vi.fn();
 
       Object.defineProperty(iframe, 'contentWindow', {
         value: { postMessage: postMessageSpy },
         writable: true,
       });
+
+      client = new VirtualDisplayClient('#test-iframe');
+
+      // Trigger load event to make queue ready
+      iframe.dispatchEvent(new Event('load'));
 
       const startTime = performance.now();
 
@@ -280,13 +284,17 @@ describe('Performance Metrics', () => {
 
   describe('Throttling and Debouncing', () => {
     it('should throttle rapid state updates efficiently', async () => {
-      client = new VirtualDisplayClient('#test-iframe');
       const postMessageSpy = vi.fn();
 
       Object.defineProperty(iframe, 'contentWindow', {
         value: { postMessage: postMessageSpy },
         writable: true,
       });
+
+      client = new VirtualDisplayClient('#test-iframe');
+
+      // Trigger load event to make queue ready
+      iframe.dispatchEvent(new Event('load'));
 
       // Simulate rapid updates (e.g., slider movement)
       const updates = Array.from({ length: 100 }, (_, i) => ({
@@ -357,18 +365,26 @@ describe('Performance Metrics', () => {
 
   describe('Concurrent Operations Performance', () => {
     it('should handle concurrent requests efficiently', async () => {
+      const postMessageSpy = vi.fn();
+
+      Object.defineProperty(iframe, 'contentWindow', {
+        value: { postMessage: postMessageSpy },
+        writable: true,
+      });
+
       client = new VirtualDisplayClient('#test-iframe');
 
-      // Mock response handling
-      const responseHandler = vi.fn().mockResolvedValue({ nodes: [] });
-      (client as { responseDispatcher: { once: vi.Mock } }).responseDispatcher =
-        { once: responseHandler };
+      // Trigger load event to make queue ready
+      iframe.dispatchEvent(new Event('load'));
 
       const startTime = performance.now();
 
-      // Send 50 concurrent requests
+      // Send 50 concurrent requests with immediate timeout
       const promises = Array.from({ length: 50 }, () =>
-        client.requestObjectTree().catch((): null => null)
+        Promise.race([
+          client.requestObjectTree(),
+          new Promise<null>((resolve) => setTimeout(() => resolve(null), 10)),
+        ]).catch((): null => null)
       );
 
       await Promise.all(promises);

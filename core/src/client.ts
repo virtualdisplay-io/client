@@ -16,6 +16,7 @@ import { logger } from './utils/logger';
 export class VirtualDisplayClient {
   private readonly iframeElement: HTMLIFrameElement;
   private readonly queue: RequestQueue;
+  private readonly messageListener: (event: MessageEvent) => void;
 
   constructor(iframe: string | HTMLIFrameElement) {
     logger.debug('Initializing VirtualDisplayClient');
@@ -36,13 +37,14 @@ export class VirtualDisplayClient {
   }
 
   private setupListener(): void {
-    window.addEventListener('message', (event: MessageEvent): void => {
+    this.messageListener = (event: MessageEvent): void => {
       const message: VirtualDisplayResponse = event.data;
       if (message && message.type) {
         logger.debug('Received message from iframe', { type: message.type });
         responseDispatcher.publish(message);
       }
-    });
+    };
+    window.addEventListener('message', this.messageListener);
   }
 
   public sendClientState(state: State): void {
@@ -85,6 +87,12 @@ export class VirtualDisplayClient {
 
   public get iframe(): HTMLIFrameElement {
     return this.iframeElement;
+  }
+
+  public destroy(): void {
+    logger.debug('Destroying VirtualDisplayClient');
+    window.removeEventListener('message', this.messageListener);
+    logger.info('VirtualDisplayClient destroyed successfully');
   }
 
   static builder(options: VirtualDisplayClientOptions): VirtualDisplayClient {

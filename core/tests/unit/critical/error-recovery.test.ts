@@ -60,10 +60,8 @@ describe('Error Recovery', () => {
       expect(errorCallback).not.toHaveBeenCalled();
     });
 
-    it('should handle postMessage failures gracefully', () => {
-      client = new VirtualDisplayClient('#test-iframe');
-
-      // Mock postMessage to throw
+    it('should handle postMessage failures gracefully', async () => {
+      // Mock postMessage to throw BEFORE creating client
       const postMessageMock = vi.fn().mockImplementation((): void => {
         throw new Error('PostMessage failed');
       });
@@ -72,6 +70,8 @@ describe('Error Recovery', () => {
         value: { postMessage: postMessageMock },
         writable: true,
       });
+
+      client = new VirtualDisplayClient('#test-iframe');
 
       // Trigger the load event to make the queue ready
       iframe.dispatchEvent(new Event('load'));
@@ -87,6 +87,10 @@ describe('Error Recovery', () => {
 
       // Should not throw despite postMessage failure
       expect(() => client.sendClientState(state)).not.toThrow();
+
+      // Wait for async error handling
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
       expect(loggerErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining('Failed to send message'),
         expect.any(Object)
@@ -210,8 +214,6 @@ describe('Error Recovery', () => {
 
   describe('State Recovery', () => {
     it('should maintain state integrity after errors', () => {
-      client = new VirtualDisplayClient('#test-iframe');
-
       const validState: State = {
         attributes: [
           {
@@ -223,12 +225,14 @@ describe('Error Recovery', () => {
         ],
       };
 
-      // Mock initial working postMessage
+      // Mock initial working postMessage BEFORE creating client
       const mockPostMessage = vi.fn();
       Object.defineProperty(iframe, 'contentWindow', {
         value: { postMessage: mockPostMessage },
         writable: true,
       });
+
+      client = new VirtualDisplayClient('#test-iframe');
 
       // Trigger load event to make queue ready
       iframe.dispatchEvent(new Event('load'));
@@ -243,7 +247,7 @@ describe('Error Recovery', () => {
         writable: true,
       });
 
-      // Try to send state again (should fail gracefully)
+      // Try to send state again (should fail gracefully but will be queued)
       expect(() => client.sendClientState(validState)).not.toThrow();
 
       // Restore iframe and trigger load again
@@ -255,18 +259,21 @@ describe('Error Recovery', () => {
 
       // Should be able to send state again
       client.sendClientState(validState);
-      expect(mockPostMessage).toHaveBeenCalledTimes(2);
+      // Expect 3 calls: 1 initial + 1 queued from when contentWindow was null + 1 final
+      expect(mockPostMessage).toHaveBeenCalledTimes(3);
     });
 
     it('should queue messages during connection interruption', () => {
-      client = new VirtualDisplayClient('#test-iframe');
       const postMessageSpy = vi.fn();
 
-      // Start without contentWindow (simulating not-ready state)
+      // Start with a contentWindow but DON'T trigger load event (queue stays not ready)
       Object.defineProperty(iframe, 'contentWindow', {
-        value: null,
+        value: { postMessage: postMessageSpy },
         writable: true,
       });
+
+      client = new VirtualDisplayClient('#test-iframe');
+      // Intentionally NOT calling iframe.dispatchEvent(new Event('load')) yet
 
       // Send multiple states
       const states = [
@@ -302,20 +309,18 @@ describe('Error Recovery', () => {
         },
       ];
 
+      // Send messages while queue is not ready (should be queued)
       states.forEach((state) => {
         expect(() => client.sendClientState(state)).not.toThrow();
       });
 
-      // Restore connection
-      Object.defineProperty(iframe, 'contentWindow', {
-        value: { postMessage: postMessageSpy },
-        writable: true,
-      });
+      // At this point, no messages should have been sent yet (still queued)
+      expect(postMessageSpy).toHaveBeenCalledTimes(0);
 
-      // Trigger flush by simulating iframe load
+      // Now trigger load event to flush the queue
       iframe.dispatchEvent(new Event('load'));
 
-      // Messages should have been queued and sent after connection restored
+      // Messages should have been queued and sent after load event
       expect(postMessageSpy).toHaveBeenCalledTimes(3);
     });
   });
@@ -344,13 +349,14 @@ describe('Error Recovery', () => {
     });
 
     it('should handle rapid state changes', () => {
-      client = new VirtualDisplayClient('#test-iframe');
       const postMessageSpy = vi.fn();
 
       Object.defineProperty(iframe, 'contentWindow', {
         value: { postMessage: postMessageSpy },
         writable: true,
       });
+
+      client = new VirtualDisplayClient('#test-iframe');
 
       // Trigger load event to make queue ready
       iframe.dispatchEvent(new Event('load'));

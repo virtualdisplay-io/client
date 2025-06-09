@@ -12,6 +12,7 @@ describe('Message Flow Integration', () => {
   let client: VirtualDisplayClient;
   let iframe: HTMLIFrameElement;
   let serverWindow: Window;
+  let timeoutIds: NodeJS.Timeout[] = [];
 
   beforeEach(() => {
     // Setup iframe
@@ -35,13 +36,39 @@ describe('Message Flow Integration', () => {
   });
 
   afterEach(() => {
+    // Clean up timeouts
+    timeoutIds.forEach((id) => clearTimeout(id));
+    timeoutIds = [];
+
+    // Clean up client if it exists
+    if (client && typeof client.destroy === 'function') {
+      client.destroy();
+    }
     document.body.innerHTML = '';
     vi.restoreAllMocks();
   });
 
+  // Helper function to create client and trigger load event
+  const createReadyClient = (selector: string): VirtualDisplayClient => {
+    const client = new VirtualDisplayClient(selector);
+    // Trigger load event to flush the message queue
+    iframe.dispatchEvent(new Event('load'));
+    return client;
+  };
+
+  // Helper function to track timeouts for cleanup
+  const setManagedTimeout = (
+    callback: () => void,
+    delay: number
+  ): NodeJS.Timeout => {
+    const id = setTimeout(callback, delay);
+    timeoutIds.push(id);
+    return id;
+  };
+
   describe('End-to-End Message Communication', () => {
     it('should complete full request-response cycle', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       // Setup response simulation
       let capturedMessage: unknown;
@@ -49,7 +76,7 @@ describe('Message Flow Integration', () => {
         capturedMessage = message;
 
         // Simulate server response
-        setTimeout(() => {
+        setManagedTimeout(() => {
           window.postMessage(
             {
               type: VirtualDisplayResponseType.OBJECT_TREE,
@@ -91,7 +118,7 @@ describe('Message Flow Integration', () => {
     });
 
     it('should handle bidirectional communication', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       const messages: Array<{ direction: string; message: unknown }> = [];
       (serverWindow.postMessage as vi.Mock).mockImplementation((message) => {
@@ -144,20 +171,23 @@ describe('Message Flow Integration', () => {
       parent.id = 'queue-test-parent';
       document.body.appendChild(parent);
 
-      // Create client with iframe
-      const onReadyCallback = vi.fn();
-      client = createVirtualDisplayClientWithIframe({
-        license: 'test-license',
-        model: 'test-model',
-        parent: parent,
-        iframeId: 'queued-iframe',
-        onReady: onReadyCallback,
+      // Create iframe manually
+      const iframe = document.createElement('iframe');
+      iframe.id = 'queued-iframe';
+      iframe.src = 'https://example.com';
+      parent.appendChild(iframe);
+
+      // Mock the iframe's contentWindow BEFORE creating client
+      const mockWindow = {
+        postMessage: vi.fn(),
+      };
+      Object.defineProperty(iframe, 'contentWindow', {
+        value: mockWindow,
+        writable: true,
       });
 
-      // Get the created iframe
-      const iframe = document.querySelector(
-        '#queued-iframe'
-      ) as HTMLIFrameElement;
+      // Create client with the prepared iframe (queue will not be ready yet)
+      client = new VirtualDisplayClient(iframe);
 
       // Send messages while iframe is loading
       const states = [
@@ -193,18 +223,13 @@ describe('Message Flow Integration', () => {
         },
       ];
 
+      // Send states while queue is not ready (should be queued)
       states.forEach((state) => client.sendClientState(state));
 
-      // Mock the iframe's contentWindow
-      const mockWindow = {
-        postMessage: vi.fn(),
-      };
-      Object.defineProperty(iframe, 'contentWindow', {
-        value: mockWindow,
-        writable: true,
-      });
+      // Verify no messages sent yet
+      expect(mockWindow.postMessage).toHaveBeenCalledTimes(0);
 
-      // Trigger load event
+      // Trigger load event to flush queue
       iframe.dispatchEvent(new Event('load'));
 
       // Wait for async operations
@@ -225,7 +250,7 @@ describe('Message Flow Integration', () => {
     });
 
     it('should handle message ordering correctly', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       const receivedMessages: unknown[] = [];
       (serverWindow.postMessage as vi.Mock).mockImplementation((message) => {
@@ -271,12 +296,12 @@ describe('Message Flow Integration', () => {
 
   describe('Response Dispatcher Integration', () => {
     it('should route responses to correct handlers', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       // Setup mock to simulate responses
       (serverWindow.postMessage as vi.Mock).mockImplementation(() => {
         // Simulate multiple responses
-        setTimeout(() => {
+        setManagedTimeout(() => {
           window.postMessage(
             {
               type: VirtualDisplayResponseType.OBJECT_TREE,
@@ -286,7 +311,7 @@ describe('Message Flow Integration', () => {
           );
         }, 10);
 
-        setTimeout(() => {
+        setManagedTimeout(() => {
           window.postMessage(
             {
               type: VirtualDisplayResponseType.OBJECT_TREE,
@@ -323,7 +348,7 @@ describe('Message Flow Integration', () => {
     });
 
     it('should handle mixed message types', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       const stateUpdates: Array<{
         status?: string;
@@ -400,11 +425,11 @@ describe('Message Flow Integration', () => {
 
   describe('Error Handling Integration', () => {
     it('should propagate errors through message flow', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       // Setup error response
       (serverWindow.postMessage as vi.Mock).mockImplementation(() => {
-        setTimeout(() => {
+        setManagedTimeout(() => {
           window.postMessage(
             {
               type: VirtualDisplayResponseType.OBJECT_TREE,
@@ -433,7 +458,7 @@ describe('Message Flow Integration', () => {
     });
 
     it('should recover from communication failures', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       let callCount = 0;
       (serverWindow.postMessage as vi.Mock).mockImplementation(() => {
@@ -457,7 +482,7 @@ describe('Message Flow Integration', () => {
 
   describe('Cross-Origin Communication', () => {
     it('should handle cross-origin messages safely', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       // Simulate messages from different origins
       const trustedOrigin = 'https://trusted.example.com';
@@ -505,7 +530,7 @@ describe('Message Flow Integration', () => {
     });
 
     it('should include origin in requests when specified', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       let capturedMessage: unknown;
       (serverWindow.postMessage as vi.Mock).mockImplementation((message) => {
@@ -533,7 +558,7 @@ describe('Message Flow Integration', () => {
 
   describe('Performance and Scalability', () => {
     it('should handle high message volume', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       const messageCount = 100; // Reduced for test performance
       const receivedMessages: unknown[] = [];
@@ -568,12 +593,12 @@ describe('Message Flow Integration', () => {
     });
 
     it('should handle concurrent operations efficiently', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       let responseIndex = 0;
       (serverWindow.postMessage as vi.Mock).mockImplementation(() => {
         const index = responseIndex++;
-        setTimeout(() => {
+        setManagedTimeout(() => {
           window.postMessage(
             {
               type: VirtualDisplayResponseType.OBJECT_TREE,
@@ -608,7 +633,7 @@ describe('Message Flow Integration', () => {
 
   describe('State Synchronization', () => {
     it('should maintain state consistency across messages', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       const sentStates: State[] = [];
       (serverWindow.postMessage as vi.Mock).mockImplementation((message) => {
@@ -671,7 +696,7 @@ describe('Message Flow Integration', () => {
     });
 
     it('should handle state conflicts gracefully', async () => {
-      client = new VirtualDisplayClient('#integration-test-iframe');
+      client = createReadyClient('#integration-test-iframe');
 
       // Send conflicting states rapidly
       const state1: State = {

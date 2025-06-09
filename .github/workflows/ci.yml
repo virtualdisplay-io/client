@@ -36,12 +36,12 @@ jobs:
         uses: actions/setup-node@v4.4.0
         with:
           node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
           
-      - name: Configure npm for GitHub Packages
+      - name: Configure npm registries
         run: |
-          echo "@virtualdisplay-io:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+          echo "@virtualdisplay-io:registry=https://npm.pkg.github.com/" > ~/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+          echo "registry=https://registry.npmjs.org/" >> ~/.npmrc
 
       - name: Cache pnpm store
         uses: actions/cache@v4

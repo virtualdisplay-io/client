@@ -188,4 +188,78 @@ describe('ResponseDispatcher', (): void => {
       val: 1,
     });
   });
+
+  it('should handle CLIENT_STATE response type', (): void => {
+    const handler = vi.fn();
+    responseDispatcher.subscribe(
+      VirtualDisplayResponseType.CLIENT_STATE,
+      handler
+    );
+
+    const stateResponse = {
+      type: VirtualDisplayResponseType.CLIENT_STATE,
+      context: {
+        objectTree: {
+          tree: {
+            name: 'Scene',
+            type: 'Scene',
+            hasChildren: true,
+            visible: true,
+            children: [
+              {
+                name: 'TableTop',
+                type: 'Mesh',
+                hasChildren: false,
+                visible: true,
+                children: [],
+              },
+              {
+                name: 'Legs',
+                type: 'Mesh',
+                hasChildren: false,
+                visible: true,
+                children: [],
+              },
+            ],
+          },
+          variants: [
+            { name: 'red-variant', visible: true },
+            { name: 'blue-variant', visible: false },
+          ],
+        },
+      },
+    };
+
+    responseDispatcher.publish(stateResponse);
+
+    expect(handler).toHaveBeenCalledWith(stateResponse);
+  });
+
+  it('should handle once() for CLIENT_STATE response', async (): Promise<void> => {
+    const handler = vi.fn();
+    const promise = responseDispatcher
+      .once(VirtualDisplayResponseType.CLIENT_STATE)
+      .then(handler);
+
+    const stateResponse = {
+      type: VirtualDisplayResponseType.CLIENT_STATE,
+      context: {
+        objectTree: {
+          tree: {
+            name: 'Scene',
+            type: 'Scene',
+            hasChildren: false,
+            visible: true,
+            children: [],
+          },
+          variants: [],
+        },
+      },
+    };
+
+    responseDispatcher.publish(stateResponse);
+    await promise;
+
+    expect(handler).toHaveBeenCalledWith(stateResponse);
+  });
 });

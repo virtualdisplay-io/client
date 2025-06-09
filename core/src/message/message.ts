@@ -22,6 +22,8 @@ export type VirtualDisplayRequest = {
 export enum VirtualDisplayResponseType {
   // @ts-ignore
   OBJECT_TREE = MESSAGE_EVENT_OBJECT_TREE,
+  // @ts-ignore
+  CLIENT_STATE = MESSAGE_EVENT_CLIENT_STATE,
 }
 
 export type VirtualDisplayResponse = {

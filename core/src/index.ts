@@ -28,5 +28,5 @@ export {
 } from './utils/accessibility';
 
 // Logger utilities
-export { logger, ClientLogger } from './utils/logger';
+export { logger } from './utils/logger';
 export type { Logger } from './utils/logger';

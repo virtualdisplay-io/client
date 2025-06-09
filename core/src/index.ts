@@ -4,6 +4,7 @@ export type { State, Attribute, AttributeValue } from './types/state';
 export type {
   ObjectTree,
   ObjectTreeNode,
+  Variant,
   ObjectTreeRequestContext,
   ObjectTreeResponseContext,
 } from './types/tree';

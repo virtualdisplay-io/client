@@ -10,11 +10,19 @@ export type ObjectTreeNode = {
 };
 
 /**
+ * Represents variant information with visibility state
+ */
+export type Variant = {
+  name: string;
+  visible: boolean;
+};
+
+/**
  * Represents the structure of a Virtual Display object tree, which includes a root node and its variants.
  */
 export type ObjectTree = {
   tree: ObjectTreeNode;
-  variants: string[];
+  variants: Variant[];
 };
 
 /**

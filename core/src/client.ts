@@ -16,7 +16,7 @@ import { logger } from './utils/logger';
 export class VirtualDisplayClient {
   private readonly iframeElement: HTMLIFrameElement;
   private readonly queue: RequestQueue;
-  private readonly messageListener: (event: MessageEvent) => void;
+  private messageListener!: (event: MessageEvent) => void;
 
   constructor(iframe: string | HTMLIFrameElement) {
     logger.debug('Initializing VirtualDisplayClient');

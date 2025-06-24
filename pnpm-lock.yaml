@@ -11,9 +11,6 @@ importers:
       '@virtualdisplay-io/logger':
         specifier: 1.2.0
         version: 1.2.0
-      '@virtualdisplay-io/translator':
-        specifier: ^1.1.0
-        version: 1.1.0
       ajv:
         specifier: 8.17.1
         version: 8.17.1
@@ -807,9 +804,6 @@ packages:
       markdownlint-cli2: ^0.15.0
       prettier: ^3.0.0
       typescript: ^5.0.0
-
-  '@virtualdisplay-io/translator@1.1.0':
-    resolution: {integrity: sha512-yBTJkNtusMCO6eLg2WKVQKCJgieoMZ0t5Rcp8doukiP+6sKTXKFmG3UCer5RFABJC4fCa/PfiEaWaTJ5iKLC4A==, tarball: https://npm.pkg.github.com/download/@virtualdisplay-io/translator/1.1.0/e0af327a76344273965dada85d6f7d799285e48f}
 
   '@vitest/coverage-v8@3.2.4':
     resolution: {integrity: sha512-EyF9SXU6kS5Ku/U82E259WSnvg6c8KTjppUncuNdm5QHpe17mwREHnjDzozC8x9MZ0xfBUFSaLkRv4TMA75ALQ==}
@@ -4081,8 +4075,6 @@ snapshots:
       markdownlint-cli2: 0.15.0
       prettier: 3.5.3
       typescript: 5.8.3
-
-  '@virtualdisplay-io/translator@1.1.0': {}
 
   '@vitest/coverage-v8@3.2.4(vitest@3.2.4(@types/node@24.0.3)(jsdom@26.1.0)(terser@5.43.1))':
     dependencies:

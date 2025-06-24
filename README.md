@@ -104,11 +104,12 @@ graph LR
 
 ## Product options
 
-### When do you need mapping?
+### When do you need mapping
 
 Before diving in, it's important to understand when you need attribute mapping:
 
 **No mapping needed:**
+
 - Static 3D models that always look the same
 - Product showcases without options
 - Architectural visualizations
@@ -116,6 +117,7 @@ Before diving in, it's important to understand when you need attribute mapping:
 - Single-configuration products
 
 **Mapping required:**
+
 - Products where users can change colors (different textures/materials per option)
 - Products with size options (different 3D meshes per size)
 - Modular products (parts that can be added/removed)

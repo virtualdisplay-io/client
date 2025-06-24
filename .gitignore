@@ -4,4 +4,3 @@ coverage/
 stats.html
 .env.local
 .idea/
-.npmrc

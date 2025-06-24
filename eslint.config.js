@@ -1,67 +1,78 @@
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import eslintPlugin from '@typescript-eslint/eslint-plugin';
-import eslintParser from '@typescript-eslint/parser';
-import eslintPluginPrettier from 'eslint-plugin-prettier';
-import airbnbBase from 'eslint-config-airbnb-base';
-import { defineConfig } from 'eslint/config';
+import config from '@virtualdisplay-io/shared-config/eslint/typescript-virtualdisplay';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-export default defineConfig([
+export default [
+  ...config,
   {
-    ignores: [
-      '**/node_modules/**',
-      '**/dist/**',
-      '**/vite.config.ts',
-      '**/vitest.config.ts',
-    ],
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**', 'examples/**'],
   },
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      parser: eslintParser,
-      parserOptions: {
-        project: './tsconfig.eslint.json',
-        tsconfigRootDir: __dirname,
-      },
       globals: {
-        window: 'readonly',
-        process: 'readonly',
-        module: 'readonly',
-        require: 'readonly',
-        console: 'readonly',
         document: 'readonly',
+        window: 'readonly',
+        HTMLElement: 'readonly',
         navigator: 'readonly',
-        fetch: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
       },
-    },
-    plugins: {
-      '@typescript-eslint': eslintPlugin,
-      prettier: eslintPluginPrettier,
-    },
-    rules: {
-      ...airbnbBase.rules,
-      '@typescript-eslint/explicit-function-return-type': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
-      'import/prefer-default-export': 'off',
-      'prettier/prettier': 'error',
-      '@typescript-eslint/adjacent-overload-signatures': 'error',
     },
   },
   {
-    files: ['**/vite.config.ts', '**/vitest.config.ts'],
+    // Test environment
+    files: ['test/**/*.ts'],
     languageOptions: {
-      ecmaVersion: 'latest',
-      sourceType: 'module',
-      parser: eslintParser,
+      globals: {
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        vi: 'readonly',
+        document: 'readonly',
+        window: 'readonly',
+        HTMLElement: 'readonly',
+        console: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        __dirname: 'readonly',
+      },
     },
-    plugins: {
-      '@typescript-eslint': eslintPlugin,
-    },
-    rules: {},
   },
-]);
+  {
+    // Node environment for config files
+    files: [
+      '*.config.ts',
+      '*.config.js',
+      '*.config.cjs',
+      '*.config.mjs',
+      'examples/**/vite.config.*.ts',
+    ],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        module: 'readonly',
+        exports: 'readonly',
+        require: 'readonly',
+      },
+    },
+  },
+  {
+    // CommonJS files
+    files: ['**/*.cjs'],
+    languageOptions: {
+      globals: {
+        module: 'readonly',
+        exports: 'readonly',
+        require: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
+  },
+];

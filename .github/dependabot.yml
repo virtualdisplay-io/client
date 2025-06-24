@@ -1,84 +1,65 @@
 version: 2
 updates:
-  # Core library dependencies
-  - package-ecosystem: "npm"
-    directory: "/core"
+  # NPM/PNPM dependencies
+  - package-ecosystem: 'npm'
+    directory: '/'
     schedule:
-      interval: "weekly"
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    open-pull-requests-limit: 10
+    assignees:
+      - 'HMAZonderland'
+    commit-message:
+      prefix: 'deps'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'automated'
+    # Group updates for better management
+    groups:
+      # Development tools (safe for auto-merge) - shared-config standards
+      development-dependencies:
+        patterns:
+          - '@types/*'
+          - 'eslint*'
+          - '@typescript-eslint/*'
+          - 'prettier*'
+          - 'typescript*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      # Testing dependencies (safe for auto-merge) - shared-config standards
+      testing-dependencies:
+        patterns:
+          - 'vitest*'
+          - '@vitest/*'
+          - 'jsdom'
+        update-types:
+          - 'minor'
+          - 'patch'
+      # Virtualdisplay packages (safe for auto-merge) - our own perfect code!
+      virtualdisplay-dependencies:
+        patterns:
+          - '@virtualdisplay-io/*'
+        update-types:
+          - 'major'
+          - 'minor'
+          - 'patch' # All updates auto-merged - we trust our own work!
+
+  # GitHub Actions updates
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
     open-pull-requests-limit: 5
     commit-message:
-      prefix: "chore"
-      prefix-development: "chore"
-      include: "scope"
-    reviewers:
-      - "virtualdisplay-io"
+      prefix: 'ci'
+      include: 'scope'
     assignees:
-      - "virtualdisplay-io"
-    groups:
-      # Group build-related dependencies
-      build-dependencies:
-        patterns:
-          - "vite*"
-          - "typescript"
-          - "@types/*"
-          - "tsconfig*"
-      # Group testing dependencies  
-      test-dependencies:
-        patterns:
-          - "vitest*"
-          - "jsdom"
-          - "@open-wc/*"
-          - "eslint*"
-          - "prettier"
-      # Group semantic release dependencies
-      release-dependencies:
-        patterns:
-          - "@semantic-release/*"
-          - "semantic-release"
-
-  # Example projects dependencies
-  - package-ecosystem: "npm"
-    directory: "/examples/simple-model-integration"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3
-
-  - package-ecosystem: "npm"
-    directory: "/examples/variable-products"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3
-
-  - package-ecosystem: "npm"
-    directory: "/examples/tree-response"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3
-
-  # Root workspace dependencies
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3
-    commit-message:
-      prefix: "chore"
-      include: "scope"
-    reviewers:
-      - "virtualdisplay-io"
-    assignees:
-      - "virtualdisplay-io"
-
-  # GitHub Actions
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 3
-    commit-message:
-      prefix: "ci"
-      include: "scope"
-    reviewers:
-      - "virtualdisplay-io"
-    assignees:
-      - "virtualdisplay-io"
+      - 'HMAZonderland'
+    labels:
+      - 'github-actions'
+      - 'automated'

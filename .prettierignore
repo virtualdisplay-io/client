@@ -1,0 +1,11 @@
+node_modules/
+dist/
+coverage/
+CHANGELOG.md
+pnpm-lock.yaml
+
+# ESLint handles all TypeScript formatting
+*.ts
+*.tsx
+*.mts
+*.cts

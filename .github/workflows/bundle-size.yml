@@ -6,6 +6,11 @@ on:
   push:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: read
+  pull-requests: write
+
 jobs:
   bundle-size:
     name: Bundle size analysis
@@ -26,7 +31,13 @@ jobs:
         uses: actions/setup-node@v4.4.0
         with:
           node-version-file: '.nvmrc'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@virtualdisplay-io'
           cache: pnpm
+
+      - name: Configure npm authentication
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+        shell: bash
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

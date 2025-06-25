@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtualdisplay - Color Configurator</title>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .demo {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: 20px;
+      }
+
+      /* 3D Viewer */
+      #viewer {
+        background: white;
+        border-radius: 12px;
+        height: 600px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Color buttons */
+      .colors {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .colors h2 {
+        margin: 0 0 20px 0;
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      .color-button {
+        width: 100%;
+        padding: 16px;
+        margin-bottom: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s;
+
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .color-button:hover {
+        border-color: #007bff;
+        transform: translateX(4px);
+      }
+
+      .color-button.active {
+        background: #007bff;
+        color: white;
+        border-color: #007bff;
+      }
+
+      .color-dot {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+      }
+
+      .color-dot.pink {
+        background: #ffb6c1;
+      }
+      .color-dot.blue {
+        background: #4682b4;
+      }
+      .color-dot.beige {
+        background: #f5deb3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo">
+      <!-- Container -->
+      <div id="viewer"></div>
+
+      <!-- Color selection -->
+      <div class="colors">
+        <h2>Choose your color</h2>
+
+        <button class="color-button" data-color="Bubblegum">
+          <span class="color-dot pink"></span>
+          Bubblegum
+        </button>
+
+        <button class="color-button" data-color="Steel blue">
+          <span class="color-dot blue"></span>
+          Steel blue
+        </button>
+
+        <button class="color-button" data-color="Warm sand">
+          <span class="color-dot beige"></span>
+          Warm sand
+        </button>
+      </div>
+    </div>
+
+    <script type="module">
+      import { VirtualdisplayClient } from '../../dist/virtualdisplay.client.es.js';
+
+      // 1. Initialize the 3D viewer
+      const client = new VirtualdisplayClient({
+        parent: '#viewer',
+        model: 'Felt_panel',
+        license: 'demo',
+      });
+
+      // 2. Define what each color controls
+      client.setMapping({
+        attributes: [
+          {
+            name: 'Color',
+            values: [
+              { value: 'Bubblegum', nodeIds: ['Pink'], isSelected: true },
+              { value: 'Steel blue', nodeIds: ['Blue'], isSelected: false },
+              { value: 'Warm sand', nodeIds: ['Beige'], isSelected: false },
+            ],
+          },
+        ],
+      });
+
+      // 3. Set up the color buttons
+      const colorAttribute = client.getAttribute('Color');
+      colorAttribute.getValues().forEach((value) => {
+        const button = document.querySelector(`[data-color="${value.value}"]`);
+
+        // also handles syncing button active class with initial state of the attribute mapping.
+        value.onChange = () => {
+          button.classList.toggle('active', value.isSelected);
+        };
+      });
+
+      // 4. Handle button clicks to change colors
+      document.querySelectorAll('.color-button').forEach((button) => {
+        button.onclick = () => colorAttribute.select(button.dataset.color);
+      });
+    </script>
+  </body>
+</html>

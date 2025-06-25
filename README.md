@@ -20,7 +20,7 @@ pnpm add @virtualdisplay-io/client
 yarn add @virtualdisplay-io/client
 ```
 
-## What's new in v4.0
+## What's new in v3.1
 
 - Simplified message handling with unified event system
 - JSON Schema validation using AJV

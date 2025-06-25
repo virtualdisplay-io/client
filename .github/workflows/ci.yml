@@ -32,13 +32,11 @@ jobs:
           scope: '@virtualdisplay-io'
           cache: 'pnpm'
 
-      - name: Configure npm authentication
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PAT }}" >> ~/.npmrc
-        shell: bash
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         shell: bash
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Run all quality checks
         run: pnpm lint

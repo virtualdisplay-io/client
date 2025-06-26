@@ -1,6 +1,7 @@
 # Virtualdisplay client
 
-TypeScript library for embedding interactive 3D product models in web applications.
+TypeScript library for embedding interactive 3D product models in web
+applications.
 
 **Key features:**
 
@@ -79,13 +80,9 @@ if (sizeAttribute) {
 
 ## How it works
 
-The 3D server hosts the viewer in an iframe, keeping WebGL complexity isolated from your application. The client library handles all communication via postMessage and manages state locally using an attribute mapping system.
-
-**Architecture Flow:**
-1. Your application → API calls → VirtualdisplayClient
-2. VirtualdisplayClient → postMessage → 3D server iframe
-3. 3D server iframe → Events → VirtualdisplayClient
-4. VirtualdisplayClient → State updates → Your application
+The 3D server hosts the viewer in an iframe, keeping WebGL complexity isolated
+from your application. The client library handles all communication via
+postMessage and manages state locally using an attribute mapping system.
 
 **Key principles:**
 
@@ -93,7 +90,8 @@ The 3D server hosts the viewer in an iframe, keeping WebGL complexity isolated f
 - **Fire-and-forget**: Send messages without waiting for confirmation
 - **Attribute mapping**: Connect your product options to 3D model parts
 - **State synchronization**: Client and 3D server stay in sync automatically
-- **Domain-driven design**: Clean separation of concerns with simplified architecture
+- **Domain-driven design**: Clean separation of concerns with simplified
+  architecture
 - **Event-driven**: Loosely coupled components communicate via events
 
 ## Product options
@@ -119,16 +117,20 @@ Before diving in, it's important to understand when you need attribute mapping:
 
 ### Attribute mapping
 
-The mapping system bridges your business logic with the 3D visualization. It serves multiple purposes:
+The mapping system bridges your business logic with the 3D visualization. It
+serves multiple purposes:
 
 **Why mapping is essential:**
 
 - The 3D server is generic - it doesn't know your specific product options
-- Your business rules (stock, pricing, combinations) change independently from the 3D model
+- Your business rules (stock, pricing, combinations) change independently from
+  the 3D model
 - You control exactly which parts of the model are shown for each option
-- You can group multiple 3D nodes (meshes, materials) into logical product choices
+- You can group multiple 3D nodes (meshes, materials) into logical product
+  choices
 
-**How it works:** The mapping connects your product options to specific parts of the 3D model:
+**How it works:** The mapping connects your product options to specific parts of
+the 3D model:
 
 ```typescript
 client.setMapping({
@@ -237,7 +239,8 @@ Here's how the client, mapping system, and 3D server work together:
 - onChange callbacks fire with the actual state
 - UI stays perfectly synchronized with 3D model
 
-**Important:** The pattern is identical for both initial mapping and user interactions. In both cases:
+**Important:** The pattern is identical for both initial mapping and user
+interactions. In both cases:
 
 1. Client sends mutations to server
 2. Server applies changes to 3D model
@@ -245,7 +248,8 @@ Here's how the client, mapping system, and 3D server work together:
 4. Client updates local state based on server response
 5. onChange callbacks fire with the actual state
 
-This ensures the server remains the single source of truth for all state changes.
+This ensures the server remains the single source of truth for all state
+changes.
 
 ## Advanced usage
 
@@ -282,7 +286,8 @@ if (!validate(myMapping)) {
 
 ### CMS integration
 
-The Virtualdisplay client is CMS-agnostic. Store the mapping configuration in your CMS alongside your product data:
+The Virtualdisplay client is CMS-agnostic. Store the mapping configuration in
+your CMS alongside your product data:
 
 ```typescript
 // Fetch product with 3D mapping from your CMS
@@ -301,7 +306,8 @@ client.setMapping(product.server3dMapping);
 
 ## Example
 
-See the [color configurator example](https://github.com/virtualdisplay-io/client/tree/main/examples/color-configurator) for a complete working implementation that demonstrates:
+See the [color configurator example](./examples/color-configurator/) for a
+complete working implementation that demonstrates:
 
 - Setting up the client
 - Defining attribute mappings
@@ -326,7 +332,9 @@ interface ClientOptions {
 
 #### `setMapping(configuration: MappingConfiguration): void`
 
-Configure attribute-to-node mapping for product variants. This is the primary method for setting up your product configurator. Call this once with your complete configuration - the client efficiently handles all updates.
+Configure attribute-to-node mapping for product variants. This is the primary
+method for setting up your product configurator. Call this once with your
+complete configuration - the client efficiently handles all updates.
 
 ```typescript
 client.setMapping({
@@ -344,7 +352,8 @@ client.setMapping({
 
 #### `getAttribute(name: string): AttributeSelector | undefined`
 
-Get an attribute selector for changing values. Returns undefined if the attribute doesn't exist.
+Get an attribute selector for changing values. Returns undefined if the
+attribute doesn't exist.
 
 ```typescript
 const colorAttr = client.getAttribute('Color');
@@ -355,7 +364,8 @@ if (colorAttr) {
 
 #### `destroy(): void`
 
-Clean up and remove the client connection. Always call this when unmounting your component.
+Clean up and remove the client connection. Always call this when unmounting your
+component.
 
 ```typescript
 // React example
@@ -407,7 +417,9 @@ class AttributeValue {
 
 #### NodeSelector
 
-The client exports `NodeSelector` for direct node manipulation. This is intended for specialized tools like mapping editors and inspectors, not for typical product configurators. For product configurators, use the attribute-based API.
+The client exports `NodeSelector` for direct node manipulation. This is intended
+for specialized tools like mapping editors and inspectors, not for typical
+product configurators. For product configurators, use the attribute-based API.
 
 ### Error handling
 
@@ -447,7 +459,7 @@ try {
 
 ## Contributing
 
-See [CONTRIBUTING.md](https://github.com/virtualdisplay-io/client/blob/main/CONTRIBUTING.md) for development setup and guidelines.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup and guidelines.
 
 ## Troubleshooting
 
@@ -467,4 +479,5 @@ See [CONTRIBUTING.md](https://github.com/virtualdisplay-io/client/blob/main/CONT
 
 ## Changelog
 
-See the [GitHub releases](https://github.com/virtualdisplay-io/client/releases) for release notes and version history.
+See the [GitHub releases](https://github.com/virtualdisplay-io/client/releases)
+for release notes and version history.

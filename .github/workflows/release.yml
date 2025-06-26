@@ -38,11 +38,18 @@ jobs:
           scope: '@virtualdisplay.io'
           cache: 'pnpm'
 
+      - name: Configure npm for GitHub Package Registry
+        run: |
+          echo "@virtualdisplay-io:registry=https://npm.pkg.github.com/" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_PAT }}" >> .npmrc
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         shell: bash
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PAT }}
+
+      - name: Clean up GitHub Package Registry config
+        run: |
+          rm .npmrc
 
       - name: Build
         run: pnpm build

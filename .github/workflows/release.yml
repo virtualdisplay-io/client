@@ -34,8 +34,8 @@ jobs:
         uses: actions/setup-node@v4.4.0
         with:
           node-version-file: '.nvmrc'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@virtualdisplay-io'
+          registry-url: 'https://registry.npmjs.org'
+          scope: '@virtualdisplay.io'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -51,7 +51,7 @@ jobs:
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PAT }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GIT_AUTHOR_NAME: 'Virtualdisplay Bot'
           GIT_AUTHOR_EMAIL: 'support@virtualdisplay.io'
           GIT_COMMITTER_NAME: 'Virtualdisplay Bot'

@@ -1,5 +1,5 @@
 {
-  "name": "@virtualdisplay-io/client",
+  "name": "@virtualdisplay.io/client",
   "description": "TypeScript-first 3D model integration library with iframe-based architecture",
   "version": "3.1.0",
   "author": "Virtualdisplay <support@virtualdisplay.io>",
@@ -78,8 +78,8 @@
   "main": "dist/virtualdisplay.client.cjs.js",
   "module": "dist/virtualdisplay.client.es.js",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com/",
-    "access": "restricted"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "repository": {
     "type": "git",

@@ -36,7 +36,7 @@ jobs:
         run: pnpm install --frozen-lockfile
         shell: bash
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_PAT }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run all quality checks
         run: pnpm lint

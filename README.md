@@ -13,11 +13,11 @@ applications.
 ## Installation
 
 ```bash
-npm install @virtualdisplay-io/client
+npm install @virtualdisplay.io/client
 # or
-pnpm add @virtualdisplay-io/client
+pnpm add @virtualdisplay.io/client
 # or
-yarn add @virtualdisplay-io/client
+yarn add @virtualdisplay.io/client
 ```
 
 ## What's new in v3.1
@@ -33,7 +33,7 @@ yarn add @virtualdisplay-io/client
 ### Simple product (no options)
 
 ```typescript
-import { VirtualdisplayClient } from '@virtualdisplay-io/client';
+import { VirtualdisplayClient } from '@virtualdisplay.io/client';
 
 // That's it! Your 3D model is now displayed
 const client = new VirtualdisplayClient({
@@ -46,7 +46,7 @@ const client = new VirtualdisplayClient({
 ### Configurable product (with options)
 
 ```typescript
-import { VirtualdisplayClient } from '@virtualdisplay-io/client';
+import { VirtualdisplayClient } from '@virtualdisplay.io/client';
 
 // Create client instance
 const client = new VirtualdisplayClient({
@@ -330,7 +330,7 @@ colorAttribute?.getValues().forEach((value) => {
 Validate your mapping configuration during development:
 
 ```typescript
-import { mappingSchema } from '@virtualdisplay-io/client';
+import { mappingSchema } from '@virtualdisplay.io/client';
 import Ajv from 'ajv';
 
 const validate = new Ajv().compile(mappingSchema);
@@ -487,7 +487,7 @@ import {
   VirtualdisplayClient,
   VirtualdisplayError,
   ERROR_CODES,
-} from '@virtualdisplay-io/client';
+} from '@virtualdisplay.io/client';
 
 try {
   client.getAttribute('NonExistent').select('Value');

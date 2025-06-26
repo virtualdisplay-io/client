@@ -1,4 +1,4 @@
-# Contributing to @virtualdisplay-io/client
+# Contributing to @virtualdisplay.io/client
 
 ## Development setup
 

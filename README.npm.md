@@ -84,14 +84,6 @@ The 3D server hosts the viewer in an iframe, keeping WebGL complexity isolated
 from your application. The client library handles all communication via
 postMessage and manages state locally using an attribute mapping system.
 
-```mermaid
-graph LR
-    A[Your application] -->|API calls| B[VirtualdisplayClient]
-    B -->|postMessage| C[3D server iframe]
-    C -->|Events| B
-    B -->|State updates| A
-```
-
 **Key principles:**
 
 - **Iframe architecture**: 3D server loads the viewer independently
@@ -213,55 +205,6 @@ client.setMapping({
 ### Complete flow
 
 Here's how the client, mapping system, and 3D server work together:
-
-```mermaid
-sequenceDiagram
-    participant UI as Your UI
-    participant Client as VirtualdisplayClient
-    participant AttrService as AttributeService
-    participant EventBus as EventBus
-    participant MsgHandler as MessageHandler
-    participant Server as 3D server
-
-    Note over Client,Server: 0. Client initialization
-    UI->>Client: new VirtualdisplayClient(...)
-    Client->>Client: Create iframe
-    Client->>MsgHandler: setIframe()
-    Server->>MsgHandler: STATE message (all nodes)
-    MsgHandler->>EventBus: emit(STATE_MESSAGE)
-    EventBus->>AttrService: Update local state
-
-    Note over UI,Server: 1. Configure mapping (setMapping)
-    UI->>Client: setMapping({attributes: [...]})
-    Client->>AttrService: loadMapping(config)
-    AttrService->>AttrService: Validate with AJV
-    AttrService->>AttrService: Create Attribute objects
-    AttrService->>AttrService: Generate default mutations<br/>(from isSelected values)
-    AttrService->>EventBus: emit(MUTATION_MESSAGE)
-    EventBus->>MsgHandler: Send mutations
-    MsgHandler->>Server: postMessage(mutations)
-    Server->>Server: Apply changes
-    Server->>MsgHandler: STATE message (updated)
-    MsgHandler->>EventBus: emit(STATE_MESSAGE)
-    EventBus->>AttrService: Update local state
-    AttrService->>UI: Trigger onChange callbacks
-
-    Note over UI,Server: 2. User interaction (getAttribute.select)
-    UI->>Client: getAttribute('Color')
-    Client->>Client: new AttributeSelector('Color')
-    UI->>Client: .select('Blue')
-    Client->>AttrService: selectAttributeValue('Color', 'Blue')
-    AttrService->>AttrService: Generate mutations<br/>(hide current, show new)
-    AttrService->>EventBus: emit(MUTATION_MESSAGE)
-    EventBus->>MsgHandler: Send mutations
-    MsgHandler->>Server: postMessage(mutations)
-    Note right of Client: select() returns<br/>immediately
-    Server->>Server: Apply changes
-    Server->>MsgHandler: STATE message (updated)
-    MsgHandler->>EventBus: emit(STATE_MESSAGE)
-    EventBus->>AttrService: Update local state
-    AttrService->>UI: Trigger onChange callbacks
-```
 
 **Phase by phase breakdown:**
 

@@ -1,5 +1,5 @@
 {
-  "name": "@virtualdisplay-io/client",
+  "name": "@virtualdisplay.io/client",
   "description": "TypeScript-first 3D model integration library with iframe-based architecture",
   "version": "3.1.0",
   "author": "Virtualdisplay <support@virtualdisplay.io>",

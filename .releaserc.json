@@ -51,9 +51,21 @@
       }
     ],
     [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "cp README.npm.md README.md"
+      }
+    ],
+    [
       "@semantic-release/npm",
       {
         "npmPublish": true
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "git checkout README.md"
       }
     ],
     [

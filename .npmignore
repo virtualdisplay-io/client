@@ -7,3 +7,4 @@ eslint.config.js
 examples/
 .github/
 .env
+README.npm.md

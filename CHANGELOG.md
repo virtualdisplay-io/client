@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/virtualdisplay-io/client/compare/v3.1.0...v3.2.0) (2025-06-27)
+
+### ✨ Features
+
+* publish client package to npm registry ([#45](https://github.com/virtualdisplay-io/client/issues/45)) ([825810b](https://github.com/virtualdisplay-io/client/commit/825810b0ca56da8e50f34f2afac9f75a87acbc40))
+
+### 🐛 Bug Fixes
+
+* improve GitHub Actions authentication and remove .env.act ([#47](https://github.com/virtualdisplay-io/client/issues/47)) ([3acc86e](https://github.com/virtualdisplay-io/client/commit/3acc86e5c27a26af0b77cc23ddff397eee141de5))
+* use GITHUB_TOKEN for checkout action ([#46](https://github.com/virtualdisplay-io/client/issues/46)) ([f8d60fb](https://github.com/virtualdisplay-io/client/commit/f8d60fba2547950137de10838bcfc874e78d9f33))
+
+### 📝 Documentation
+
+* update README version reference to v3.1 ([#44](https://github.com/virtualdisplay-io/client/issues/44)) ([1652c15](https://github.com/virtualdisplay-io/client/commit/1652c157890ca43d1e366b302a37f02465d6450b))
+
 ## [3.1.0](https://github.com/virtualdisplay-io/client/compare/v3.0.0...v3.1.0) (2025-06-25)
 
 ### ⚠ BREAKING CHANGES

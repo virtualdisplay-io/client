@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.1](https://github.com/virtualdisplay-io/client/compare/v3.2.0...v3.2.1) (2025-06-30)
+
+### 🐛 Bug Fixes
+
+* prevent .env from being used in production builds ([#48](https://github.com/virtualdisplay-io/client/issues/48)) ([7ab54d0](https://github.com/virtualdisplay-io/client/commit/7ab54d02a9aad94daf5a53899fefa9299f9bf73f))
+
 ## [3.2.0](https://github.com/virtualdisplay-io/client/compare/v3.1.0...v3.2.0) (2025-06-27)
 
 ### ✨ Features

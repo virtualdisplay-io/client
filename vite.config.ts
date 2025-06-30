@@ -3,8 +3,10 @@ import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import dts from 'vite-plugin-dts';
 
-export default defineConfig(() => {
+export default defineConfig(({ command }) => {
   return {
+    // Don't load any .env files during build
+    envFile: command === 'build' ? false : '.env',
     build: {
       outDir: 'dist',
       emptyOutDir: true,

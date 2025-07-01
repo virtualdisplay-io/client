@@ -2,7 +2,7 @@ import { Logger } from '@virtualdisplay-io/logger';
 
 export const logger = Logger.getInstance().child({
   prefix: 'Client',
-  level: 'info', // Default level, can be changed via enableDebugMode
+  level: 'warn', // Show warnings and errors by default
 });
 
 export function enableDebugMode(): void {

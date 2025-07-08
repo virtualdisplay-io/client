@@ -1,0 +1,6 @@
+# Virtualdisplay Project Code Owners
+# This file defines who owns code in different parts of the repository
+# Learn more about CODEOWNERS: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owners for everything in the repository
+* @HMAZonderland

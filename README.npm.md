@@ -1,0 +1,483 @@
+# Virtualdisplay client
+
+TypeScript library for embedding interactive 3D product models in web
+applications.
+
+**Key features:**
+
+- Simple attribute-based API for product configurators
+- Fire-and-forget messaging with automatic state synchronization
+- Zero external dependencies (all bundled)
+- Works with any frontend framework or vanilla JavaScript
+
+## Installation
+
+```bash
+npm install @virtualdisplay.io/client
+# or
+pnpm add @virtualdisplay.io/client
+# or
+yarn add @virtualdisplay.io/client
+```
+
+## What's new in v3.1
+
+- Simplified message handling with unified event system
+- JSON Schema validation using AJV
+- Cleaner, more maintainable codebase
+- Improved TypeScript types
+- Better error messages with specific error codes
+
+## Quick start
+
+### Simple product (no options)
+
+```typescript
+import { VirtualdisplayClient } from '@virtualdisplay.io/client';
+
+// That's it! Your 3D model is now displayed
+const client = new VirtualdisplayClient({
+  parent: '#product-container',
+  license: 'your-license-key',
+  model: 'statue-model',
+});
+```
+
+### Configurable product (with options)
+
+```typescript
+import { VirtualdisplayClient } from '@virtualdisplay.io/client';
+
+// Create client instance
+const client = new VirtualdisplayClient({
+  parent: '#product-container',
+  license: 'your-license-key',
+  model: 'sneaker',
+});
+
+// Map product options to 3D parts
+client.setMapping({
+  attributes: [
+    {
+      name: 'Color',
+      values: [
+        { value: 'Red', nodeIds: ['laces_red', 'sole_red'], isSelected: true },
+        { value: 'Blue', nodeIds: ['laces_blue', 'sole_blue'] },
+      ],
+    },
+  ],
+});
+
+// Control via product options
+client.getAttribute('Color')?.select('Red');
+
+// Or store the attribute for multiple operations
+const sizeAttribute = client.getAttribute('Size');
+if (sizeAttribute) {
+  sizeAttribute.select('Large');
+}
+```
+
+## How it works
+
+The 3D server hosts the viewer in an iframe, keeping WebGL complexity isolated
+from your application. The client library handles all communication via
+postMessage and manages state locally using an attribute mapping system.
+
+**Key principles:**
+
+- **Iframe architecture**: 3D server loads the viewer independently
+- **Fire-and-forget**: Send messages without waiting for confirmation
+- **Attribute mapping**: Connect your product options to 3D model parts
+- **State synchronization**: Client and 3D server stay in sync automatically
+- **Domain-driven design**: Clean separation of concerns with simplified
+  architecture
+- **Event-driven**: Loosely coupled components communicate via events
+
+## Product options
+
+### When do you need mapping
+
+Before diving in, it's important to understand when you need attribute mapping:
+
+**No mapping needed:**
+
+- Static 3D models that always look the same
+- Product showcases without options
+- Architectural visualizations
+- Art pieces or sculptures
+- Single-configuration products
+
+**Mapping required:**
+
+- Products where users can change colors (different textures/materials per option)
+- Products with size options (different 3D meshes per size)
+- Modular products (parts that can be added/removed)
+- Any product where different options show different 3D elements
+
+### Attribute mapping
+
+The mapping system bridges your business logic with the 3D visualization. It
+serves multiple purposes:
+
+**Why mapping is essential:**
+
+- The 3D server is generic - it doesn't know your specific product options
+- Your business rules (stock, pricing, combinations) change independently from
+  the 3D model
+- You control exactly which parts of the model are shown for each option
+- You can group multiple 3D nodes (meshes, materials) into logical product
+  choices
+
+**How it works:** The mapping connects your product options to specific parts of
+the 3D model:
+
+```typescript
+client.setMapping({
+  attributes: [
+    {
+      name: 'Color',
+      values: [
+        {
+          value: 'Red',
+          nodeIds: ['mat_red_sole', 'mat_red_laces', 'mat_red_logo'],
+          isSelected: true,
+        },
+        {
+          value: 'Blue',
+          nodeIds: ['mat_blue_sole', 'mat_blue_laces', 'mat_blue_logo'],
+        },
+      ],
+    },
+    {
+      name: 'Material',
+      values: [
+        { value: 'Leather', nodeIds: ['material_leather_upper'] },
+        {
+          value: 'Canvas',
+          nodeIds: ['material_canvas_upper'],
+          isSelected: true,
+        },
+      ],
+    },
+  ],
+});
+```
+
+**Structure explained:**
+
+- `attribute` - A product feature like Color, Size, or Material
+- `value` - A specific option like Red, Blue, Small, or Large
+- `nodeIds` - The 3D model parts that represent this option
+- `isSelected` - Whether this option is selected by default
+
+**Example benefits:**
+
+```typescript
+// Group related 3D parts into one logical choice
+{
+  value: 'Red',
+  nodeIds: [
+    'mesh_sole_red',      // Red sole mesh
+    'material_laces_red', // Red laces material
+    'texture_logo_red',   // Red logo texture
+    'mesh_stitching_red'  // Red stitching details
+  ]
+}
+
+// The server automatically handles showing Red parts
+// and hiding Blue/Green parts when Red is selected
+```
+
+**Key advantages:**
+
+- Full control over what's visible without modifying the 3D model
+- Business logic stays in your application, not in the 3D server
+- Easy to update when products or availability changes
+- Group complex 3D structures into simple user choices
+
+**Need help with mapping?**
+
+- We help you connect your product catalog to your 3D models
+- Visual mapping tool coming soon to simplify this process
+- Contact <support@virtualdisplay.io> for mapping assistance
+
+### Complete flow
+
+Here's how the client, mapping system, and 3D server work together:
+
+**Phase by phase breakdown:**
+
+#### Phase 0: Initialization (always happens)
+
+- Client creates iframe and loads 3D server
+- Server initializes the 3D model with all nodes visible
+- Server sends complete node state to client
+- Client now knows about all available nodes in the model
+
+**Note:** For simple models without options, this is all you need!
+
+#### Phase 1: Configuration (only for configurable products)
+
+- You call `setMapping()` with your product structure
+- Client stores the attribute mapping locally
+- Client sends mutations for all `isSelected: true` values
+- Server applies these changes and hides non-selected options
+- Server sends back confirmed state
+- Local state updates based on server response
+- onChange callbacks fire for initial UI synchronization
+
+#### Phase 2: User interaction (only for configurable products)
+
+- User selects a different option in your UI
+- You call `getAttribute('Color').select('Blue')`
+- Client sends mutation request to server
+- Your code continues immediately (doesn't wait for server response)
+- Server updates the 3D model
+- Server sends back the confirmed state
+- Local state updates based on server response
+- onChange callbacks fire with the actual state
+- UI stays perfectly synchronized with 3D model
+
+**Important:** The pattern is identical for both initial mapping and user
+interactions. In both cases:
+
+1. Client sends mutations to server
+2. Server applies changes to 3D model
+3. Server sends back confirmed state
+4. Client updates local state based on server response
+5. onChange callbacks fire with the actual state
+
+This ensures the server remains the single source of truth for all state
+changes.
+
+## Advanced usage
+
+### Live state synchronization
+
+Keep your UI in sync with the 3D server state using onChange callbacks:
+
+```typescript
+const colorAttribute = client.getAttribute('Color');
+
+colorAttribute?.getValues().forEach((value) => {
+  value.onChange = () => {
+    // Update UI when state changes
+    updateButton(value.value, value.isSelected);
+  };
+});
+```
+
+### Mapping validation
+
+Validate your mapping configuration during development:
+
+```typescript
+import { mappingSchema } from '@virtualdisplay.io/client';
+import Ajv from 'ajv';
+
+const validate = new Ajv().compile(mappingSchema);
+if (!validate(myMapping)) {
+  console.error('Invalid mapping:', validate.errors);
+}
+```
+
+## Real-world integration examples
+
+### CMS integration
+
+The Virtualdisplay client is CMS-agnostic. Store the mapping configuration in
+your CMS alongside your product data:
+
+```typescript
+// Fetch product with 3D mapping from your CMS
+const product = await fetch('/api/products/sneaker-pro').then((r) => r.json());
+
+// Use the stored mapping directly
+client.setMapping(product.server3dMapping);
+```
+
+**Best practices:**
+
+- Store the complete mapping configuration with each product
+- Update mappings when product options or availability changes
+- Let your CMS handle filtering of unavailable combinations
+- Version your mappings when 3D models are updated
+
+## Example
+
+See the [color configurator example](./examples/color-configurator/) for a
+complete working implementation that demonstrates:
+
+- Setting up the client
+- Defining attribute mappings
+- Binding UI controls to attributes
+- Real-time state synchronization
+
+## API reference
+
+### ClientOptions
+
+```typescript
+interface ClientOptions {
+  parent: string | HTMLElement; // Container element or selector
+  license: string; // Your license key
+  model: string; // Model ID to load
+  debug?: boolean; // Enable debug logging (default: false)
+  language?: string; // Language for UI inside the iframe (default: 'nl', supported: 'nl', 'en', 'de')
+}
+```
+
+### Methods
+
+#### `setMapping(configuration: MappingConfiguration): void`
+
+Configure attribute-to-node mapping for product variants. This is the primary
+method for setting up your product configurator. Call this once with your
+complete configuration - the client efficiently handles all updates.
+
+```typescript
+client.setMapping({
+  attributes: [
+    {
+      name: 'Color',
+      values: [
+        { value: 'Red', nodeIds: ['node1', 'node2'], isSelected: true },
+        { value: 'Blue', nodeIds: ['node3', 'node4'] },
+      ],
+    },
+  ],
+});
+```
+
+#### `getAttribute(name: string): AttributeSelector | undefined`
+
+Get an attribute selector for changing values. Returns undefined if the
+attribute doesn't exist.
+
+```typescript
+const colorAttr = client.getAttribute('Color');
+if (colorAttr) {
+  colorAttr.select('Blue');
+}
+```
+
+#### `destroy(): void`
+
+Clean up and remove the client connection. Always call this when unmounting your
+component.
+
+```typescript
+// React example
+useEffect(() => {
+  const client = new VirtualdisplayClient({ ... });
+  return () => client.destroy();
+}, []);
+```
+
+### Types
+
+```typescript
+interface MappingConfiguration {
+  attributes: AttributeConfig[];
+}
+
+interface AttributeConfig {
+  name: string; // Attribute name (e.g., 'Color')
+  values: AttributeValueConfig[]; // Possible values
+}
+
+interface AttributeValueConfig {
+  value: string; // Value name (e.g., 'Red')
+  nodeIds: string[]; // 3D node IDs for this value
+  isSelected?: boolean; // Default selection state
+}
+
+class AttributeSelector {
+  // Properties
+  name: string; // Attribute name (getter)
+  currentValue: string | undefined; // Current selected value (getter)
+  availableValues: string[]; // All possible values (getter)
+
+  // Methods
+  select(value: string): AttributeSelector; // Select a value (chainable)
+  onChange(callback: () => void): AttributeSelector; // Register change callback (chainable)
+  getValues(): AttributeValue[]; // Get all AttributeValue objects
+  getValue(value: string): AttributeValue | undefined; // Get specific AttributeValue
+}
+
+class AttributeValue {
+  // Properties
+  value: string; // The value name (e.g., 'Red') - getter
+  nodeList: string[]; // Associated 3D node IDs - getter
+  isSelected: boolean; // Current selection state - getter
+  onChange?: () => void; // Callback when selection changes - property
+}
+```
+
+#### NodeSelector
+
+The client exports `NodeSelector` for direct node manipulation. This is intended
+for specialized tools like mapping editors and inspectors, not for typical
+product configurators. For product configurators, use the attribute-based API.
+
+### Error handling
+
+The client throws `VirtualdisplayError` for known error conditions:
+
+```typescript
+import {
+  VirtualdisplayClient,
+  VirtualdisplayError,
+  ERROR_CODES,
+} from '@virtualdisplay.io/client';
+
+try {
+  client.getAttribute('NonExistent').select('Value');
+} catch (error) {
+  if (error instanceof VirtualdisplayError) {
+    switch (error.code) {
+      case ERROR_CODES.ATTRIBUTE_NOT_FOUND:
+        console.error('Attribute does not exist');
+        break;
+      case ERROR_CODES.NO_MAPPING:
+        console.error('Call setMapping() first');
+        break;
+      // Handle other error codes
+    }
+  }
+}
+```
+
+**Error codes:**
+
+- `NO_MAPPING` - No mapping configuration set
+- `ATTRIBUTE_NOT_FOUND` - Requested attribute doesn't exist
+- `VALUE_NOT_FOUND` - Requested value doesn't exist for attribute
+- `INVALID_MAPPING` - Mapping configuration is invalid
+- `PARENT_NOT_FOUND` - Parent element for iframe not found
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for development setup and guidelines.
+
+## Troubleshooting
+
+### Common issues
+
+**Iframe not loading:**
+
+- Check that the parent element exists in the DOM
+- Verify your license key is valid
+- Ensure the model ID matches your license
+
+**Attributes not working:**
+
+- Make sure you call `setMapping()` before using `getAttribute()`
+- Verify attribute names match exactly (case-sensitive)
+- Check that node IDs in your mapping exist in the 3D model
+
+## Changelog
+
+See the [GitHub releases](https://github.com/virtualdisplay-io/client/releases)
+for release notes and version history.

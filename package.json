@@ -1,0 +1,119 @@
+{
+  "name": "@virtualdisplay.io/client",
+  "description": "TypeScript-first 3D model integration library with iframe-based architecture",
+  "version": "3.3.0",
+  "author": "Virtualdisplay <support@virtualdisplay.io>",
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions",
+    "last 2 Edge versions"
+  ],
+  "bugs": {
+    "url": "https://github.com/virtualdisplay-io/client/issues"
+  },
+  "bundledDependencies": [
+    "@virtualdisplay-io/logger"
+  ],
+  "dependencies": {
+    "@virtualdisplay-io/logger": "1.2.0",
+    "ajv": "8.17.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.29.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/exec": "7.1.0",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.3",
+    "@semantic-release/npm": "^12.0.1",
+    "@semantic-release/release-notes-generator": "^14.0.3",
+    "@types/node": "^24.0.10",
+    "@typescript-eslint/eslint-plugin": "^8.36.0",
+    "@typescript-eslint/parser": "^8.36.0",
+    "@virtualdisplay-io/shared-config": "^1.4.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "conventional-changelog-conventionalcommits": "9.0.0",
+    "eslint": "^9.29.0",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.5.0",
+    "eslint-plugin-unicorn": "^59.0.1",
+    "globals": "^16.2.0",
+    "jsdom": "^26.1.0",
+    "markdownlint-cli2": "^0.15.0",
+    "markdownlint-cli2-formatter-pretty": "^0.0.8",
+    "prettier": "^3.6.2",
+    "semantic-release": "^24.2.5",
+    "terser": "^5.43.1",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vite-bundle-visualizer": "^1.2.1",
+    "vite-plugin-dts": "^4.5.4",
+    "vitest": "^3.2.4"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/virtualdisplay.client.es.js",
+      "require": "./dist/virtualdisplay.client.cjs.js"
+    }
+  },
+  "files": [
+    "dist",
+    "schemas",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "homepage": "https://github.com/virtualdisplay-io/client#readme",
+  "keywords": [
+    "3d",
+    "iframe",
+    "models",
+    "typescript",
+    "visualization",
+    "webgl"
+  ],
+  "license": "MIT",
+  "main": "dist/virtualdisplay.client.cjs.js",
+  "module": "dist/virtualdisplay.client.es.js",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/virtualdisplay-io/client.git"
+  },
+  "scripts": {
+    "analyze": "vite-bundle-visualizer --template treemap --output stats.html --open false",
+    "build": "tsc -p tsconfig.build.json && vite build",
+    "coverage": "vitest run --coverage --reporter=verbose",
+    "coverage:feature": "vitest run test/feature --coverage --reporter=verbose",
+    "coverage:integration": "vitest run test/integration --coverage --reporter=verbose",
+    "coverage:unit": "vitest run test/unit --coverage --reporter=verbose",
+    "dev": "vite build --watch",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "pnpm run lint:eslint && pnpm run lint:md && pnpm run lint:types && pnpm run lint:format",
+    "lint:eslint": "eslint .",
+    "lint:eslint:fix": "eslint . --fix",
+    "lint:fix": "pnpm run lint:eslint:fix && pnpm run lint:md:fix && pnpm run lint:format:fix && npx fixpack",
+    "lint:format": "prettier --check .",
+    "lint:format:fix": "prettier --write .",
+    "lint:md": "markdownlint-cli2 '**/*.md' --config .markdownlint-cli2.jsonc",
+    "lint:md:fix": "markdownlint-cli2 '**/*.md' --config .markdownlint-cli2.jsonc --fix",
+    "lint:types": "tsc --noEmit",
+    "prepare": "node -e \"if (!process.env.CI) require('child_process').execSync('pnpm build', {stdio: 'inherit'})\"",
+    "release": "semantic-release",
+    "test": "vitest run",
+    "test:feature": "vitest run test/feature",
+    "test:integration": "vitest run test/integration",
+    "test:unit": "vitest run test/unit",
+    "test:watch": "vitest",
+    "type-check": "tsc --noEmit"
+  },
+  "type": "module",
+  "types": "dist/index.d.ts"
+}

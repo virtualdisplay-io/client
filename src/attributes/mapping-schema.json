@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Virtualdisplay mapping configuration",
+  "description": "Schema for attribute-based 3D model configuration",
+  "type": "object",
+  "required": ["attributes"],
+  "definitions": {
+    "attribute": {
+      "type": "object",
+      "description": "A configurable attribute with multiple possible values",
+      "required": ["name", "values"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Unique attribute name (e.g., 'Color', 'Size')",
+          "minLength": 1,
+          "pattern": "^\\S.*\\S$|^\\S$"
+        },
+        "values": {
+          "type": "array",
+          "description": "Possible values for this attribute",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/attributeValue"
+          }
+        }
+      }
+    },
+    "attributeValue": {
+      "type": "object",
+      "description": "A single value option for an attribute",
+      "required": ["value", "nodeIds"],
+      "properties": {
+        "value": {
+          "type": "string",
+          "description": "Display value (e.g., 'Red', 'Large')",
+          "minLength": 1,
+          "pattern": "^\\S.*\\S$|^\\S$"
+        },
+        "nodeIds": {
+          "type": "array",
+          "description": "3D model node IDs controlled by this value",
+          "items": {
+            "type": "string",
+            "description": "Node ID in the 3D model"
+          }
+        },
+        "isSelected": {
+          "type": "boolean",
+          "description": "Whether this value is selected by default",
+          "default": false
+        }
+      }
+    }
+  },
+  "properties": {
+    "attributes": {
+      "type": "array",
+      "description": "List of all configurable attributes",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/definitions/attribute"
+      }
+    }
+  }
+}

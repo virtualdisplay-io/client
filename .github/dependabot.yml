@@ -1,0 +1,65 @@
+version: 2
+updates:
+  # NPM/PNPM dependencies
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    open-pull-requests-limit: 10
+    assignees:
+      - 'HMAZonderland'
+    commit-message:
+      prefix: 'deps'
+      include: 'scope'
+    labels:
+      - 'dependencies'
+      - 'automated'
+    # Group updates for better management
+    groups:
+      # Development tools (safe for auto-merge) - shared-config standards
+      development-dependencies:
+        patterns:
+          - '@types/*'
+          - 'eslint*'
+          - '@typescript-eslint/*'
+          - 'prettier*'
+          - 'typescript*'
+        update-types:
+          - 'minor'
+          - 'patch'
+      # Testing dependencies (safe for auto-merge) - shared-config standards
+      testing-dependencies:
+        patterns:
+          - 'vitest*'
+          - '@vitest/*'
+          - 'jsdom'
+        update-types:
+          - 'minor'
+          - 'patch'
+      # Virtualdisplay packages (safe for auto-merge) - our own perfect code!
+      virtualdisplay-dependencies:
+        patterns:
+          - '@virtualdisplay-io/*'
+        update-types:
+          - 'major'
+          - 'minor'
+          - 'patch' # All updates auto-merged - we trust our own work!
+
+  # GitHub Actions updates
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+      day: 'monday'
+      time: '09:00'
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: 'ci'
+      include: 'scope'
+    assignees:
+      - 'HMAZonderland'
+    labels:
+      - 'github-actions'
+      - 'automated'

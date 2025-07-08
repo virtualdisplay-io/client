@@ -1,0 +1,10 @@
+test/
+coverage/
+vitest.config.ts
+eslint.config.js
+.prettierignore
+.gitignore
+examples/
+.github/
+.env
+README.npm.md

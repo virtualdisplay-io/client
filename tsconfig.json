@@ -1,0 +1,8 @@
+{
+  "extends": "@virtualdisplay-io/shared-config/typescript/virtualdisplay",
+  "compilerOptions": {
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*", "test/**/*", "vite.config.ts", "vitest.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

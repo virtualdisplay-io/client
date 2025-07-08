@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.0.0 (2025-07-08)
+
+### 🐛 Bug Fixes
+
+* regenerate pnpm-lock.yaml with correct autoInstallPeers setting ([6506ea3](https://github.com/virtualdisplay-io/client/commit/6506ea3551e88261525adf4771e4df11b8c1189e))
+
+### 🔧 Maintenance
+
+* update pnpm-lock.yaml ([#1](https://github.com/virtualdisplay-io/client/issues/1)) ([7de7091](https://github.com/virtualdisplay-io/client/commit/7de70915f5e06bb78500c656c100551d9eb93f9d))
+
 ## [3.3.0](https://github.com/virtualdisplay-io/client/compare/v3.2.2...v3.3.0) (2025-07-07)
 
 ### ✨ Features

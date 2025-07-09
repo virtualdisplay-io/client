@@ -8,13 +8,11 @@ export const EVENT_NAMES = {
   // Mutation flow (Client → Server)
   MUTATION_MESSAGE: 'mutation:message' as const,
 
+  // Config flow (Client → Server)
+  CONFIG_MESSAGE: 'config:message' as const,
+
   // State flow (Server → Client)
   MESSAGE_RECEIVED: 'message:received' as const,
   STATE_CHANGED: 'state:changed' as const,
   INITIAL_STATE_RECEIVED: 'state:initial-received' as const,
 } as const;
-
-/**
- * Type for all valid event names
- */
-export type EventName = typeof EVENT_NAMES[keyof typeof EVENT_NAMES];

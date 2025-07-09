@@ -7,8 +7,7 @@ import {
   vi,
 } from 'vitest';
 
-import { VirtualdisplayClient } from '../../../src/client/virtualdisplay-client';
-import { MESSAGE_TYPES, type StateMessage } from '../../../src/messaging/message-types';
+import { VirtualdisplayClient, MESSAGE_TYPES, type StateMessage } from '../../../src';
 
 describe('ModelNode onChange - visibility changes', () => {
   let parent: HTMLDivElement = document.createElement('div');

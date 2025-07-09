@@ -7,4 +7,9 @@ export interface ClientOptions {
   readonly license: string;
   readonly debug?: boolean;
   readonly language?: string;
+
+  // UI configuration options
+  readonly arEnabled?: boolean;
+  readonly fullscreenEnabled?: boolean;
+  readonly loadingIndicatorEnabled?: boolean;
 }

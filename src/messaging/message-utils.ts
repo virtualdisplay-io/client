@@ -1,4 +1,4 @@
-import { MESSAGE_TYPES, type Message, type MutationMessage, type StateMessage } from './message-types';
+import { MESSAGE_TYPES, type Message, type MutationMessage, type StateMessage, type ConfigMessage } from './message-types';
 import { VirtualdisplayError } from '../client/virtualdisplay-error';
 import type { Mutation } from '../mutations/mutation';
 
@@ -20,7 +20,7 @@ export function createMutationMessage(mutations: Mutation[]): MutationMessage {
  * Type guard for any valid message
  */
 export function isValidMessage(data: unknown): data is Message {
-  return isMutationMessage(data) || isStateMessage(data);
+  return isMutationMessage(data) || isStateMessage(data) || isConfigMessage(data);
 }
 
 /**
@@ -50,5 +50,21 @@ export function isStateMessage(data: unknown): data is StateMessage {
   return (
     obj.type === MESSAGE_TYPES.STATE &&
     Array.isArray(obj.nodes)
+  );
+}
+
+/**
+ * Type guard for config messages
+ */
+export function isConfigMessage(data: unknown): data is ConfigMessage {
+  if (typeof data !== 'object' || data === null) {
+    return false;
+  }
+
+  const obj = data as Record<string, unknown>;
+  return (
+    obj.type === MESSAGE_TYPES.CONFIG &&
+    typeof obj.config === 'object' &&
+    obj.config !== null
   );
 }

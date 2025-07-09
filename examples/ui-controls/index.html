@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtualdisplay UI configuration example</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      h1 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+
+      .demo-grid {
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        gap: 20px;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .controls {
+        border-right: 1px solid #e0e0e0;
+        padding-right: 20px;
+      }
+
+      .viewer-container {
+        height: 600px;
+        background: #f9f9f9;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .control-group {
+        margin-bottom: 20px;
+      }
+
+      .control-group h3 {
+        margin-bottom: 10px;
+        color: #555;
+        font-size: 16px;
+      }
+
+      .checkbox-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .checkbox-group label {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      .checkbox-group input[type='checkbox'] {
+        cursor: pointer;
+      }
+
+      .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      button {
+        padding: 8px 16px;
+        border: 1px solid #ddd;
+        background: white;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+
+      button:hover {
+        background: #f0f0f0;
+        border-color: #ccc;
+      }
+
+      button:active {
+        background: #e0e0e0;
+      }
+
+      .info {
+        background: #e3f2fd;
+        padding: 12px;
+        border-radius: 4px;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #1976d2;
+      }
+
+      .code-block {
+        background: #f5f5f5;
+        padding: 12px;
+        border-radius: 4px;
+        font-family: monospace;
+        font-size: 12px;
+        margin-top: 8px;
+        overflow-x: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Virtualdisplay UI configuration example</h1>
+
+      <div class="demo-grid">
+        <div class="controls">
+          <div class="control-group">
+            <h3>Initial configuration</h3>
+            <div class="checkbox-group">
+              <label>
+                <input type="checkbox" id="initial-ar" checked />
+                AR button enabled
+              </label>
+              <label>
+                <input type="checkbox" id="initial-fullscreen" checked />
+                Fullscreen button enabled
+              </label>
+              <label>
+                <input type="checkbox" id="initial-loading" checked />
+                Loading indicator enabled
+              </label>
+            </div>
+            <button id="reinitialize" style="margin-top: 12px">
+              Reinitialize with config
+            </button>
+          </div>
+
+          <div class="control-group">
+            <h3>Dynamic control</h3>
+            <div class="button-group">
+              <button onclick="client.viewer.setArEnabled(true)">
+                Show AR button
+              </button>
+              <button onclick="client.viewer.setArEnabled(false)">
+                Hide AR button
+              </button>
+              <button onclick="client.viewer.setFullscreenEnabled(true)">
+                Show fullscreen button
+              </button>
+              <button onclick="client.viewer.setFullscreenEnabled(false)">
+                Hide fullscreen button
+              </button>
+              <button onclick="client.viewer.setLoadingIndicatorEnabled(true)">
+                Show loading indicator
+              </button>
+              <button onclick="client.viewer.setLoadingIndicatorEnabled(false)">
+                Hide loading indicator
+              </button>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <h3>Batch controls</h3>
+            <div class="button-group">
+              <button onclick="client.viewer.showAllUI()">Show all UI</button>
+              <button onclick="client.viewer.hideAllUI()">Hide all UI</button>
+              <button onclick="updateMultiple()">Custom update</button>
+            </div>
+          </div>
+
+          <div class="info">
+            <strong>Note:</strong> The server defaults all UI elements to
+            visible. Only send config for elements you want to hide initially.
+          </div>
+        </div>
+
+        <div class="viewer-container" id="viewer">
+          <!-- Virtualdisplay viewer will be inserted here -->
+        </div>
+      </div>
+
+      <div class="code-block">
+        <strong>Example usage:</strong><br />
+        // Initialize with UI config<br />
+        const client = new VirtualdisplayClient({<br />
+        &nbsp;&nbsp;parent: '#viewer',<br />
+        &nbsp;&nbsp;model: 'your-model-id',<br />
+        &nbsp;&nbsp;license: 'your-license',<br />
+        &nbsp;&nbsp;arEnabled: false, // Hide AR button<br />
+        &nbsp;&nbsp;fullscreenEnabled: true, // Show fullscreen (default)<br />
+        &nbsp;&nbsp;loadingIndicatorEnabled: false // Hide loading indicator<br />
+        });<br /><br />
+
+        // Dynamic control<br />
+        client.viewer.setArEnabled(true);<br />
+        client.viewer.updateUIConfig({<br />
+        &nbsp;&nbsp;arEnabled: true,<br />
+        &nbsp;&nbsp;fullscreenEnabled: false<br />
+        });
+      </div>
+    </div>
+
+    <script type="module">
+      // Import from local build
+      import { VirtualdisplayClient } from '../../dist/virtualdisplay.client.es.js';
+
+      // Make available globally for button onclick handlers
+      window.VirtualdisplayClient = VirtualdisplayClient;
+
+      let client;
+
+      function initializeClient() {
+        // Clean up existing client
+        if (client) {
+          client.destroy();
+        }
+
+        // Get initial configuration from checkboxes
+        const arEnabled = document.getElementById('initial-ar').checked;
+        const fullscreenEnabled =
+          document.getElementById('initial-fullscreen').checked;
+        const loadingIndicatorEnabled =
+          document.getElementById('initial-loading').checked;
+
+        // Create new client with configuration
+        client = new VirtualdisplayClient({
+          parent: '#viewer',
+          model: 'Felt_panel',
+          license: 'demo',
+          debug: true,
+          arEnabled,
+          fullscreenEnabled,
+          loadingIndicatorEnabled,
+        });
+
+        // Make client available globally
+        window.client = client;
+
+        console.log('Client initialized with config:', {
+          arEnabled,
+          fullscreenEnabled,
+          loadingIndicatorEnabled,
+        });
+      }
+
+      // Custom update function
+      window.updateMultiple = function () {
+        client.viewer.updateUIConfig({
+          arEnabled: false,
+          fullscreenEnabled: true,
+          loadingIndicatorEnabled: false,
+        });
+        console.log('Updated multiple UI settings');
+      };
+
+      // Initialize on load
+      initializeClient();
+
+      // Reinitialize button
+      document
+        .getElementById('reinitialize')
+        .addEventListener('click', initializeClient);
+    </script>
+  </body>
+</html>

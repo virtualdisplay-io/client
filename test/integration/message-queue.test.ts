@@ -5,10 +5,10 @@ import { EventBus } from '../../src/events/event-bus';
 import { MessageHandler } from '../../src/messaging/message-handler';
 
 describe('Integration: Message Queue Basic Behavior', () => {
-  let eventBus = new EventBus();
-  let messageHandler = new MessageHandler(eventBus);
-  let mockIframe = {} as HTMLIFrameElement;
-  let postMessageSpy = vi.fn();
+  let eventBus: EventBus = new EventBus();
+  let messageHandler: MessageHandler = new MessageHandler(eventBus);
+  let mockIframe: HTMLIFrameElement = {} as HTMLIFrameElement;
+  let postMessageSpy: ReturnType<typeof vi.fn> = vi.fn();
 
   beforeEach(() => {
     eventBus = new EventBus();
@@ -65,10 +65,10 @@ describe('Integration: Message Queue Basic Behavior', () => {
 });
 
 describe('Integration: Message Queue Ready State', () => {
-  let eventBus = new EventBus();
-  let messageHandler = new MessageHandler(eventBus);
-  let mockIframe = {} as HTMLIFrameElement;
-  let postMessageSpy = vi.fn();
+  let eventBus: EventBus = new EventBus();
+  let messageHandler: MessageHandler = new MessageHandler(eventBus);
+  let mockIframe: HTMLIFrameElement = {} as HTMLIFrameElement;
+  let postMessageSpy: ReturnType<typeof vi.fn> = vi.fn();
 
   beforeEach(() => {
     eventBus = new EventBus();
@@ -129,10 +129,8 @@ function verifyMessagesWereSent(
   postMessageSpy: ReturnType<typeof vi.fn>,
   messages: [MutationMessage, MutationMessage],
 ): void {
-  const firstCall = 1;
-  const secondCall = 2;
-  expect(postMessageSpy).toHaveBeenNthCalledWith(firstCall, messages[0], '*');
-  expect(postMessageSpy).toHaveBeenNthCalledWith(secondCall, messages[1], '*');
+  expect(postMessageSpy).toHaveBeenNthCalledWith(1, messages[0], '*');
+  expect(postMessageSpy).toHaveBeenNthCalledWith(2, messages[1], '*');
 }
 
 function testQueueEmptyAfterSend(context: MessageQueueTestContext): void {

@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 
+import { EVENT_NAMES, MESSAGE_TYPES, type StateMessage } from '../../../src';
 import { EventBus } from '../../../src/events/event-bus';
-import { EVENT_NAMES } from '../../../src/events/event-names';
-import { MESSAGE_TYPES, type StateMessage } from '../../../src/messaging/message-types';
 import { StateService } from '../../../src/nodes/state-service';
 
 describe('StateService state updates', () => {
@@ -49,8 +48,7 @@ describe('StateService state updates', () => {
     eventBus.emit(EVENT_NAMES.MESSAGE_RECEIVED, { message: updateMessage });
 
     expect(stateService.isReady).toBe(true);
-    const expectedNodeCount = 2;
-    expect(stateService.nodeCount).toBe(expectedNodeCount);
+    expect(stateService.nodeCount).toBe(2);
   });
 
   it('should reset ready state when cleared', () => {

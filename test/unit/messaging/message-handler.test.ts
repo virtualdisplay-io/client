@@ -7,8 +7,6 @@ import { EventBus } from '../../../src/events/event-bus';
 import { MessageHandler } from '../../../src/messaging/message-handler';
 import { createMutationMessage } from '../../../src/messaging/message-utils';
 
-const CALL_COUNT_TWO = 2;
-
 describe('MessageHandler - Basic Setup', () => {
   let eventBus = new EventBus();
   let handler = new MessageHandler(eventBus);
@@ -125,6 +123,28 @@ describe('MessageHandler - Queue Processing', () => {
 
     verifyMessagesSent({ postMessageSpy, handler, message1, message2 });
   });
+
+  it('should queue CONFIG messages before ready', () => {
+    const configMessage = {
+      type: MESSAGE_TYPES.CONFIG,
+      config: {
+        ui: {
+          arEnabled: false,
+          fullscreenEnabled: true,
+        },
+      },
+    };
+
+    eventBus.emit(EVENT_NAMES.CONFIG_MESSAGE, { message: configMessage });
+
+    expect(postMessageSpy).not.toHaveBeenCalled();
+
+    // Mark as ready
+    eventBus.emit(EVENT_NAMES.IFRAME_READY, {});
+
+    // CONFIG message should be sent
+    expect(postMessageSpy).toHaveBeenCalledWith(configMessage, '*');
+  });
 });
 
 describe('MessageHandler - Valid Message Receiving', () => {
@@ -235,7 +255,7 @@ interface VerifyMessagesSentParams {
 
 function verifyMessagesSent(params: VerifyMessagesSentParams): void {
   const { postMessageSpy, message1, message2 } = params;
-  expect(postMessageSpy).toHaveBeenCalledTimes(CALL_COUNT_TWO);
+  expect(postMessageSpy).toHaveBeenCalledTimes(2);
   expect(postMessageSpy).toHaveBeenCalledWith(message1, '*');
   expect(postMessageSpy).toHaveBeenCalledWith(message2, '*');
 }

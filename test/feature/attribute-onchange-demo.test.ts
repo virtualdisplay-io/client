@@ -2,6 +2,7 @@ import { describe, expect, it, beforeEach } from 'vitest';
 
 import { createMockSetup, simulateStateChange, type TestSetup } from './shared-test-setup';
 import type { MappingConfiguration } from '../../src';
+import { expectMutationCall } from '../helpers/mutation-test-helpers';
 
 const demoMapping: MappingConfiguration = {
   attributes: [
@@ -70,12 +71,9 @@ describe('Feature: AttributeValue onChange callbacks', () => {
   it('should send mutations when changing selections', () => {
     simulateStateChange(setup.clientWithEventBus, ['color-blue', 'size-small'], allNodes);
 
-    setup.postMessageSpy.mockClear();
-    setup.client.getAttribute('Color').select('Red');
-
-    expect(setup.postMessageSpy).toHaveBeenCalledTimes(1);
-    const { calls } = setup.postMessageSpy.mock;
-    expect(calls[0]?.[0]?.mutations).toEqual([
+    expectMutationCall(setup, () => {
+      setup.client.getAttribute('Color').select('Red');
+    }, [
       { type: 'hide', nodeId: 'color-blue' },
       { type: 'show', nodeId: 'color-red' },
     ]);

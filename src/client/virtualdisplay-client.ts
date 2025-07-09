@@ -10,6 +10,7 @@ import { MessageHandler } from '../messaging/message-handler';
 import type { ModelNode } from '../nodes/node';
 import { NodeSelector } from '../nodes/node-selector';
 import { StateService } from '../nodes/state-service';
+import { VirtualdisplayViewerService } from '../ui/virtualdisplay-viewer-service';
 import { logger, enableDebugMode } from '../utils/logger';
 
 /**
@@ -25,6 +26,8 @@ export class VirtualdisplayClient {
 
   private readonly messageHandler: MessageHandler;
 
+  private readonly viewerService: VirtualdisplayViewerService;
+
   private readonly options: ClientOptions;
 
   private iframe: HTMLIFrameElement | undefined;
@@ -35,9 +38,11 @@ export class VirtualdisplayClient {
     this.attributeService = new AttributeService(this.eventBus);
     this.stateService = new StateService(this.eventBus);
     this.messageHandler = new MessageHandler(this.eventBus);
+    this.viewerService = new VirtualdisplayViewerService(this.eventBus);
 
     this.initializeLogging();
     this.createAndConnectIframe();
+    this.setupInitialConfig();
   }
 
   private initializeLogging(): void {
@@ -61,6 +66,13 @@ export class VirtualdisplayClient {
     logger.debug('Iframe created, setting up messaging');
 
     this.messageHandler.setIframe(this.iframe);
+  }
+
+  private setupInitialConfig(): void {
+    // Send initial config after iframe is ready
+    this.eventBus.once(EVENT_NAMES.IFRAME_READY, () => {
+      this.viewerService.sendInitialConfig(this.options);
+    });
   }
 
   /**
@@ -133,6 +145,13 @@ export class VirtualdisplayClient {
     }
 
     this.eventBus.once(EVENT_NAMES.INITIAL_STATE_RECEIVED, callback);
+  }
+
+  /**
+   * Get the viewer service for UI configuration
+   */
+  public get viewer(): VirtualdisplayViewerService {
+    return this.viewerService;
   }
 
   public destroy(): void {

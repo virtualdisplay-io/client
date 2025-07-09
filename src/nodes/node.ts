@@ -43,7 +43,7 @@ export class ModelNode {
   }
 }
 
-export interface CreateNodeParams {
+interface CreateNodeParams {
   id: string;
   name: string;
   type: NodeType;

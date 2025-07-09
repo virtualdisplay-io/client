@@ -1,10 +1,8 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
+import { EVENT_NAMES, MESSAGE_TYPES, type StateMessage, logger } from '../../../src';
 import { EventBus } from '../../../src/events/event-bus';
-import { EVENT_NAMES } from '../../../src/events/event-names';
-import { MESSAGE_TYPES, type StateMessage } from '../../../src/messaging/message-types';
 import { StateService } from '../../../src/nodes/state-service';
-import { logger } from '../../../src/utils/logger';
 
 describe('StateService logging', () => {
   let eventBus: EventBus = new EventBus();

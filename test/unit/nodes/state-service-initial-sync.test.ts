@@ -1,8 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 
+import { EVENT_NAMES, MESSAGE_TYPES, type StateMessage } from '../../../src';
 import { EventBus } from '../../../src/events/event-bus';
-import { EVENT_NAMES } from '../../../src/events/event-names';
-import { MESSAGE_TYPES, type StateMessage } from '../../../src/messaging/message-types';
 import { StateService } from '../../../src/nodes/state-service';
 
 describe('StateService initial sync', () => {

@@ -7,6 +7,7 @@ import type { MutationDto } from '../mutations/mutation';
 export const MESSAGE_TYPES = {
   MUTATION: 'mutation',
   STATE: 'state',
+  CONFIG: 'config',
 } as const;
 
 export type MessageType = typeof MESSAGE_TYPES[keyof typeof MESSAGE_TYPES];
@@ -22,16 +23,9 @@ export interface ModelNodeDto {
 }
 
 /**
- * Base message interface
- */
-export interface BaseMessage {
-  readonly type: MessageType;
-}
-
-/**
  * Mutation message sent to server
  */
-export interface MutationMessage extends BaseMessage {
+export interface MutationMessage {
   readonly type: typeof MESSAGE_TYPES.MUTATION;
   readonly mutations: MutationDto[];
 }
@@ -40,13 +34,37 @@ export interface MutationMessage extends BaseMessage {
  * State message received from server
  * Contains array of model node DTOs
  */
-export interface StateMessage extends BaseMessage {
+export interface StateMessage {
   readonly type: typeof MESSAGE_TYPES.STATE;
   readonly nodes: ModelNodeDto[];
   readonly isInitial: boolean;
 }
 
 /**
+ * UI configuration options
+ */
+export interface UIConfig {
+  readonly arEnabled?: boolean;
+  readonly fullscreenEnabled?: boolean;
+  readonly loadingIndicatorEnabled?: boolean;
+}
+
+/**
+ * Viewer configuration
+ */
+export interface ViewerConfig {
+  readonly ui?: UIConfig;
+}
+
+/**
+ * Configuration message sent to server
+ */
+export interface ConfigMessage {
+  readonly type: typeof MESSAGE_TYPES.CONFIG;
+  readonly config: ViewerConfig;
+}
+
+/**
  * Union of all possible messages
  */
-export type Message = MutationMessage | StateMessage;
+export type Message = MutationMessage | StateMessage | ConfigMessage;

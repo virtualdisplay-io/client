@@ -2,6 +2,7 @@ import type { Message } from './message-types';
 import { isValidMessage } from './message-utils';
 import type { EventBus } from '../events/event-bus';
 import { EVENT_NAMES } from '../events/event-names';
+import type { MessageEvent as DomainMessageEvent } from '../events/event-types';
 import { logger } from '../utils/logger';
 
 /**
@@ -83,7 +84,7 @@ export class MessageHandler {
     });
   }
 
-  private readonly handleWindowMessage = (event: MessageEvent): void => {
+  private readonly handleWindowMessage = (event: globalThis.MessageEvent): void => {
     if (!isValidMessage(event.data)) {
       return;
     }
@@ -108,8 +109,15 @@ export class MessageHandler {
   }
 
   private setupOutgoingMessages(): void {
-    this.eventBus.on(EVENT_NAMES.MUTATION_MESSAGE, event => {
-      this.queueOrSend(event.message);
+    const outgoingEvents = [
+      EVENT_NAMES.MUTATION_MESSAGE,
+      EVENT_NAMES.CONFIG_MESSAGE,
+    ];
+
+    outgoingEvents.forEach(eventName => {
+      this.eventBus.on(eventName, (event: DomainMessageEvent) => {
+        this.queueOrSend(event.message);
+      });
     });
   }
 

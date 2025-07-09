@@ -9,6 +9,9 @@ export { NodeSelector } from './nodes/node-selector';
 export { MappingValidator } from './attributes/mapping-validator';
 export type { MappingConfiguration, AttributeConfig, AttributeValueConfig } from './attributes/mapping-types';
 
+// UI configuration
+export { VirtualdisplayViewerService } from './ui/virtualdisplay-viewer-service';
+
 // Export mapping schema for external use
 export { default as mappingSchema } from './attributes/mapping-schema.json';
 export { NODE_TYPES, ModelNode } from './nodes/node';
@@ -18,7 +21,16 @@ export { EVENT_NAMES } from './events/event-names';
 export type { DomainEvents } from './events/event-types';
 
 // Message types for server communication
-export { MESSAGE_TYPES, type Message, type MutationMessage, type StateMessage, type ModelNodeDto } from './messaging/message-types';
+export {
+  MESSAGE_TYPES,
+  type Message,
+  type MutationMessage,
+  type StateMessage,
+  type ConfigMessage,
+  type UIConfig,
+  type ViewerConfig,
+  type ModelNodeDto,
+} from './messaging/message-types';
 export { MUTATION_TYPES, Mutation, type MutationType, type MutationDto } from './mutations/mutation';
 
 // Utilities for debugging

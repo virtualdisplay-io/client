@@ -42,7 +42,7 @@ export class NodeSelector {
       return;
     }
 
-    if (node.isVisible === true) {
+    if (node.isVisible) {
       this.hide();
       return;
     }

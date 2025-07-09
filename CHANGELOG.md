@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.0](https://github.com/virtualdisplay-io/client/compare/v3.3.0...v3.4.0) (2025-07-09)
+
+### ✨ Features
+
+* implement UI configuration via PostMessage CONFIG messages ([#2](https://github.com/virtualdisplay-io/client/issues/2)) ([abc2294](https://github.com/virtualdisplay-io/client/commit/abc229414f9f70c54f37db903c46c0612c5eb6cf))
+
 ## [3.3.0](https://github.com/virtualdisplay-io/client/compare/v3.2.2...v3.3.0) (2025-07-07)
 
 ### ✨ Features

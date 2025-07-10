@@ -39,7 +39,6 @@ export class IframeBuilder {
     });
 
     // Apply attributes
-    iframe.setAttribute('allowfullscreen', 'true');
     iframe.setAttribute('allow', 'xr-spatial-tracking; fullscreen');
 
     iframe.addEventListener('load', () => {

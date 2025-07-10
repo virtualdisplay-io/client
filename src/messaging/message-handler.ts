@@ -27,17 +27,12 @@ export class MessageHandler {
 
   public setIframe(iframe: HTMLIFrameElement): void {
     this.iframe = iframe;
-    logger.debug('Message handler configured with iframe', {
-      src: iframe.src,
-      loaded: iframe.contentWindow !== null,
-    });
   }
 
   public destroy(): void {
     window.removeEventListener('message', this.handleWindowMessage);
     this.queue.length = 0;
     this.isReady = false;
-    logger.debug('Message handler destroyed');
   }
 
   private queueOrSend(message: Message): void {
@@ -68,7 +63,7 @@ export class MessageHandler {
     });
 
     this.iframe!.contentWindow!.postMessage(message, targetOrigin);
-    logger.info('Message sent to server', message);
+    logger.debug('Message sent to server', message);
   }
 
   private canSend(): boolean {
@@ -105,7 +100,6 @@ export class MessageHandler {
 
   private setupIncomingMessages(): void {
     window.addEventListener('message', this.handleWindowMessage);
-    logger.debug('Message handler started listening');
   }
 
   private setupOutgoingMessages(): void {

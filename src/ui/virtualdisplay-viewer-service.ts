@@ -41,7 +41,6 @@ export class VirtualdisplayViewerService {
 
     // Only send if we have any config to send
     if (Object.keys(config).length > 0) {
-      logger.debug('Sending initial UI configuration', config);
       this.sendUIConfig(config);
     }
   }
@@ -112,7 +111,6 @@ export class VirtualdisplayViewerService {
       config,
     };
 
-    logger.debug('Emitting CONFIG message', message);
     this.eventBus.emit(EVENT_NAMES.CONFIG_MESSAGE, { message });
   }
 }

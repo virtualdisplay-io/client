@@ -61,4 +61,23 @@ describe('EventBus', () => {
     expect(spy1).toHaveBeenCalled();
     expect(spy2).not.toHaveBeenCalled();
   });
+
+  it('should handle multiple once listeners that self-remove during execution', () => {
+    const bus = new EventBus();
+    const spy1 = vi.fn();
+    const spy2 = vi.fn();
+    const spy3 = vi.fn();
+
+    // This tests the bug we fixed - multiple once handlers where each removes itself
+    bus.once(EVENT_NAMES.IFRAME_READY, spy1);
+    bus.once(EVENT_NAMES.IFRAME_READY, spy2);
+    bus.once(EVENT_NAMES.IFRAME_READY, spy3);
+
+    // All handlers should be called despite self-removal during iteration
+    bus.emit(EVENT_NAMES.IFRAME_READY, {});
+
+    expect(spy1).toHaveBeenCalledTimes(1);
+    expect(spy2).toHaveBeenCalledTimes(1);
+    expect(spy3).toHaveBeenCalledTimes(1);
+  });
 });

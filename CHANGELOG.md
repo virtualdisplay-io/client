@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.1](https://github.com/virtualdisplay-io/client/compare/v3.4.0...v3.4.1) (2025-07-10)
+
+### 🐛 Bug Fixes
+
+* EventBus once handlers and logging improvements ([#3](https://github.com/virtualdisplay-io/client/issues/3)) ([5a99d8d](https://github.com/virtualdisplay-io/client/commit/5a99d8d6ef82d058799734b54c98ca171d17dd36))
+
 ## [3.4.0](https://github.com/virtualdisplay-io/client/compare/v3.3.0...v3.4.0) (2025-07-09)
 
 ### ✨ Features

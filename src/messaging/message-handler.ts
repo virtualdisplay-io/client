@@ -106,6 +106,7 @@ export class MessageHandler {
     const outgoingEvents = [
       EVENT_NAMES.MUTATION_MESSAGE,
       EVENT_NAMES.CONFIG_MESSAGE,
+      EVENT_NAMES.CAMERA_MESSAGE,
     ];
 
     outgoingEvents.forEach(eventName => {

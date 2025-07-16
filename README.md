@@ -436,6 +436,33 @@ useEffect(() => {
 }, []);
 ```
 
+#### `camera: Camera`
+
+Control the 3D viewer's camera position programmatically. The camera API provides
+a fluent interface for chaining multiple operations.
+
+```typescript
+// Single operation
+client.camera.rotate(45).set();
+
+// Chain multiple operations
+client.camera.rotate(90).tilt(45).zoom(150).set();
+
+// Reset to default position
+client.camera.reset();
+```
+
+**Camera methods:**
+
+- `rotate(degrees: number)`: Rotate horizontally (-180° to 180°, 0° = front)
+- `tilt(degrees: number)`: Tilt vertically (0° to 180°, 75° = default, 0° = top, 90° = side)
+- `zoom(percentage: number)`: Zoom level (25% to 400%, 100% = default)
+- `reset()`: Reset to default position (equivalent to `rotate(0).tilt(75).zoom(100).set()`)
+- `set()`: Execute all chained commands
+
+**Note:** Camera commands are accumulated until `set()` is called, allowing efficient
+batch operations. The `reset()` method is the only exception - it executes immediately.
+
 ### Types
 
 ```typescript
@@ -473,6 +500,15 @@ class AttributeValue {
   nodeList: string[]; // Associated 3D node IDs - getter
   isSelected: boolean; // Current selection state - getter
   onChange?: () => void; // Callback when selection changes - property
+}
+
+class Camera {
+  // Methods - all return Camera for chaining
+  rotate(degrees: number): Camera; // Rotate horizontally
+  tilt(degrees: number): Camera; // Tilt vertically
+  zoom(percentage: number): Camera; // Set zoom level
+  reset(): void; // Reset to default (executes immediately)
+  set(): void; // Execute chained commands
 }
 ```
 

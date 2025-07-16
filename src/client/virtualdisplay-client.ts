@@ -4,6 +4,7 @@ import { VirtualdisplayError } from './virtualdisplay-error';
 import { AttributeSelector } from '../attributes/attribute-selector';
 import { AttributeService } from '../attributes/attribute-service';
 import type { MappingConfiguration } from '../attributes/mapping-types';
+import { Camera } from '../camera';
 import { EventBus } from '../events/event-bus';
 import { EVENT_NAMES } from '../events/event-names';
 import { MessageHandler } from '../messaging/message-handler';
@@ -28,6 +29,8 @@ export class VirtualdisplayClient {
 
   private readonly viewerService: VirtualdisplayViewerService;
 
+  private readonly cameraApi: Camera;
+
   private readonly options: ClientOptions;
 
   private iframe: HTMLIFrameElement | undefined;
@@ -39,6 +42,7 @@ export class VirtualdisplayClient {
     this.stateService = new StateService(this.eventBus);
     this.messageHandler = new MessageHandler(this.eventBus);
     this.viewerService = new VirtualdisplayViewerService(this.eventBus);
+    this.cameraApi = new Camera(this.eventBus);
 
     this.initializeLogging();
     this.createAndConnectIframe();
@@ -152,6 +156,13 @@ export class VirtualdisplayClient {
    */
   public get viewer(): VirtualdisplayViewerService {
     return this.viewerService;
+  }
+
+  /**
+   * Get the camera control API
+   */
+  public get camera(): Camera {
+    return this.cameraApi;
   }
 
   public destroy(): void {

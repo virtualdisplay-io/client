@@ -11,6 +11,9 @@ export const EVENT_NAMES = {
   // Config flow (Client → Server)
   CONFIG_MESSAGE: 'config:message' as const,
 
+  // Camera flow (Client → Server)
+  CAMERA_MESSAGE: 'camera:message' as const,
+
   // State flow (Server → Client)
   MESSAGE_RECEIVED: 'message:received' as const,
   STATE_CHANGED: 'state:changed' as const,

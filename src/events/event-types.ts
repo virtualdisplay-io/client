@@ -1,5 +1,5 @@
 import type { EVENT_NAMES } from './event-names';
-import type { MutationMessage, ConfigMessage, Message } from '../messaging/message-types';
+import type { MutationMessage, ConfigMessage, CameraMessage, Message } from '../messaging/message-types';
 import type { ModelNode } from '../nodes/node';
 
 export interface VoidEvent {}
@@ -27,6 +27,9 @@ export interface DomainEvents extends Record<string, unknown> {
 
   // Config flow (Client → Server)
   [EVENT_NAMES.CONFIG_MESSAGE]: MessageEvent<ConfigMessage>;
+
+  // Camera flow (Client → Server)
+  [EVENT_NAMES.CAMERA_MESSAGE]: MessageEvent<CameraMessage>;
 
   // State flow (Server → Client)
   [EVENT_NAMES.MESSAGE_RECEIVED]: MessageEvent;

@@ -8,6 +8,7 @@ export const MESSAGE_TYPES = {
   MUTATION: 'mutation',
   STATE: 'state',
   CONFIG: 'config',
+  CAMERA: 'camera',
 } as const;
 
 export type MessageType = typeof MESSAGE_TYPES[keyof typeof MESSAGE_TYPES];
@@ -65,6 +66,22 @@ export interface ConfigMessage {
 }
 
 /**
+ * Camera command
+ */
+export interface CameraCommand {
+  readonly action: 'rotate' | 'tilt' | 'zoom' | 'reset';
+  readonly value?: number;
+}
+
+/**
+ * Camera message sent to server
+ */
+export interface CameraMessage {
+  readonly type: typeof MESSAGE_TYPES.CAMERA;
+  readonly commands: CameraCommand[];
+}
+
+/**
  * Union of all possible messages
  */
-export type Message = MutationMessage | StateMessage | ConfigMessage;
+export type Message = MutationMessage | StateMessage | ConfigMessage | CameraMessage;

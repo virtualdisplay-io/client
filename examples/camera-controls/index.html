@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtualdisplay - Camera controls demo</title>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .demo {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 20px;
+      }
+
+      /* 3D Viewer */
+      #viewer {
+        background: white;
+        border-radius: 12px;
+        height: 700px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Controls Panel */
+      .controls {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        max-height: 700px;
+        overflow-y: auto;
+      }
+
+      .controls h2 {
+        margin: 0 0 20px 0;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      /* Control Groups */
+      .control-group {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .control-group:last-of-type {
+        border-bottom: none;
+      }
+
+      .control-group h3 {
+        margin: 0 0 15px 0;
+        font-size: 16px;
+        color: #555;
+      }
+
+      /* Buttons */
+      button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 8px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      button:hover {
+        background: #0056b3;
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button.secondary {
+        background: #6c757d;
+      }
+
+      button.secondary:hover {
+        background: #545b62;
+      }
+
+      button.accent {
+        background: #28a745;
+      }
+
+      button.accent:hover {
+        background: #218838;
+      }
+
+      /* Sliders */
+      .slider-container {
+        margin: 15px 0;
+      }
+
+      .slider-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .slider-value {
+        font-weight: 600;
+        color: #007bff;
+      }
+
+      input[type='range'] {
+        width: 100%;
+        height: 6px;
+        background: #ddd;
+        border-radius: 3px;
+        outline: none;
+        -webkit-appearance: none;
+      }
+
+      input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      input[type='range']::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      input[type='range']::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        transition: transform 0.2s;
+      }
+
+      input[type='range']::-moz-range-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      /* Button Grid */
+      .button-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
+
+      .button-grid button {
+        font-size: 13px;
+        padding: 10px;
+      }
+
+      /* Log */
+      .log {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+      }
+
+      .log h4 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        font-family: inherit;
+      }
+
+      .log-entry {
+        margin-bottom: 5px;
+        padding: 5px 8px;
+        background: white;
+        border-radius: 3px;
+        border-left: 3px solid #007bff;
+      }
+
+      .log-entry.reset {
+        border-left-color: #28a745;
+      }
+
+      .log-entry.chained {
+        border-left-color: #ffc107;
+      }
+
+      /* Header */
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+      }
+
+      .description {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Camera controls demo</h1>
+    <p class="description">
+      Demonstrating the camera API with rotation, tilt, and zoom controls. Use
+      the buttons or sliders to control the camera position.
+    </p>
+
+    <div class="demo">
+      <!-- 3D Viewer will be inserted here -->
+      <div id="viewer"></div>
+
+      <!-- Camera Controls -->
+      <div class="controls">
+        <h2>Camera controls</h2>
+
+        <!-- Rotation Control -->
+        <div class="control-group">
+          <h3>🔄 Rotation (horizontal)</h3>
+          <div class="slider-container">
+            <div class="slider-label">
+              <span>Rotation</span>
+              <span class="slider-value" id="rotate-value">0°</span>
+            </div>
+            <input
+              type="range"
+              id="rotate-slider"
+              min="-180"
+              max="180"
+              value="0"
+              step="5"
+            />
+          </div>
+          <div class="button-grid">
+            <button onclick="setRotation(-90)">Left side (-90°)</button>
+            <button onclick="setRotation(90)">Right side (90°)</button>
+            <button onclick="setRotation(-45)">Left 45°</button>
+            <button onclick="setRotation(45)">Right 45°</button>
+            <button onclick="setRotation(0)">Front (0°)</button>
+            <button onclick="setRotation(180)">Back (180°)</button>
+          </div>
+        </div>
+
+        <!-- Tilt Control -->
+        <div class="control-group">
+          <h3>📐 Tilt (vertical)</h3>
+          <div class="slider-container">
+            <div class="slider-label">
+              <span>Tilt</span>
+              <span class="slider-value" id="tilt-value">75°</span>
+            </div>
+            <input
+              type="range"
+              id="tilt-slider"
+              min="0"
+              max="180"
+              value="75"
+              step="5"
+            />
+          </div>
+          <div class="button-grid">
+            <button onclick="setTilt(0)">Top view (0°)</button>
+            <button onclick="setTilt(90)">Side view (90°)</button>
+            <button onclick="setTilt(45)">High angle (45°)</button>
+            <button onclick="setTilt(135)">Low angle (135°)</button>
+            <button onclick="setTilt(75)">Default (75°)</button>
+            <button onclick="setTilt(180)">Bottom (180°)</button>
+          </div>
+        </div>
+
+        <!-- Zoom Control -->
+        <div class="control-group">
+          <h3>🔍 Zoom</h3>
+          <div class="slider-container">
+            <div class="slider-label">
+              <span>Zoom</span>
+              <span class="slider-value" id="zoom-value">100%</span>
+            </div>
+            <input
+              type="range"
+              id="zoom-slider"
+              min="50"
+              max="200"
+              value="100"
+              step="10"
+            />
+          </div>
+          <div class="button-grid">
+            <button onclick="setZoom(50)">50% (far)</button>
+            <button onclick="setZoom(75)">75%</button>
+            <button onclick="setZoom(100)">100% (normal)</button>
+            <button onclick="setZoom(150)">150%</button>
+            <button onclick="setZoom(200)">200% (close)</button>
+          </div>
+        </div>
+
+        <!-- Combined Actions -->
+        <div class="control-group">
+          <h3>🎬 Presets & actions</h3>
+          <button class="accent" onclick="animateToPosition()">
+            Animate: side → top → front
+          </button>
+          <button onclick="chainedExample()">
+            Chain: rotate + tilt + zoom
+          </button>
+          <button class="secondary" onclick="resetCamera()">
+            Reset to default
+          </button>
+        </div>
+
+        <!-- Log -->
+        <div class="log" id="log">
+          <h4>Command log</h4>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { VirtualdisplayClient } from '../../dist/virtualdisplay.client.es.js';
+
+      // Initialize client
+      const client = new VirtualdisplayClient({
+        parent: '#viewer',
+        license: 'demo',
+        model: 'Felt_panel',
+      });
+
+      // Log function
+      function addLog(message, type = 'normal') {
+        const log = document.getElementById('log');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        const time = new Date().toLocaleTimeString();
+        entry.textContent = `[${time}] ${message}`;
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
+      }
+
+      // Camera control functions - single source of truth for each axis
+      window.setRotation = function (degrees) {
+        client.camera.rotate(degrees).set();
+        updateSlider('rotate', degrees);
+        addLog(`Rotate to ${degrees}°`);
+      };
+
+      window.setTilt = function (degrees) {
+        client.camera.tilt(degrees).set();
+        updateSlider('tilt', degrees);
+        addLog(`Tilt to ${degrees}°`);
+      };
+
+      window.setZoom = function (percentage) {
+        client.camera.zoom(percentage).set();
+        updateSlider('zoom', percentage);
+        addLog(`Zoom to ${percentage}%`);
+      };
+
+      window.chainedExample = function () {
+        // Use the individual set functions for consistency
+        setRotation(45);
+        setTilt(45);
+        setZoom(150);
+        
+        // Override the last log with a combined message
+        addLog('Chained: Rotate 45° + Tilt 45° + Zoom 150%', 'chained');
+      };
+
+      window.resetCamera = function () {
+        // Use set functions to reset to defaults
+        setRotation(0);
+        setTilt(75);
+        setZoom(100);
+        
+        // Override logs with single reset message
+        addLog('Camera reset to default position', 'reset');
+      };
+
+      window.animateToPosition = async function () {
+        addLog('Starting animation sequence...', 'chained');
+
+        // Side view
+        setRotation(90);
+        setTilt(90);
+        await sleep(1000);
+
+        // Top view
+        setRotation(0);
+        setTilt(0);
+        setZoom(150);
+        await sleep(1000);
+
+        // Front view
+        setRotation(0);
+        setTilt(75);
+        setZoom(100);
+
+        addLog('Animation complete', 'chained');
+      };
+
+      // Helper functions
+      function updateSlider(type, value) {
+        const slider = document.getElementById(`${type}-slider`);
+        const display = document.getElementById(`${type}-value`);
+
+        slider.value = value;
+
+        if (type === 'zoom') {
+          display.textContent = `${value}%`;
+        } else {
+          display.textContent = `${value}°`;
+        }
+      }
+
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      // Slider event listeners - reuse the same functions as buttons
+      document.getElementById('rotate-slider')
+        .addEventListener('input', (e) => {
+          setRotation(parseInt(e.target.value));
+        });
+
+      document.getElementById('tilt-slider')
+        .addEventListener('input', (e) => {
+          setTilt(parseInt(e.target.value));
+        });
+
+      document.getElementById('zoom-slider')
+        .addEventListener('input', (e) => {
+          setZoom(parseInt(e.target.value));
+        });
+
+      // Log initial state
+      client.onReady(() => {
+        addLog('Camera API ready - try the controls!', 'reset');
+      });
+    </script>
+  </body>
+</html>

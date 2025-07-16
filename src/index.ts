@@ -9,6 +9,9 @@ export { NodeSelector } from './nodes/node-selector';
 export { MappingValidator } from './attributes/mapping-validator';
 export type { MappingConfiguration, AttributeConfig, AttributeValueConfig } from './attributes/mapping-types';
 
+// Camera API
+export { Camera } from './camera';
+
 // UI configuration
 export { VirtualdisplayViewerService } from './ui/virtualdisplay-viewer-service';
 
@@ -27,6 +30,8 @@ export {
   type MutationMessage,
   type StateMessage,
   type ConfigMessage,
+  type CameraMessage,
+  type CameraCommand,
   type UIConfig,
   type ViewerConfig,
   type ModelNodeDto,

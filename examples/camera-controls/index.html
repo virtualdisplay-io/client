@@ -388,7 +388,7 @@
         setRotation(45);
         setTilt(45);
         setZoom(150);
-        
+
         // Override the last log with a combined message
         addLog('Chained: Rotate 45° + Tilt 45° + Zoom 150%', 'chained');
       };
@@ -398,7 +398,7 @@
         setRotation(0);
         setTilt(75);
         setZoom(100);
-        
+
         // Override logs with single reset message
         addLog('Camera reset to default position', 'reset');
       };
@@ -444,20 +444,19 @@
       }
 
       // Slider event listeners - reuse the same functions as buttons
-      document.getElementById('rotate-slider')
+      document
+        .getElementById('rotate-slider')
         .addEventListener('input', (e) => {
           setRotation(parseInt(e.target.value));
         });
 
-      document.getElementById('tilt-slider')
-        .addEventListener('input', (e) => {
-          setTilt(parseInt(e.target.value));
-        });
+      document.getElementById('tilt-slider').addEventListener('input', (e) => {
+        setTilt(parseInt(e.target.value));
+      });
 
-      document.getElementById('zoom-slider')
-        .addEventListener('input', (e) => {
-          setZoom(parseInt(e.target.value));
-        });
+      document.getElementById('zoom-slider').addEventListener('input', (e) => {
+        setZoom(parseInt(e.target.value));
+      });
 
       // Log initial state
       client.onReady(() => {

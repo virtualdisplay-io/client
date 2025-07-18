@@ -1,4 +1,10 @@
-import { MESSAGE_TYPES, type Message, type MutationMessage, type StateMessage, type ConfigMessage } from './message-types';
+import {
+  MESSAGE_TYPES,
+  type Message,
+  type MutationMessage,
+  type StateMessage,
+  type SnapshotDevelopedMessage,
+} from './message-types';
 import { VirtualdisplayError } from '../client/virtualdisplay-error';
 import type { Mutation } from '../mutations/mutation';
 
@@ -20,21 +26,9 @@ export function createMutationMessage(mutations: Mutation[]): MutationMessage {
  * Type guard for any valid message
  */
 export function isValidMessage(data: unknown): data is Message {
-  return isMutationMessage(data) || isStateMessage(data) || isConfigMessage(data);
-}
-
-/**
- * Type guard for mutation messages
- */
-export function isMutationMessage(data: unknown): data is MutationMessage {
-  if (typeof data !== 'object' || data === null) {
-    return false;
-  }
-
-  const obj = data as Record<string, unknown>;
   return (
-    obj.type === MESSAGE_TYPES.MUTATION &&
-    Array.isArray(obj.mutations)
+    isStateMessage(data) ||
+    isSnapshotDevelopedMessage(data)
   );
 }
 
@@ -54,17 +48,17 @@ export function isStateMessage(data: unknown): data is StateMessage {
 }
 
 /**
- * Type guard for config messages
+ * Type guard for snapshot developed messages
  */
-export function isConfigMessage(data: unknown): data is ConfigMessage {
+export function isSnapshotDevelopedMessage(data: unknown): data is SnapshotDevelopedMessage {
   if (typeof data !== 'object' || data === null) {
     return false;
   }
 
   const obj = data as Record<string, unknown>;
   return (
-    obj.type === MESSAGE_TYPES.CONFIG &&
-    typeof obj.config === 'object' &&
-    obj.config !== null
+    obj.type === MESSAGE_TYPES.SNAPSHOT &&
+    typeof obj.filename === 'string' &&
+    typeof obj.data === 'string'
   );
 }

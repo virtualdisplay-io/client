@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.5.1](https://github.com/virtualdisplay-io/client/compare/v3.5.0...v3.5.1) (2025-07-18)
+
+### ♻️ Code Refactoring
+
+* remove validation of outgoing message types ([#5](https://github.com/virtualdisplay-io/client/issues/5)) ([5f4f985](https://github.com/virtualdisplay-io/client/commit/5f4f9853d65af676aec3a865864f43461fdb6ca5))
+
 ## [3.5.0](https://github.com/virtualdisplay-io/client/compare/v3.4.1...v3.5.0) (2025-07-16)
 
 ### ✨ Features

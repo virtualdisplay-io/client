@@ -18,4 +18,8 @@ export const EVENT_NAMES = {
   MESSAGE_RECEIVED: 'message:received' as const,
   STATE_CHANGED: 'state:changed' as const,
   INITIAL_STATE_RECEIVED: 'state:initial-received' as const,
+
+  // Snapshot flow
+  SNAPSHOT_MESSAGE: 'snapshot:take' as const,
+  SNAPSHOT_DEVELOPED: 'snapshot:developed' as const,
 } as const;

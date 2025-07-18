@@ -107,11 +107,13 @@ export class MessageHandler {
       EVENT_NAMES.MUTATION_MESSAGE,
       EVENT_NAMES.CONFIG_MESSAGE,
       EVENT_NAMES.CAMERA_MESSAGE,
+      EVENT_NAMES.SNAPSHOT_MESSAGE,
     ];
 
     outgoingEvents.forEach(eventName => {
-      this.eventBus.on(eventName, (event: DomainMessageEvent) => {
-        this.queueOrSend(event.message);
+      this.eventBus.on(eventName, event => {
+        const messageEvent = event as DomainMessageEvent;
+        this.queueOrSend(messageEvent.message);
       });
     });
   }

@@ -11,6 +11,7 @@ import { MessageHandler } from '../messaging/message-handler';
 import type { ModelNode } from '../nodes/node';
 import { NodeSelector } from '../nodes/node-selector';
 import { StateService } from '../nodes/state-service';
+import { Snapshot } from '../snapshot';
 import { VirtualdisplayViewerService } from '../ui/virtualdisplay-viewer-service';
 import { logger, enableDebugMode } from '../utils/logger';
 
@@ -31,6 +32,8 @@ export class VirtualdisplayClient {
 
   private readonly cameraApi: Camera;
 
+  private readonly snapshotApi: Snapshot;
+
   private readonly options: ClientOptions;
 
   private iframe: HTMLIFrameElement | undefined;
@@ -43,6 +46,7 @@ export class VirtualdisplayClient {
     this.messageHandler = new MessageHandler(this.eventBus);
     this.viewerService = new VirtualdisplayViewerService(this.eventBus);
     this.cameraApi = new Camera(this.eventBus);
+    this.snapshotApi = new Snapshot(this.eventBus);
 
     this.initializeLogging();
     this.createAndConnectIframe();
@@ -163,6 +167,13 @@ export class VirtualdisplayClient {
    */
   public get camera(): Camera {
     return this.cameraApi;
+  }
+
+  /**
+   * Get the snapshot API for taking screenshots
+   */
+  public get snapshot(): Snapshot {
+    return this.snapshotApi;
   }
 
   public destroy(): void {

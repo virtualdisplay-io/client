@@ -1,0 +1,677 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtualdisplay - Snapshot demo</title>
+    <style>
+      body {
+        font-family:
+          system-ui,
+          -apple-system,
+          sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+
+      .demo {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 20px;
+      }
+
+      /* 3D Viewer */
+      #viewer {
+        background: white;
+        border-radius: 12px;
+        height: 700px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Controls Panel */
+      .controls {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        height: 700px;
+        overflow-y: auto;
+        box-sizing: border-box;
+      }
+
+      .controls h2 {
+        margin: 0 0 20px 0;
+        font-size: 20px;
+        font-weight: 600;
+      }
+
+      /* Control Groups */
+      .control-group {
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .control-group:last-of-type {
+        border-bottom: none;
+      }
+
+      .control-group h3 {
+        margin: 0 0 15px 0;
+        font-size: 16px;
+        color: #555;
+      }
+
+      /* Buttons */
+      button {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 8px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+
+      button:hover {
+        background: #0056b3;
+        transform: translateY(-1px);
+      }
+
+      button:active {
+        transform: translateY(0);
+      }
+
+      button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      button.secondary {
+        background: #6c757d;
+      }
+
+      button.secondary:hover {
+        background: #545b62;
+      }
+
+      button.accent {
+        background: #007bff;
+      }
+
+      button.accent:hover {
+        background: #0056b3;
+      }
+
+      button.danger {
+        background: #6c757d;
+      }
+
+      button.danger:hover {
+        background: #545b62;
+      }
+
+      /* Input Field */
+      .input-group {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      input[type='text'] {
+        flex: 1;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      .input-group button {
+        flex: 0 0 auto;
+        width: auto;
+        padding: 8px 16px;
+        margin-bottom: 0;
+      }
+
+      /* Sliders */
+      .slider-container {
+        margin: 15px 0;
+      }
+
+      .slider-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .slider-value {
+        font-weight: 600;
+        color: #333;
+      }
+
+      input[type='range'] {
+        width: 100%;
+        height: 6px;
+        background: #ddd;
+        border-radius: 3px;
+        outline: none;
+        -webkit-appearance: none;
+        margin-bottom: 10px;
+      }
+
+      input[type='range']::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        background: #6c757d;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      input[type='range']::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      input[type='range']::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+        background: #6c757d;
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        transition: transform 0.2s;
+      }
+
+      input[type='range']::-moz-range-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      /* Snapshot Gallery */
+      .snapshot-gallery {
+        margin-top: 15px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+      }
+
+      .snapshot-item {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 8px;
+        text-align: center;
+      }
+
+      .snapshot-item img {
+        width: 100%;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-bottom: 5px;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      .snapshot-item img:hover {
+        transform: scale(1.05);
+      }
+
+      .snapshot-item .filename {
+        font-size: 11px;
+        color: #666;
+        word-break: break-all;
+      }
+
+      .snapshot-item .size {
+        font-size: 10px;
+        color: #999;
+      }
+
+      /* Popup Modal */
+      .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        cursor: pointer;
+      }
+
+      .popup-content {
+        max-width: 90%;
+        max-height: 90%;
+        position: relative;
+      }
+
+      .popup-image {
+        max-width: 100%;
+        max-height: 100%;
+        border-radius: 8px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      }
+
+      .popup-close {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 32px;
+        text-align: center;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .popup-close:hover {
+        background: white;
+      }
+
+      .popup-info {
+        position: absolute;
+        bottom: -40px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: white;
+        font-size: 14px;
+      }
+
+      /* Log */
+      .log {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 6px;
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        max-height: 150px;
+        overflow-y: auto;
+        border: 1px solid #dee2e6;
+      }
+
+      .log h4 {
+        margin: 0 0 10px 0;
+        font-size: 14px;
+        font-family: inherit;
+      }
+
+      .log-entry {
+        margin-bottom: 5px;
+        padding: 5px 8px;
+        background: white;
+        border-radius: 3px;
+        border-left: 3px solid #6c757d;
+      }
+
+      .log-entry.success {
+        border-left-color: #333;
+      }
+
+      .log-entry.error {
+        border-left-color: #999;
+      }
+
+      /* Header */
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+      }
+
+      .description {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Snapshot demo</h1>
+    <p class="description">
+      Control the camera position with the sliders and take photos of the 3D
+      model. Click on any photo in the gallery to view it full-screen.
+    </p>
+
+    <div class="demo">
+      <!-- 3D Viewer will be inserted here -->
+      <div id="viewer"></div>
+
+      <!-- Controls -->
+      <div class="controls">
+        <h2>Photo controls</h2>
+
+        <!-- Camera Controls -->
+        <div class="control-group">
+          <h3>Camera position</h3>
+          <div class="slider-container">
+            <div class="slider-label">
+              <span>Rotation</span>
+              <span class="slider-value" id="rotate-value">0°</span>
+            </div>
+            <input
+              type="range"
+              id="rotate-slider"
+              min="-180"
+              max="180"
+              value="0"
+              step="5"
+            />
+          </div>
+          <div class="slider-container">
+            <div class="slider-label">
+              <span>Tilt</span>
+              <span class="slider-value" id="tilt-value">75°</span>
+            </div>
+            <input
+              type="range"
+              id="tilt-slider"
+              min="0"
+              max="180"
+              value="75"
+              step="5"
+            />
+          </div>
+          <div class="slider-container">
+            <div class="slider-label">
+              <span>Zoom</span>
+              <span class="slider-value" id="zoom-value">100%</span>
+            </div>
+            <input
+              type="range"
+              id="zoom-slider"
+              min="50"
+              max="200"
+              value="100"
+              step="10"
+            />
+          </div>
+          <button onclick="resetCamera()" class="secondary">
+            Reset camera
+          </button>
+        </div>
+
+        <!-- Take Photo -->
+        <div class="control-group">
+          <h3>Take photo</h3>
+          <div class="input-group">
+            <input
+              type="text"
+              id="filename-input"
+              placeholder="Enter filename (e.g., product.png)"
+              value="photo.png"
+            />
+            <button id="take-photo" class="accent">Take photo</button>
+          </div>
+          <button onclick="clearGallery()" class="danger">Clear gallery</button>
+        </div>
+
+        <!-- Gallery -->
+        <div class="control-group">
+          <h3>Gallery</h3>
+          <div id="snapshot-gallery" class="snapshot-gallery">
+            <!-- Snapshots will appear here -->
+          </div>
+        </div>
+
+        <!-- Log -->
+        <div class="log" id="log">
+          <h4>Activity log</h4>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { VirtualdisplayClient } from '../../dist/virtualdisplay.client.es.js';
+
+      // Initialize client
+      const client = new VirtualdisplayClient({
+        parent: '#viewer',
+        license: 'demo',
+        model: 'Felt_panel',
+        debug: true,
+      });
+
+      // UI Elements
+      const filenameInput = document.getElementById('filename-input');
+      const takePhotoBtn = document.getElementById('take-photo');
+      const snapshotGallery = document.getElementById('snapshot-gallery');
+
+      // Log function
+      function addLog(message, type = 'normal') {
+        const log = document.getElementById('log');
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        const time = new Date().toLocaleTimeString();
+        entry.textContent = `[${time}] ${message}`;
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
+      }
+
+      // Add snapshot to gallery
+      function addToGallery(filename, dataUrl) {
+        const item = document.createElement('div');
+        item.className = 'snapshot-item';
+
+        const img = document.createElement('img');
+        img.src = dataUrl;
+        img.alt = filename;
+
+        // Add click handler for popup
+        img.addEventListener('click', () => {
+          showPopup(filename, dataUrl);
+        });
+
+        const filenameDiv = document.createElement('div');
+        filenameDiv.className = 'filename';
+        filenameDiv.textContent = filename;
+
+        const sizeDiv = document.createElement('div');
+        sizeDiv.className = 'size';
+        sizeDiv.textContent = `${Math.round(dataUrl.length / 1024)}KB`;
+
+        item.appendChild(img);
+        item.appendChild(filenameDiv);
+        item.appendChild(sizeDiv);
+
+        snapshotGallery.appendChild(item);
+
+        // Auto-scroll to new item
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      // Show popup with full-size image
+      function showPopup(filename, dataUrl) {
+        const overlay = document.createElement('div');
+        overlay.className = 'popup-overlay';
+
+        const content = document.createElement('div');
+        content.className = 'popup-content';
+
+        const img = document.createElement('img');
+        img.className = 'popup-image';
+        img.src = dataUrl;
+        img.alt = filename;
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'popup-close';
+        closeBtn.textContent = '×';
+
+        const info = document.createElement('div');
+        info.className = 'popup-info';
+        info.textContent = `${filename} • ${Math.round(dataUrl.length / 1024)}KB`;
+
+        content.appendChild(closeBtn);
+        content.appendChild(img);
+        content.appendChild(info);
+        overlay.appendChild(content);
+
+        // Close handlers
+        const closePopup = () => {
+          document.body.removeChild(overlay);
+        };
+
+        closeBtn.addEventListener('click', closePopup);
+        overlay.addEventListener('click', (e) => {
+          if (e.target === overlay) {
+            closePopup();
+          }
+        });
+
+        // ESC key handler
+        const escHandler = (e) => {
+          if (e.key === 'Escape') {
+            closePopup();
+            document.removeEventListener('keydown', escHandler);
+          }
+        };
+        document.addEventListener('keydown', escHandler);
+
+        document.body.appendChild(overlay);
+      }
+
+      // Camera control functions
+      function setRotation(degrees) {
+        client.camera.rotate(degrees).set();
+        updateSlider('rotate', degrees);
+        addLog(`Rotate to ${degrees}°`);
+      }
+
+      function setTilt(degrees) {
+        client.camera.tilt(degrees).set();
+        updateSlider('tilt', degrees);
+        addLog(`Tilt to ${degrees}°`);
+      }
+
+      function setZoom(percentage) {
+        client.camera.zoom(percentage).set();
+        updateSlider('zoom', percentage);
+        addLog(`Zoom to ${percentage}%`);
+      }
+
+      function updateSlider(type, value) {
+        const slider = document.getElementById(`${type}-slider`);
+        const display = document.getElementById(`${type}-value`);
+
+        slider.value = value;
+
+        if (type === 'zoom') {
+          display.textContent = `${value}%`;
+        } else {
+          display.textContent = `${value}°`;
+        }
+      }
+
+      // Reset camera
+      window.resetCamera = function () {
+        setRotation(0);
+        setTilt(75);
+        setZoom(100);
+        addLog('Camera reset to default position', 'success');
+      };
+
+      // Take snapshot function
+      function takeSnapshot(filename) {
+        try {
+          addLog(`Taking photo: ${filename}`);
+
+          const photo = client.snapshot.take(filename);
+
+          photo.onDeveloped((photoData) => {
+            addLog(`Photo ready: ${photoData.filename}`, 'success');
+            addToGallery(photoData.filename, photoData.data);
+          });
+        } catch (error) {
+          addLog(`Failed: ${error.message}`, 'error');
+        }
+      }
+
+      // Clear gallery
+      window.clearGallery = function () {
+        snapshotGallery.innerHTML = '';
+        addLog('Gallery cleared', 'success');
+      };
+
+      // Setup slider event listeners
+      document
+        .getElementById('rotate-slider')
+        .addEventListener('input', (e) => {
+          setRotation(parseInt(e.target.value));
+        });
+
+      document.getElementById('tilt-slider').addEventListener('input', (e) => {
+        setTilt(parseInt(e.target.value));
+      });
+
+      document.getElementById('zoom-slider').addEventListener('input', (e) => {
+        setZoom(parseInt(e.target.value));
+      });
+
+      // Photo button
+      takePhotoBtn.addEventListener('click', () => {
+        const filename = filenameInput.value.trim();
+        if (!filename) {
+          addLog('Please enter a filename', 'error');
+          return;
+        }
+        takeSnapshot(filename);
+
+        // Auto-increment filename for next photo
+        const nameWithoutExt = filename.substring(0, filename.lastIndexOf('.'));
+        const ext = filename.substring(filename.lastIndexOf('.'));
+        const match = nameWithoutExt.match(/(\d+)$/);
+        if (match) {
+          const num = parseInt(match[1]) + 1;
+          const newName = nameWithoutExt.replace(/\d+$/, num) + ext;
+          filenameInput.value = newName;
+        } else {
+          filenameInput.value = nameWithoutExt + '-2' + ext;
+        }
+      });
+
+      // Enter key support
+      filenameInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          takePhotoBtn.click();
+        }
+      });
+
+      // Initialize
+      client.onReady(() => {
+        addLog(
+          'Snapshot demo ready - adjust camera and take photos!',
+          'success'
+        );
+      });
+    </script>
+  </body>
+</html>

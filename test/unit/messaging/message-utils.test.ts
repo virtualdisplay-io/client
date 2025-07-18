@@ -4,8 +4,8 @@ import { MESSAGE_TYPES, Mutation } from '../../../src';
 import {
   createMutationMessage,
   isValidMessage,
-  isMutationMessage,
   isStateMessage,
+  isSnapshotDevelopedMessage,
 } from '../../../src/messaging/message-utils';
 
 describe('Message Utils - Factory Functions', () => {
@@ -42,15 +42,6 @@ describe('Message Utils - Factory Functions', () => {
 
 describe('Message Utils - Validation Functions', () => {
   describe('isValidMessage', () => {
-    it('should return true for valid mutation message', () => {
-      const message = {
-        type: MESSAGE_TYPES.MUTATION,
-        mutations: [{ type: 'show', nodeId: 'test' }],
-      };
-
-      expect(isValidMessage(message)).toBe(true);
-    });
-
     it('should return true for valid state message', () => {
       const message = {
         type: MESSAGE_TYPES.STATE,
@@ -58,6 +49,25 @@ describe('Message Utils - Validation Functions', () => {
       };
 
       expect(isValidMessage(message)).toBe(true);
+    });
+
+    it('should return true for valid snapshot message', () => {
+      const message = {
+        type: MESSAGE_TYPES.SNAPSHOT,
+        filename: 'test.png',
+        data: 'data:image/png;base64,abc123',
+      };
+
+      expect(isValidMessage(message)).toBe(true);
+    });
+
+    it('should return false for config message', () => {
+      const message = {
+        type: MESSAGE_TYPES.CONFIG,
+        config: { ui: 'default' },
+      };
+
+      expect(isValidMessage(message)).toBe(false);
     });
 
     it('should return false for null or undefined', () => {
@@ -94,20 +104,6 @@ describe('Message Utils - Validation Functions', () => {
 });
 
 describe('Message Utils - Type Checking Functions', () => {
-  describe('isMutationMessage', () => {
-    it('should return true for mutation message', () => {
-      const message = { type: MESSAGE_TYPES.MUTATION, mutations: [] };
-
-      expect(isMutationMessage(message)).toBe(true);
-    });
-
-    it('should return false for state message', () => {
-      const message = { type: MESSAGE_TYPES.STATE, nodes: [] };
-
-      expect(isMutationMessage(message)).toBe(false);
-    });
-  });
-
   describe('isStateMessage', () => {
     it('should return true for state message', () => {
       const message = { type: MESSAGE_TYPES.STATE, nodes: [] };
@@ -119,6 +115,40 @@ describe('Message Utils - Type Checking Functions', () => {
       const message = { type: MESSAGE_TYPES.MUTATION, mutations: [] };
 
       expect(isStateMessage(message)).toBe(false);
+    });
+
+    it('should return false for non-state messages', () => {
+      expect(isStateMessage({ type: MESSAGE_TYPES.SNAPSHOT, filename: 'test.png', data: 'data' })).toBe(false);
+      expect(isStateMessage({ type: MESSAGE_TYPES.CONFIG, config: {} })).toBe(false);
+    });
+
+    it('should return false for invalid input', () => {
+      expect(isStateMessage(null)).toBe(false);
+      expect(isStateMessage(undefined)).toBe(false);
+      expect(isStateMessage('string')).toBe(false);
+      expect(isStateMessage(123)).toBe(false);
+    });
+  });
+
+  describe('isSnapshotDevelopedMessage', () => {
+    it('should return true for valid snapshot developed message', () => {
+      const message = {
+        type: MESSAGE_TYPES.SNAPSHOT,
+        filename: 'test.png',
+        data: 'data:image/png;base64,abc123',
+      };
+
+      expect(isSnapshotDevelopedMessage(message)).toBe(true);
+    });
+
+    it('should return false for snapshot message missing required fields', () => {
+      expect(isSnapshotDevelopedMessage({ type: MESSAGE_TYPES.SNAPSHOT, data: 'data' })).toBe(false);
+      expect(isSnapshotDevelopedMessage({ type: MESSAGE_TYPES.SNAPSHOT, filename: 'test.png' })).toBe(false);
+    });
+
+    it('should return false for other message types', () => {
+      expect(isSnapshotDevelopedMessage({ type: MESSAGE_TYPES.STATE, nodes: [] })).toBe(false);
+      expect(isSnapshotDevelopedMessage(null)).toBe(false);
     });
   });
 });

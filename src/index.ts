@@ -12,6 +12,9 @@ export type { MappingConfiguration, AttributeConfig, AttributeValueConfig } from
 // Camera API
 export { Camera } from './camera';
 
+// Snapshot API
+export { Snapshot, Photo, type PhotoData } from './snapshot';
+
 // UI configuration
 export { VirtualdisplayViewerService } from './ui/virtualdisplay-viewer-service';
 
@@ -32,6 +35,8 @@ export {
   type ConfigMessage,
   type CameraMessage,
   type CameraCommand,
+  type SnapshotRequestMessage,
+  type SnapshotDevelopedMessage,
   type UIConfig,
   type ViewerConfig,
   type ModelNodeDto,

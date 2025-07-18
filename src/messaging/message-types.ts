@@ -9,6 +9,7 @@ export const MESSAGE_TYPES = {
   STATE: 'state',
   CONFIG: 'config',
   CAMERA: 'camera',
+  SNAPSHOT: 'snapshot',
 } as const;
 
 export type MessageType = typeof MESSAGE_TYPES[keyof typeof MESSAGE_TYPES];
@@ -82,6 +83,29 @@ export interface CameraMessage {
 }
 
 /**
+ * Snapshot request message sent to server
+ */
+export interface SnapshotRequestMessage {
+  readonly type: typeof MESSAGE_TYPES.SNAPSHOT;
+  readonly filename: string;
+}
+
+/**
+ * Snapshot developed message received from server
+ */
+export interface SnapshotDevelopedMessage {
+  readonly type: typeof MESSAGE_TYPES.SNAPSHOT;
+  readonly filename: string;
+  readonly data: string;
+}
+
+/**
  * Union of all possible messages
  */
-export type Message = MutationMessage | StateMessage | ConfigMessage | CameraMessage;
+export type Message =
+  | MutationMessage
+  | StateMessage
+  | ConfigMessage
+  | CameraMessage
+  | SnapshotRequestMessage
+  | SnapshotDevelopedMessage;

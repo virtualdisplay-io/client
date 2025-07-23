@@ -35,7 +35,6 @@ const client = new VirtualdisplayClient({
 });
 ```
 
-
 ### Configurable product (with options)
 
 ```typescript
@@ -380,14 +379,14 @@ interface ClientOptions {
   model: string; // Which 3D model to load
   debug?: boolean; // Shows console logs for troubleshooting
   language?: string; // UI language: 'nl', 'en', or 'de' (default: 'nl')
-  
+
   // UI elements (all visible by default)
   ui?: {
     arEnabled?: boolean;
     fullscreenEnabled?: boolean;
     loadingIndicatorEnabled?: boolean;
   };
-  
+
   // Camera behavior
   camera?: {
     initialRotate?: number; // Starting view angle (-180 to 180, 0 = front)
@@ -476,7 +475,7 @@ const photo = client.snapshot.take('product-hero-shot.jpg');
 photo.onDeveloped((photoData) => {
   // photoData.filename - The filename you provided
   // photoData.data - Base64 encoded image data
-  
+
   // Use the image
   const img = document.createElement('img');
   img.src = photoData.data;

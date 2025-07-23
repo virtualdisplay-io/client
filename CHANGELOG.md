@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.6.0](https://github.com/virtualdisplay-io/client/compare/v3.5.1...v3.6.0) (2025-07-23)
+
+### ✨ Features
+
+* add camera configuration support ([#6](https://github.com/virtualdisplay-io/client/issues/6)) ([a6bce4b](https://github.com/virtualdisplay-io/client/commit/a6bce4bfd0d55362e76c893ddf5ed28409dc8bec))
+
 ## [3.5.1](https://github.com/virtualdisplay-io/client/compare/v3.5.0...v3.5.1) (2025-07-18)
 
 ### ♻️ Code Refactoring

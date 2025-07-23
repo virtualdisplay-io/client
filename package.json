@@ -1,7 +1,7 @@
 {
   "name": "@virtualdisplay.io/client",
   "description": "TypeScript-first 3D model integration library with iframe-based architecture",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "author": "Virtualdisplay <support@virtualdisplay.io>",
   "browserslist": [
     "last 2 Chrome versions",

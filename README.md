@@ -20,14 +20,6 @@ pnpm add @virtualdisplay.io/client
 yarn add @virtualdisplay.io/client
 ```
 
-## What's new in v3.1
-
-- Simplified message handling with unified event system
-- JSON Schema validation using AJV
-- Cleaner, more maintainable codebase
-- Improved TypeScript types
-- Better error messages with specific error codes
-
 ## Quick start
 
 ### Simple product (no options)
@@ -42,6 +34,7 @@ const client = new VirtualdisplayClient({
   model: 'statue-model',
 });
 ```
+
 
 ### Configurable product (with options)
 
@@ -365,15 +358,16 @@ client.setMapping(product.server3dMapping);
 - Let your CMS handle filtering of unavailable combinations
 - Version your mappings when 3D models are updated
 
-## Example
+## Examples
 
-See the [color configurator example](./examples/color-configurator/) for a
-complete working implementation that demonstrates:
+Check out our example implementations:
 
-- Setting up the client
-- Defining attribute mappings
-- Binding UI controls to attributes
-- Real-time state synchronization
+- [Color configurator](./examples/color-configurator/) - Product configurator with attribute mapping
+- [Camera controls](./examples/camera-controls/) - Interactive camera positioning demo
+- [Snapshot demo](./examples/snapshot-demo/) - Capturing product images programmatically
+- [Static model](./examples/static-model/) - Simple viewer without configuration
+
+Each example demonstrates different aspects of the API with complete working code.
 
 ## API reference
 
@@ -381,11 +375,29 @@ complete working implementation that demonstrates:
 
 ```typescript
 interface ClientOptions {
-  parent: string | HTMLElement; // Container element or selector
-  license: string; // Your license key
-  model: string; // Model ID to load
-  debug?: boolean; // Enable debug logging (default: false)
-  language?: string; // Language for UI inside the iframe (default: 'nl', supported: 'nl', 'en', 'de')
+  parent: string | HTMLElement; // Where to embed the 3D viewer
+  license: string; // License key from your Virtualdisplay account
+  model: string; // Which 3D model to load
+  debug?: boolean; // Shows console logs for troubleshooting
+  language?: string; // UI language: 'nl', 'en', or 'de' (default: 'nl')
+  
+  // UI elements (all visible by default)
+  ui?: {
+    arEnabled?: boolean;
+    fullscreenEnabled?: boolean;
+    loadingIndicatorEnabled?: boolean;
+  };
+  
+  // Camera behavior
+  camera?: {
+    initialRotate?: number; // Starting view angle (-180 to 180, 0 = front)
+    initialTilt?: number; // Starting elevation (0 = top view, 90 = side view)
+    initialZoom?: number; // Starting distance (100 = default, may need adjustment)
+    minZoom?: number; // Minimum zoom level constraint
+    maxZoom?: number; // Maximum zoom level constraint
+    minTilt?: number; // Minimum tilt angle constraint
+    maxTilt?: number; // Maximum tilt angle constraint
+  };
 }
 ```
 
@@ -423,45 +435,66 @@ if (colorAttr) {
 }
 ```
 
-#### `destroy(): void`
+#### UI control methods
 
-Clean up and remove the client connection. Always call this when unmounting your
-component.
+Control UI elements visibility dynamically through the client:
 
 ```typescript
-// React example
-useEffect(() => {
-  const client = new VirtualdisplayClient({ ... });
-  return () => client.destroy();
-}, []);
+client.viewer.setArEnabled(false);
+client.viewer.setFullscreenEnabled(true);
+client.viewer.setLoadingIndicatorEnabled(false);
+client.viewer.hideAllUI();
+client.viewer.showAllUI();
+client.viewer.updateUIConfig({ arEnabled: false, fullscreenEnabled: true });
 ```
 
 #### `camera: Camera`
 
-Control the 3D viewer's camera position programmatically. The camera API provides
-a fluent interface for chaining multiple operations.
+Control the 3D viewer's camera position programmatically.
 
 ```typescript
-// Single operation
 client.camera.rotate(45).set();
-
-// Chain multiple operations
 client.camera.rotate(90).tilt(45).zoom(150).set();
-
-// Reset to default position
 client.camera.reset();
 ```
 
-**Camera methods:**
+#### `snapshot.take(filename: string): Photo`
 
-- `rotate(degrees: number)`: Rotate horizontally (-180° to 180°, 0° = front)
-- `tilt(degrees: number)`: Tilt vertically (0° to 180°, 75° = default, 0° = top, 90° = side)
-- `zoom(percentage: number)`: Zoom level (25% to 400%, 100% = default)
-- `reset()`: Reset to default position (equivalent to `rotate(0).tilt(75).zoom(100).set()`)
-- `set()`: Execute all chained commands
+Request a snapshot of the current 3D view. You must provide a filename with a valid image extension
+(.png, .jpg, .jpeg, or .webp).
 
-**Note:** Camera commands are accumulated until `set()` is called, allowing efficient
-batch operations. The `reset()` method is the only exception - it executes immediately.
+This works perfectly with the camera API - first position the model exactly how you want it, then capture:
+
+```typescript
+// Position the model for a perfect product shot
+client.camera.rotate(45).tilt(60).zoom(120).set();
+
+// Take a snapshot once positioned
+const photo = client.snapshot.take('product-hero-shot.jpg');
+
+// Register callback for when image is ready
+photo.onDeveloped((photoData) => {
+  // photoData.filename - The filename you provided
+  // photoData.data - Base64 encoded image data
+  
+  // Use the image
+  const img = document.createElement('img');
+  img.src = photoData.data;
+  document.body.appendChild(img);
+});
+```
+
+The snapshot captures exactly what the user sees, including selected options and current camera angle.
+The image format is determined by the file extension you provide.
+
+#### `destroy(): void`
+
+Clean up and remove the client connection.
+
+```typescript
+// When done with the viewer
+client.destroy();
+```
 
 ### Types
 
@@ -507,16 +540,49 @@ class Camera {
   rotate(degrees: number): Camera; // Rotate horizontally
   tilt(degrees: number): Camera; // Tilt vertically
   zoom(percentage: number): Camera; // Set zoom level
-  reset(): void; // Reset to default (executes immediately)
+  reset(): void; // Reset to base position (executes immediately)
   set(): void; // Execute chained commands
+}
+
+class Snapshot {
+  // Methods
+  take(): Promise<Photo>; // Capture current view
+}
+
+interface Photo {
+  dataUri: string; // Base64 data URI
+  blob: Blob; // Raw image blob
+  filename: string; // Suggested filename
+}
+
+class VirtualdisplayViewerService {
+  // Methods
+  setArEnabled(enabled: boolean): void;
+  setFullscreenEnabled(enabled: boolean): void;
+  setLoadingIndicatorEnabled(enabled: boolean): void;
+  updateUIConfig(config: Partial<UIConfig>): void;
+  hideAllUI(): void;
+  showAllUI(): void;
+}
+
+interface UIConfig {
+  arEnabled?: boolean;
+  fullscreenEnabled?: boolean;
+  loadingIndicatorEnabled?: boolean;
 }
 ```
 
-#### NodeSelector
+#### Node manipulation
 
-The client exports `NodeSelector` for direct node manipulation. This is intended
+The client provides methods for direct node access. This is intended
 for specialized tools like mapping editors and inspectors, not for typical
 product configurators. For product configurators, use the attribute-based API.
+
+```typescript
+const node = client.getNode('nodeId'); // Get specific node
+const nodes = client.getNodes(); // Get all nodes
+const selector = client.getNodeSelector('nodeId'); // Get node selector for manipulation
+```
 
 ##### Node visibility monitoring
 

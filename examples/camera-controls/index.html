@@ -351,6 +351,7 @@
         parent: '#viewer',
         license: 'demo',
         model: 'Felt_panel',
+        debug: true,
       });
 
       // Log function
@@ -394,13 +395,11 @@
       };
 
       window.resetCamera = function () {
-        // Use set functions to reset to defaults
-        setRotation(0);
-        setTilt(75);
-        setZoom(100);
-
-        // Override logs with single reset message
-        addLog('Camera reset to default position', 'reset');
+        // Use the proper reset command that resets to the model's base position
+        client.camera.reset();
+        
+        // Log the reset
+        addLog('Camera reset to base position', 'reset');
       };
 
       window.animateToPosition = async function () {

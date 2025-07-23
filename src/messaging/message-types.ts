@@ -1,3 +1,4 @@
+import type { CameraConfig } from '../camera/camera-config';
 import type { MutationDto } from '../mutations/mutation';
 
 /**
@@ -56,6 +57,7 @@ export interface UIConfig {
  */
 export interface ViewerConfig {
   readonly ui?: UIConfig;
+  readonly camera?: CameraConfig;
 }
 
 /**

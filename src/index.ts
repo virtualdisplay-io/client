@@ -10,7 +10,7 @@ export { MappingValidator } from './attributes/mapping-validator';
 export type { MappingConfiguration, AttributeConfig, AttributeValueConfig } from './attributes/mapping-types';
 
 // Camera API
-export { Camera } from './camera';
+export { Camera, type CameraConfig } from './camera';
 
 // Snapshot API
 export { Snapshot, Photo, type PhotoData } from './snapshot';

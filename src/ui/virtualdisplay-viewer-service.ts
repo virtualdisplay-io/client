@@ -31,31 +31,44 @@ export class VirtualdisplayViewerService {
 
   /**
    * Build UI configuration from client options
-   * 
+   *
    * Supports both legacy properties (options.arEnabled) and the newer ui object
    * for backward compatibility. Legacy properties take precedence when both exist.
    */
   private buildUIConfig(options: ClientOptions): UIConfig | undefined {
-    // Legacy properties override ui object to prevent breaking existing implementations
-    const arEnabled = options.arEnabled ?? options.ui?.arEnabled;
-    const fullscreenEnabled = options.fullscreenEnabled ?? options.ui?.fullscreenEnabled;
-    const loadingIndicatorEnabled =
-      options.loadingIndicatorEnabled ?? options.ui?.loadingIndicatorEnabled;
+    const uiValues = this.extractUIValues(options);
 
     // Only send message when UI options are explicitly configured
-    if (
-      arEnabled !== undefined ||
-      fullscreenEnabled !== undefined ||
-      loadingIndicatorEnabled !== undefined
-    ) {
-      return {
-        ...(arEnabled !== undefined && { arEnabled }),
-        ...(fullscreenEnabled !== undefined && { fullscreenEnabled }),
-        ...(loadingIndicatorEnabled !== undefined && { loadingIndicatorEnabled }),
-      };
+    const hasUIConfig = Object.values(uiValues).some(value => value !== undefined);
+    if (!hasUIConfig) {
+      return undefined;
     }
 
-    return undefined;
+    return {
+      ...(uiValues.arEnabled !== undefined && { arEnabled: uiValues.arEnabled }),
+      ...(uiValues.fullscreenEnabled !== undefined && {
+        fullscreenEnabled: uiValues.fullscreenEnabled,
+      }),
+      ...(uiValues.loadingIndicatorEnabled !== undefined && {
+        loadingIndicatorEnabled: uiValues.loadingIndicatorEnabled,
+      }),
+    };
+  }
+
+  /**
+   * Extract UI values from options, with legacy properties taking precedence
+   */
+  private extractUIValues(options: ClientOptions): {
+    arEnabled: boolean | undefined;
+    fullscreenEnabled: boolean | undefined;
+    loadingIndicatorEnabled: boolean | undefined;
+  } {
+    return {
+      arEnabled: options.arEnabled ?? options.ui?.arEnabled,
+      fullscreenEnabled: options.fullscreenEnabled ?? options.ui?.fullscreenEnabled,
+      loadingIndicatorEnabled:
+        options.loadingIndicatorEnabled ?? options.ui?.loadingIndicatorEnabled,
+    };
   }
 
   /**

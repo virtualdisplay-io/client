@@ -234,10 +234,11 @@
           parent: '#viewer',
           model: 'Felt_panel',
           license: 'demo',
-          debug: true,
-          arEnabled,
-          fullscreenEnabled,
-          loadingIndicatorEnabled,
+          ui: {
+            arEnabled,
+            fullscreenEnabled,
+            loadingIndicatorEnabled,
+          },
         });
 
         // Make client available globally

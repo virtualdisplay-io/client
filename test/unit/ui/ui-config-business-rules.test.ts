@@ -4,12 +4,8 @@ import { EVENT_NAMES, VirtualdisplayViewerService, type ConfigMessage } from '..
 import { EventBus } from '../../../src/events/event-bus';
 
 describe('UI Configuration Business Rules', () => {
-  it('should only send CONFIG for explicitly disabled options (not for enabled/undefined)', () => {
-    // This tests an important business rule:
-    // - Server defaults all UI to enabled (true)
-    // - Client should only send config when explicitly disabling (false)
-    // - This minimizes network traffic and prevents unnecessary messages
-
+  it('should send CONFIG with all explicitly set UI options', () => {
+    // Tests that both true and false values are sent to server
     const eventBus = new EventBus();
     const service = new VirtualdisplayViewerService(eventBus);
 
@@ -18,27 +14,24 @@ describe('UI Configuration Business Rules', () => {
       capturedEvents.push(event as { message: ConfigMessage });
     });
 
-    // Test with mix of disabled, enabled, and undefined options
     service.sendInitialConfig({
       parent: '#test',
       model: 'test',
       license: 'test',
-      arEnabled: false, // Should be sent
-      fullscreenEnabled: true, // Should NOT be sent (default)
-      loadingIndicatorEnabled: false, // Should be sent
-      // Other options undefined - Should NOT be sent
+      arEnabled: false,
+      fullscreenEnabled: true,
+      loadingIndicatorEnabled: false,
     });
 
-    // Verify only disabled options were sent
     expect(capturedEvents).toHaveLength(1);
     expect(capturedEvents[0]?.message.config.ui).toEqual({
       arEnabled: false,
+      fullscreenEnabled: true,
       loadingIndicatorEnabled: false,
-      // Note: fullscreenEnabled is NOT included
     });
   });
 
-  it('should not send any CONFIG when all options use defaults', () => {
+  it('should send CONFIG when UI options are set', () => {
     const eventBus = new EventBus();
     const service = new VirtualdisplayViewerService(eventBus);
 
@@ -47,17 +40,18 @@ describe('UI Configuration Business Rules', () => {
       capturedEvents.push(event as { message: ConfigMessage });
     });
 
-    // All options are either true or undefined (server defaults)
     service.sendInitialConfig({
       parent: '#test',
       model: 'test',
       license: 'test',
       arEnabled: true,
       fullscreenEnabled: true,
-      // LoadingIndicatorEnabled: undefined
     });
 
-    // No message should be sent
-    expect(capturedEvents).toHaveLength(0);
+    expect(capturedEvents).toHaveLength(1);
+    expect(capturedEvents[0]?.message.config.ui).toEqual({
+      arEnabled: true,
+      fullscreenEnabled: true,
+    });
   });
 });

@@ -1,3 +1,6 @@
+import type { CameraConfig } from '../camera';
+import type { UIConfig } from '../messaging/message-types';
+
 /**
  * Configuration options for VirtualdisplayClient
  */
@@ -12,4 +15,10 @@ export interface ClientOptions {
   readonly arEnabled?: boolean;
   readonly fullscreenEnabled?: boolean;
   readonly loadingIndicatorEnabled?: boolean;
+
+  // UI configuration object (alternative way to configure UI)
+  readonly ui?: UIConfig;
+
+  // Camera configuration options
+  readonly camera?: CameraConfig;
 }

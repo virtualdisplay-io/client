@@ -2,8 +2,7 @@ import {
   describe, it, expect, beforeEach, afterEach, vi,
 } from 'vitest';
 
-import { VirtualdisplayClient } from '../../src/index';
-import { MESSAGE_TYPES, type ConfigMessage } from '../../src/messaging/message-types';
+import { MESSAGE_TYPES, type ConfigMessage, VirtualdisplayClient } from '../../src';
 
 // Test state
 let client = null as VirtualdisplayClient | null;

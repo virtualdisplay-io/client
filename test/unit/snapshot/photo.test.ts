@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 
-import { Photo, type PhotoData } from '../../../src/snapshot/photo';
+import { Photo, type PhotoData } from '../../../src';
 
 describe('Photo - basic functionality', () => {
   describe('constructor', () => {

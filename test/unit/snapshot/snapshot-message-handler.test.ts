@@ -1,10 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
+import { MESSAGE_TYPES, EVENT_NAMES, Photo } from '../../../src';
 import { EventBus } from '../../../src/events/event-bus';
-import { EVENT_NAMES } from '../../../src/events/event-names';
-import { MESSAGE_TYPES } from '../../../src/messaging/message-types';
-import { Photo } from '../../../src/snapshot/photo';
-import { SnapshotMessageHandler } from '../../../src/snapshot/snapshot-message-handler';
+import { SnapshotMessageHandler } from '../../../src/snapshot';
 
 describe('SnapshotMessageHandler', () => {
   let eventBus = new EventBus();

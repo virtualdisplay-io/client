@@ -1,4 +1,4 @@
-import type { CameraConfig } from '../camera/camera-config';
+import type { CameraConfig } from '../camera';
 import type { MutationDto } from '../mutations/mutation';
 
 /**
@@ -13,7 +13,6 @@ export const MESSAGE_TYPES = {
   SNAPSHOT: 'snapshot',
 } as const;
 
-export type MessageType = typeof MESSAGE_TYPES[keyof typeof MESSAGE_TYPES];
 
 /**
  * DTO for model node data received from server

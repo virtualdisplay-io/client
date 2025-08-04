@@ -18,7 +18,6 @@ export class Attribute {
     this.values.set(attributeValue.value, attributeValue);
   }
 
-
   public getDefaultMutations(): Mutation[] {
     return Array.from(this.values.values())
       .flatMap(value => value.getMutations());

@@ -20,7 +20,6 @@ describe('Attribute - Creation', () => {
   });
 });
 
-
 describe('Attribute - Default Handling', () => {
   it('should get default mutations', () => {
     const attribute = new Attribute('Color');

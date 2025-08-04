@@ -13,7 +13,6 @@ export const MESSAGE_TYPES = {
   SNAPSHOT: 'snapshot',
 } as const;
 
-
 /**
  * DTO for model node data received from server
  */

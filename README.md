@@ -6,6 +6,7 @@ applications.
 **Key features:**
 
 - Simple attribute-based API for product configurators
+- Dynamic mapping support for dependent product options
 - Fire-and-forget messaging with automatic state synchronization
 - Zero external dependencies (all bundled)
 - Works with any frontend framework or vanilla JavaScript
@@ -94,43 +95,11 @@ graph LR
   architecture
 - **Event-driven**: Loosely coupled components communicate via events
 
-## Product options
-
-### When do you need mapping
-
-Before diving in, it's important to understand when you need attribute mapping:
-
-**No mapping needed:**
-
-- Static 3D models that always look the same
-- Product showcases without options
-- Architectural visualizations
-- Art pieces or sculptures
-- Single-configuration products
-
-**Mapping required:**
-
-- Products where users can change colors (different textures/materials per option)
-- Products with size options (different 3D meshes per size)
-- Modular products (parts that can be added/removed)
-- Any product where different options show different 3D elements
+## Product configuration
 
 ### Attribute mapping
 
-The mapping system bridges your business logic with the 3D visualization. It
-serves multiple purposes:
-
-**Why mapping is essential:**
-
-- The 3D server is generic - it doesn't know your specific product options
-- Your business rules (stock, pricing, combinations) change independently from
-  the 3D model
-- You control exactly which parts of the model are shown for each option
-- You can group multiple 3D nodes (meshes, materials) into logical product
-  choices
-
-**How it works:** The mapping connects your product options to specific parts of
-the 3D model:
+For configurable products, the mapping system connects your product options to parts of the 3D model:
 
 ```typescript
 client.setMapping({
@@ -138,69 +107,33 @@ client.setMapping({
     {
       name: 'Color',
       values: [
-        {
-          value: 'Red',
-          nodeIds: ['mat_red_sole', 'mat_red_laces', 'mat_red_logo'],
-          isSelected: true,
-        },
-        {
-          value: 'Blue',
-          nodeIds: ['mat_blue_sole', 'mat_blue_laces', 'mat_blue_logo'],
-        },
-      ],
-    },
-    {
-      name: 'Material',
-      values: [
-        { value: 'Leather', nodeIds: ['material_leather_upper'] },
-        {
-          value: 'Canvas',
-          nodeIds: ['material_canvas_upper'],
-          isSelected: true,
-        },
+        { value: 'Red', nodeIds: ['sole_red', 'laces_red'], isSelected: true },
+        { value: 'Blue', nodeIds: ['sole_blue', 'laces_blue'] },
       ],
     },
   ],
 });
 ```
 
-**Structure explained:**
+**Key concepts:**
 
-- `attribute` - A product feature like Color, Size, or Material
-- `value` - A specific option like Red, Blue, Small, or Large
+- `attribute` - A product feature (Color, Size, Material)
+- `value` - A specific option (Red, Blue, Small, Large)
 - `nodeIds` - The 3D model parts that represent this option
-- `isSelected` - Whether this option is selected by default
+- `isSelected` - Default selection state
 
-**Example benefits:**
+**When you need mapping:**
 
-```typescript
-// Group related 3D parts into one logical choice
-{
-  value: 'Red',
-  nodeIds: [
-    'mesh_sole_red',      // Red sole mesh
-    'material_laces_red', // Red laces material
-    'texture_logo_red',   // Red logo texture
-    'mesh_stitching_red'  // Red stitching details
-  ]
-}
+- Products with color/material variations
+- Products with size options that affect the 3D model
+- Modular products with optional parts
+- Any product where options change what's visible in 3D
 
-// The server automatically handles showing Red parts
-// and hiding Blue/Green parts when Red is selected
-```
+**Learn more:**
 
-**Key advantages:**
-
-- Full control over what's visible without modifying the 3D model
-- Business logic stays in your application, not in the 3D server
-- Easy to update when products or availability changes
-- Group complex 3D structures into simple user choices
-
-**Need help with mapping?**
-
-- We help you connect your product catalog to your 3D models
-- Visual mapping tool coming soon to simplify this process
-- Contact <support@virtualdisplay.io> for mapping assistance
+- [Understanding Attribute Mapping](./docs/mapping-concept.md) - Core concepts
+- [Static Mapping Examples](./docs/static-mapping-examples.md) - Simple configurations
+- [Dynamic Mapping Examples](./docs/dynamic-mapping-examples.md) - Advanced dependencies
 
 ### Complete flow
 

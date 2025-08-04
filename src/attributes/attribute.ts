@@ -18,27 +18,6 @@ export class Attribute {
     this.values.set(attributeValue.value, attributeValue);
   }
 
-  /**
-   * Select a value - returns mutations needed for the change
-   * Pure function - no side effects
-   */
-  public select(value: string): Mutation[] {
-    const newValue = this.values.get(value);
-    if (newValue === undefined) {
-      return [];
-    }
-
-    const currentValue = this.getCurrentValue();
-    if (currentValue === newValue) {
-      return [];
-    }
-
-    return [
-      ...(currentValue?.getMutations().map(m => m.inverse()) ?? []),
-      ...newValue.getMutations().map(m => m.inverse()),
-    ];
-  }
-
   public getDefaultMutations(): Mutation[] {
     return Array.from(this.values.values())
       .flatMap(value => value.getMutations());
@@ -67,5 +46,9 @@ export class Attribute {
 
   public get currentSelection(): string | undefined {
     return this.getCurrentValue()?.value;
+  }
+
+  public clear(): void {
+    this.values.clear();
   }
 }

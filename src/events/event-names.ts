@@ -21,5 +21,4 @@ export const EVENT_NAMES = {
 
   // Snapshot flow
   SNAPSHOT_MESSAGE: 'snapshot:take' as const,
-  SNAPSHOT_DEVELOPED: 'snapshot:developed' as const,
 } as const;

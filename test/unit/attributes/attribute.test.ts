@@ -20,51 +20,6 @@ describe('Attribute - Creation', () => {
   });
 });
 
-describe('Attribute - Selection', () => {
-  it('should select value and return mutations', () => {
-    const attribute = new Attribute('Material');
-    const leather = new AttributeValue('Leather', ['mat-leather'], true);
-    const fabric = new AttributeValue('Fabric', ['mat-fabric']);
-
-    attribute.addValue(leather);
-    attribute.addValue(fabric);
-
-    const mutations = attribute.select('Fabric');
-
-    expect(mutations).toEqual([
-      { type: MUTATION_TYPES.HIDE, nodeId: 'mat-leather' },
-      { type: MUTATION_TYPES.SHOW, nodeId: 'mat-fabric' },
-    ]);
-  });
-
-  it('should handle multiple nodes per value', () => {
-    const attribute = new Attribute('Material');
-    const leather = new AttributeValue('Leather', ['mat-leather'], true);
-    const fabric = new AttributeValue('Fabric', ['mat-fabric-1', 'mat-fabric-2']);
-
-    attribute.addValue(leather);
-    attribute.addValue(fabric);
-
-    const mutations = attribute.select('Fabric');
-
-    expect(mutations).toEqual([
-      { type: MUTATION_TYPES.HIDE, nodeId: 'mat-leather' },
-      { type: MUTATION_TYPES.SHOW, nodeId: 'mat-fabric-1' },
-      { type: MUTATION_TYPES.SHOW, nodeId: 'mat-fabric-2' },
-    ]);
-  });
-
-  it('should return empty array for invalid selection', () => {
-    const attribute = new Attribute('Color');
-    const red = new AttributeValue('Red', ['red-node']);
-    attribute.addValue(red);
-
-    const mutations = attribute.select('NonExistent');
-
-    expect(mutations).toEqual([]);
-  });
-});
-
 describe('Attribute - Default Handling', () => {
   it('should get default mutations', () => {
     const attribute = new Attribute('Color');

@@ -650,8 +650,7 @@
         const match = nameWithoutExt.match(/(\d+)$/);
         if (match) {
           const num = parseInt(match[1]) + 1;
-          const newName = nameWithoutExt.replace(/\d+$/, num) + ext;
-          filenameInput.value = newName;
+          filenameInput.value = nameWithoutExt.replace(/\d+$/, num) + ext;
         } else {
           filenameInput.value = nameWithoutExt + '-2' + ext;
         }

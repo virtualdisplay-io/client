@@ -1,11 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { VirtualdisplayError, ERROR_CODES } from '../../../src/client/virtualdisplay-error';
+import {
+  Photo, Snapshot, MESSAGE_TYPES, EVENT_NAMES, VirtualdisplayError, ERROR_CODES,
+} from '../../../src';
 import { EventBus } from '../../../src/events/event-bus';
-import { EVENT_NAMES } from '../../../src/events/event-names';
-import { MESSAGE_TYPES } from '../../../src/messaging/message-types';
-import { Photo } from '../../../src/snapshot/photo';
-import { Snapshot } from '../../../src/snapshot/snapshot';
 
 describe('Snapshot - basic tests', () => {
   let eventBus = new EventBus();

@@ -1,4 +1,4 @@
-import type { CameraConfig } from '../camera/camera-config';
+import type { CameraConfig } from '../camera';
 import type { ClientOptions } from '../client/client-options';
 import type { EventBus } from '../events/event-bus';
 import { EVENT_NAMES } from '../events/event-names';

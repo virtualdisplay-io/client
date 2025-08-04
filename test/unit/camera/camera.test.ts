@@ -1,9 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-import { Camera } from '../../../src/camera';
+import { Camera, EVENT_NAMES, MESSAGE_TYPES } from '../../../src';
 import type { EventBus } from '../../../src/events/event-bus';
-import { EVENT_NAMES } from '../../../src/events/event-names';
-import { MESSAGE_TYPES } from '../../../src/messaging/message-types';
 
 describe('Camera', () => {
   let camera: Camera = null as unknown as Camera;

@@ -68,10 +68,11 @@ client.getAttribute('Color')?.select('Red');
 ## Documentation
 
 For complete documentation including:
+
 - API reference
 - Advanced examples
 - Integration guides
 - Architecture diagrams
 - Troubleshooting
 
-Visit our GitHub repository: https://github.com/virtualdisplay-io/client
+Visit our [GitHub repository](https://github.com/virtualdisplay-io/client)

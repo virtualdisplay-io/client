@@ -3,9 +3,10 @@
 Static mapping is the simplest approach for product configurators where all options are predetermined and
 independent of each other.
 
-> **New to attribute mapping?** If you haven't read about the core concepts yet, start with [Understanding attribute mapping](./mapping-concept.md) for the fundamentals.
+> **New to attribute mapping?** If you haven't read about the core concepts yet, start with
+> [Understanding attribute mapping](./mapping-concept.md) for the fundamentals.
 
-## What makes mapping "static"?
+## What makes mapping "static"
 
 In static mapping:
 
@@ -14,7 +15,7 @@ In static mapping:
 - Every combination is valid (from the mapping perspective)
 - The configuration structure remains constant
 
-## When to use static mapping?
+## When to use static mapping
 
 Static mapping is ideal for:
 
@@ -249,7 +250,7 @@ Set `isSelected: true` on sensible defaults:
 - Standard configuration (comfort saddle)
 - Essential accessories (bell included)
 
-## When to upgrade to dynamic mapping?
+## When to upgrade to dynamic mapping
 
 You've outgrown static mapping when:
 

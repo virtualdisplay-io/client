@@ -1,6 +1,6 @@
 # Understanding attribute mapping
 
-## What is attribute mapping?
+## What is attribute mapping
 
 Attribute mapping is the bridge between your product's business logic and its 3D visualization. It translates
 your product options into specific parts of the 3D model that should be visible.
@@ -11,9 +11,10 @@ This translation layer solves a fundamental disconnect:
 - The 3D world operates with technical constructs - meshes, nodes, materials, transforms
 - Your customers think in their own terms - "I want the blue one with the basket"
 
-Without this bridge, you'd be forced to embed business logic into your 3D models or technical details into your product catalog. Mapping keeps both worlds pure and focused on what they do best.
+Without this bridge, you'd be forced to embed business logic into your 3D models or technical details into your
+product catalog. Mapping keeps both worlds pure and focused on what they do best.
 
-## Why do we use mapping?
+## Why do we use mapping
 
 ### The separation of concerns
 
@@ -32,7 +33,7 @@ inventory, or business rules. This separation provides several benefits:
 - **Easy updates**: When products or availability changes, just update the mapping
 - **Logical grouping**: Complex 3D structures become simple user choices (one button can control multiple nodes)
 
-## When do you need mapping?
+## When do you need mapping
 
 ### You need mapping when
 
@@ -382,6 +383,7 @@ There are two approaches to implementing attribute mapping, each suited to diffe
 All options are predefined and independent. Every combination is valid.
 
 **Example**: Basic bicycle configurator
+
 - Color: blue, red, black (always available)
 - Saddle: comfort, sport (always available)
 - Accessories: basket, lights, bell (always available)
@@ -395,6 +397,7 @@ All options are predefined and independent. Every combination is valid.
 Options change based on other selections. The system prevents invalid combinations.
 
 **Example**: Advanced bicycle configurator
+
 - Frame size: small → forces 26" wheels, positions parts closer
 - Frame size: large → allows 28" wheels, spreads components wider
 - Saddle: sport → requires matching sport grips
@@ -404,7 +407,7 @@ Options change based on other selections. The system prevents invalid combinatio
 
 → [Learn how to implement dynamic mapping](./dynamic-mapping.md)
 
-## Need help with mapping?
+## Need help with mapping
 
 - We help you connect your product catalog to your 3D models
 - Visual mapping tool coming soon to simplify this process

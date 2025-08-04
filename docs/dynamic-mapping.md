@@ -3,11 +3,13 @@
 Dynamic mapping allows attribute values to change based on other selections, enabling complex product
 configurations with dependencies.
 
-> **New to attribute mapping?** If you haven't read about the core concepts yet, start with [Understanding attribute mapping](./mapping-concept.md) for the fundamentals.
+> **New to attribute mapping?** If you haven't read about the core concepts yet, start with
+> [Understanding attribute mapping](./mapping-concept.md) for the fundamentals.
 >
-> **Haven't read about static mapping yet?** Start with [Static mapping guide](./static-mapping.md) first. This guide builds on those concepts using the same city bicycle example.
+> **Haven't read about static mapping yet?** Start with [Static mapping guide](./static-mapping.md) first.
+> This guide builds on those concepts using the same city bicycle example.
 
-## What makes mapping "dynamic"?
+## What makes mapping "dynamic"
 
 In dynamic mapping, any property can be computed at runtime using a function:
 
@@ -59,7 +61,8 @@ When you select a frame size, it cascades through the entire configuration:
 The basket is always "basket" from the user's perspective, but the 3D model shows `basket_small`,
 `basket_medium`, or `basket_large` nodes positioned appropriately for each frame.
 
-Without dynamic mapping, you'd need either 3 separate product configurations or build complex workarounds in your application to manage all these dependencies - defeating the purpose of a clean mapping system.
+Without dynamic mapping, you'd need either 3 separate product configurations or build complex workarounds in your
+application to manage all these dependencies - defeating the purpose of a clean mapping system.
 
 ### Implementation
 
@@ -262,7 +265,7 @@ client.setMapping({
 });
 ```
 
-### What happens during re-evaluation?
+### What happens during re-evaluation
 
 Look at the cascade effect when changing frame size:
 
@@ -372,6 +375,7 @@ saddle), the server will handle the state update appropriately.
 5. **Document dependencies**: Make it clear which attributes depend on others
 6. **Consider user experience**: Ensure logical defaults when options change
 
-## When to use dynamic vs static?
+## When to use dynamic vs static
 
-→ See [Types of mapping](./mapping-concept.md#types-of-mapping) in the mapping concepts guide for detailed comparison and use cases.
+→ See [Types of mapping](./mapping-concept.md#types-of-mapping) in the mapping concepts guide for detailed
+comparison and use cases.

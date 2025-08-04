@@ -10,18 +10,6 @@ Think of it as a configuration system that connects:
 - User selections in your UI (choosing colors, sizes, features)
 - What gets displayed in the 3D viewer (specific meshes, materials, and parts)
 
-## Example: City bicycle configurator
-
-To make these concepts concrete, we'll use a city bicycle configurator throughout this documentation.
-A typical bicycle has many customizable options, but let's start with the most obvious ones:
-
-- Frame color (blue, red, or black)
-- Accessories (adding a basket or lights)
-- Saddle type (comfort or sport)
-
-When the user selects "blue frame", the system shows the blue frame mesh and hides the red and black ones.
-When they add a basket, the basket accessory becomes visible on the 3D model.
-
 ## Why do we use mapping
 
 ### The separation of concerns
@@ -33,6 +21,18 @@ inventory, or business rules. This separation provides several benefits:
 2. **Reusability**: Use the same 3D server for all your products
 3. **Independence**: Your developers work on business logic while 3D artists work on models
 4. **Scalability**: Add new product variants without modifying the 3D infrastructure
+
+## Example: City bicycle configurator
+
+To make these concepts concrete, we'll use a city bicycle configurator throughout this documentation.
+A typical bicycle has many customizable options, but let's start with the most obvious ones:
+
+- Frame color (blue, red, or black)
+- Accessories (adding a basket or lights)
+- Saddle type (comfort or sport)
+
+When the user selects "blue frame", the system shows the blue frame mesh and hides the red and black ones.
+When they add a basket, the basket accessory becomes visible on the 3D model.
 
 ## Components of mapping
 

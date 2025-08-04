@@ -68,17 +68,17 @@ Without dynamic mapping, you'd need 3 separate product configurations!
 // Tire types - same options but positioned for different wheel sizes
 function getTireOptions(frameSize: string) {
   const wheelSize = frameSize === 'small' ? '26' : '28';
-  
+
   const options = [
     { value: 'city', nodeIds: [`tires_${wheelSize}_city`], isSelected: true },
-    { value: 'comfort', nodeIds: [`tires_${wheelSize}_comfort`] }
+    { value: 'comfort', nodeIds: [`tires_${wheelSize}_comfort`] },
   ];
-  
+
   // Sport tires only available for larger wheels
   if (frameSize !== 'small') {
     options.push({ value: 'sport', nodeIds: [`tires_${wheelSize}_sport`] });
   }
-  
+
   return options;
 }
 
@@ -86,18 +86,18 @@ function getTireOptions(frameSize: string) {
 function getBrakeOptions(frameSize: string) {
   const wheelSize = frameSize === 'small' ? '26' : '28';
   const defaultBrake = frameSize === 'small' ? 'rim' : 'disc';
-  
+
   return [
-    { 
-      value: 'rim', 
-      nodeIds: [`brakes_rim_${wheelSize}`], 
-      isSelected: defaultBrake === 'rim' 
+    {
+      value: 'rim',
+      nodeIds: [`brakes_rim_${wheelSize}`],
+      isSelected: defaultBrake === 'rim',
     },
-    { 
-      value: 'disc', 
-      nodeIds: [`brakes_disc_${wheelSize}`], 
-      isSelected: defaultBrake === 'disc' 
-    }
+    {
+      value: 'disc',
+      nodeIds: [`brakes_disc_${wheelSize}`],
+      isSelected: defaultBrake === 'disc',
+    },
   ];
 }
 
@@ -105,11 +105,11 @@ function getBasketOptions(frameSize: string) {
   // User always sees same options, but nodeIds change based on frame size
   return [
     { value: 'none', nodeIds: [], isSelected: true },
-    { 
-      value: 'basket', 
+    {
+      value: 'basket',
       nodeIds: [`basket_${frameSize}`], // basket_small, basket_medium, basket_large
-      isSelected: false 
-    }
+      isSelected: false,
+    },
   ];
 }
 
@@ -139,9 +139,21 @@ client.setMapping({
       // Frame size is our primary driver - it affects almost everything else
       name: 'Frame Size',
       values: [
-        { value: 'small', nodeIds: ['frame_small', 'wheels_26'], isSelected: false },
-        { value: 'medium', nodeIds: ['frame_medium', 'wheels_28'], isSelected: true },
-        { value: 'large', nodeIds: ['frame_large', 'wheels_28'], isSelected: false },
+        {
+          value: 'small',
+          nodeIds: ['frame_small', 'wheels_26'],
+          isSelected: false,
+        },
+        {
+          value: 'medium',
+          nodeIds: ['frame_medium', 'wheels_28'],
+          isSelected: true,
+        },
+        {
+          value: 'large',
+          nodeIds: ['frame_large', 'wheels_28'],
+          isSelected: false,
+        },
       ],
     },
     {
@@ -153,12 +165,12 @@ client.setMapping({
           { value: 'blue', nodeIds: ['paint_blue'], isSelected: true },
           { value: 'black', nodeIds: ['paint_black'] },
         ];
-        
+
         // Red is a premium color only available on medium/large frames
         if (frameSize !== 'small') {
           colors.push({ value: 'red', nodeIds: ['paint_red'] });
         }
-        
+
         return colors;
       },
     },
@@ -205,7 +217,7 @@ client.setMapping({
       name: 'Gear System',
       values: (context) => {
         const frameSize = context.getValue('Frame Size');
-        
+
         // Small frames get simpler gearing
         if (frameSize === 'small') {
           return [
@@ -213,7 +225,7 @@ client.setMapping({
             { value: '7-speed', nodeIds: ['gears_7speed'] },
           ];
         }
-        
+
         // Larger frames can handle more complex gearing
         return [
           { value: '7-speed', nodeIds: ['gears_7speed'], isSelected: true },
@@ -226,23 +238,23 @@ client.setMapping({
       values: (context) => {
         const frameSize = context.getValue('Frame Size');
         const wheelSize = frameSize === 'small' ? '26' : '28';
-        
+
         return [
           { value: 'none', nodeIds: [], isSelected: true },
-          { 
-            value: 'standard', 
+          {
+            value: 'standard',
             nodeIds: [`lights_front_${frameSize}`, `lights_rear_${frameSize}`],
-            isSelected: false 
+            isSelected: false,
           },
           {
             value: 'premium',
             nodeIds: [
               `lights_premium_front_${frameSize}`,
               `lights_premium_rear_${frameSize}`,
-              `dynamo_${wheelSize}`
+              `dynamo_${wheelSize}`,
             ],
-            isSelected: false
-          }
+            isSelected: false,
+          },
         ];
       },
     },

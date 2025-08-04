@@ -1,9 +1,11 @@
-# Static Mapping Examples
+# Static mapping guide
 
 Static mapping is the simplest approach for product configurators where all options are predetermined and
 independent of each other.
 
-## What makes mapping "static"
+> **New to attribute mapping?** If you haven't read about the core concepts yet, start with [Understanding attribute mapping](./mapping-concept.md) for the fundamentals.
+
+## What makes mapping "static"?
 
 In static mapping:
 
@@ -12,7 +14,7 @@ In static mapping:
 - Every combination is valid (from the mapping perspective)
 - The configuration structure remains constant
 
-## When to use static mapping
+## When to use static mapping?
 
 Static mapping is ideal for:
 
@@ -23,7 +25,17 @@ Static mapping is ideal for:
 
 ## City bicycle example
 
-Let's configure a city bicycle with simple, independent options. Each option can be selected without affecting the others:
+To make these concepts concrete, we'll use a city bicycle configurator throughout this documentation.
+A typical bicycle has many customizable options, but let's start with the most obvious ones:
+
+- Frame color (blue, red, or black)
+- Accessories (adding a basket or lights)
+- Saddle type (comfort or sport)
+
+When the user selects "blue frame", the system shows the blue frame mesh and hides the red and black ones.
+When they add a basket, the basket accessory becomes visible on the 3D model.
+
+Let's configure this city bicycle with simple, independent options. Each option can be selected without affecting the others:
 
 ```typescript
 client.setMapping({
@@ -237,7 +249,7 @@ Set `isSelected: true` on sensible defaults:
 - Standard configuration (comfort saddle)
 - Essential accessories (bell included)
 
-## When to upgrade to dynamic mapping
+## When to upgrade to dynamic mapping?
 
 You've outgrown static mapping when:
 
@@ -246,8 +258,4 @@ You've outgrown static mapping when:
 - You're duplicating similar configurations with small variations
 - Business rules become complex to express statically
 
-## Next steps
-
-- See [Dynamic Mapping Examples](./dynamic-mapping-examples.md) for the same bicycle with dependencies
-- Return to [Mapping Concepts](./mapping-concept.md) for the overview
-- Explore the [color configurator example](../examples/color-configurator/) for a working implementation
+→ [Learn about dynamic mapping](./dynamic-mapping.md)

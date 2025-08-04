@@ -1,16 +1,19 @@
 # Understanding attribute mapping
 
-## What is attribute mapping
+## What is attribute mapping?
 
 Attribute mapping is the bridge between your product's business logic and its 3D visualization. It translates
 your product options into specific parts of the 3D model that should be visible.
 
-Think of it as a configuration system that connects:
+This translation layer solves a fundamental disconnect:
 
-- User selections in your UI (choosing colors, sizes, features)
-- What gets displayed in the 3D viewer (specific meshes, materials, and parts)
+- Your business domain speaks in product terminology - colors, sizes, features, SKUs
+- The 3D world operates with technical constructs - meshes, nodes, materials, transforms
+- Your customers think in their own terms - "I want the blue one with the basket"
 
-## Why do we use mapping
+Without this bridge, you'd be forced to embed business logic into your 3D models or technical details into your product catalog. Mapping keeps both worlds pure and focused on what they do best.
+
+## Why do we use mapping?
 
 ### The separation of concerns
 
@@ -21,6 +24,31 @@ inventory, or business rules. This separation provides several benefits:
 2. **Reusability**: Use the same 3D server for all your products
 3. **Independence**: Your developers work on business logic while 3D artists work on models
 4. **Scalability**: Add new product variants without modifying the 3D infrastructure
+
+### Key advantages
+
+- **Full control**: You decide exactly which parts of the model are shown for each option
+- **Business logic stays pure**: Your application handles products, the 3D server just visualizes
+- **Easy updates**: When products or availability changes, just update the mapping
+- **Logical grouping**: Complex 3D structures become simple user choices (one button can control multiple nodes)
+
+## When do you need mapping?
+
+### You need mapping when
+
+- **Products with color/material variations**: Different textures or materials per option
+- **Products with size options**: Different 3D meshes or positioning per size
+- **Modular products**: Parts that can be added, removed, or swapped
+- **Optional features**: Accessories, upgrades, or add-ons
+- **Any scenario where user choices affect what's visible in 3D**
+
+### You don't need mapping when
+
+- **Static 3D models**: Always look the same regardless of user interaction
+- **Product showcases**: Pure visualization without configuration options
+- **Architectural visualizations**: Static buildings or environments
+- **Art pieces or sculptures**: Single-configuration display items
+- **Single-variant products**: No customization options available
 
 ## Example: City bicycle configurator
 
@@ -81,16 +109,44 @@ Each attribute has multiple possible values. For our bicycle:
 string value - the client library simply uses it to match your selection calls with the mapping configuration.
 
 While you can use any values you want (even made-up ones like "option-a", "variant-1"), it's best practice
-to use the same values as your existing e-commerce or product system. This makes integration easier:
+to use the same values as your existing e-commerce or product system. This makes integration easier.
+
+### 4. Selection state
+
+Each value can be marked as selected or not:
+
+- `isSelected: true` - This option is active by default
+- `isSelected: false` or omitted - This option is not active
+
+For our bicycle, we might want:
+
+- Default frame color: Blue (`isSelected: true`)
+- Default frame size: Medium (most common)
+- Default accessories: None (base model)
+
+**Complete example with all properties:**
 
 ```typescript
 // Good practice: Match your existing system
-{ value: 'blue', nodeIds: ['frame_blue'] }            // Same as product database
-{ value: 'SKU-BASKET-01', nodeIds: ['basket_front'] } // Using SKU system
+{
+  value: 'blue',
+  nodeIds: ['frame_blue'],
+  isSelected: true              // This is the default color
+}
+
+// Using SKU system
+{
+  value: 'SKU-BASKET-01',
+  nodeIds: ['basket_front'],
+  isSelected: false             // Not selected by default
+}
 
 // Also valid: Custom identifiers
-{ value: 'primary-color', nodeIds: ['frame_blue'] }   // Custom naming
-{ value: 'color-1', nodeIds: ['variant_a'] }          // Made-up values
+{
+  value: 'primary-color',
+  nodeIds: ['frame_blue'],
+  isSelected: true              // Default selection
+}
 ```
 
 **Connecting to UI elements:** Here's how the value connects your bicycle configurator interface to the 3D model:
@@ -156,19 +212,6 @@ to use the same values as your existing e-commerce or product system. This makes
 ```
 
 The key is: whatever value you define in your mapping must match what you pass to `select()`.
-
-### 4. Selection state
-
-Each value can be marked as selected or not:
-
-- `isSelected: true` - This option is active by default
-- `isSelected: false` or omitted - This option is not active
-
-For our bicycle, we might want:
-
-- Default frame color: Blue (`isSelected: true`)
-- Default frame size: Medium (most common)
-- Default accessories: None (base model)
 
 ## How the mapping process works
 
@@ -275,9 +318,9 @@ When a user customizes their bicycle:
 
 ```mermaid
 sequenceDiagram
-    participant UI as Bicycle Configurator UI
-    participant Client as Client Library
-    participant Server as 3D Server
+    participant UI as Bicycle configurator UI
+    participant Client as Client library
+    participant Server as 3D server
 
     UI->>Client: getAttribute('Frame Color').select('red')
     Client->>Client: Calculate mutations<br/>(hide blue, show red)
@@ -330,48 +373,39 @@ multiple accessory parts (`basket_front`, `lights_front`, `lights_rear`, `bell_c
 // and hiding Blue/Black parts when Red is selected
 ```
 
-## When do you need mapping
+## Types of mapping
 
-### You need mapping when
+There are two approaches to implementing attribute mapping, each suited to different scenarios:
 
-- **Products with color/material variations**: Different textures or materials per option
-- **Products with size options**: Different 3D meshes or positioning per size
-- **Modular products**: Parts that can be added, removed, or swapped
-- **Optional features**: Accessories, upgrades, or add-ons
-- **Any scenario where user choices affect what's visible in 3D**
+### Static mapping
 
-### You don't need mapping when
+All options are predefined and independent. Every combination is valid.
 
-- **Static 3D models**: Always look the same regardless of user interaction
-- **Product showcases**: Pure visualization without configuration options
-- **Architectural visualizations**: Static buildings or environments
-- **Art pieces or sculptures**: Single-configuration display items
-- **Single-variant products**: No customization options available
+**Example**: Basic bicycle configurator
+- Color: blue, red, black (always available)
+- Saddle: comfort, sport (always available)
+- Accessories: basket, lights, bell (always available)
 
-## Why mapping is essential
+**When to use**: Products with simple variations where choices don't affect each other.
 
-**Separation of concerns:**
+→ [Learn how to implement static mapping](./static-mapping.md)
 
-- The 3D server is generic - it doesn't know your specific product options
-- Your business rules (stock, pricing, combinations) change independently from the 3D model
-- You control exactly which parts of the model are shown for each option
-- You can group multiple 3D nodes (meshes, materials) into logical product choices
+### Dynamic mapping
 
-**Key advantages:**
+Options change based on other selections. The system prevents invalid combinations.
 
-- Full control over what's visible without modifying the 3D model
-- Business logic stays in your application, not in the 3D server
-- Easy to update when products or availability changes
-- Group complex 3D structures into simple user choices
+**Example**: Advanced bicycle configurator
+- Frame size: small → forces 26" wheels, positions parts closer
+- Frame size: large → allows 28" wheels, spreads components wider
+- Saddle: sport → requires matching sport grips
+- Color: premium red → only available on medium/large frames
 
-## Need help with mapping
+**When to use**: Products where one choice affects others, requires specific combinations, or has conditional rules.
+
+→ [Learn how to implement dynamic mapping](./dynamic-mapping.md)
+
+## Need help with mapping?
 
 - We help you connect your product catalog to your 3D models
 - Visual mapping tool coming soon to simplify this process
-- Contact <support@virtualdisplay.io> for mapping assistance
-
-## Next steps
-
-- See [Static Mapping Examples](./static-mapping-examples.md) for simple, independent options
-- See [Dynamic Mapping Examples](./dynamic-mapping-examples.md) for options with dependencies
-- Check the main [README](../README.md) for API reference
+- Contact [support@virtualdisplay.io](mailto:support@virtualdisplay.io) for mapping assistance

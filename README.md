@@ -131,9 +131,9 @@ client.setMapping({
 
 **Learn more:**
 
-- [Understanding Attribute Mapping](./docs/mapping-concept.md) - Core concepts
-- [Static Mapping Examples](./docs/static-mapping-examples.md) - Simple configurations
-- [Dynamic Mapping Examples](./docs/dynamic-mapping-examples.md) - Advanced dependencies
+- [Understanding attribute mapping](./docs/mapping-concept.md) - Core concepts
+- [Static mapping guide](./docs/static-mapping.md) - Simple configurations
+- [Dynamic mapping guide](./docs/dynamic-mapping.md) - Advanced dependencies
 
 ### Complete flow
 

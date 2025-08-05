@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.7.0](https://github.com/virtualdisplay-io/client/compare/v3.6.0...v3.7.0) (2025-08-05)
+
+### ✨ Features
+
+* dynamic mapping - proxy release ([#9](https://github.com/virtualdisplay-io/client/issues/9)) ([a95f0e7](https://github.com/virtualdisplay-io/client/commit/a95f0e7a7672b844571b11307637083c6b487f3f)), closes [#8](https://github.com/virtualdisplay-io/client/issues/8)
+
+### 🔧 Maintenance
+
+* various fixes and documentation updates ([#7](https://github.com/virtualdisplay-io/client/issues/7)) ([325150b](https://github.com/virtualdisplay-io/client/commit/325150b41bd557e7426e6dae6780cd4fd7660deb))
+
 ## [3.6.0](https://github.com/virtualdisplay-io/client/compare/v3.5.1...v3.6.0) (2025-07-23)
 
 ### ✨ Features
